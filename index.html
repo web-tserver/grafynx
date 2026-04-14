@@ -1,0 +1,1174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>GRAPHINK | Design Studio | Floating Image + Animation</title>
+  <meta name="description" content="GraphINK – Corporate Identity, Advertising Design, Logo, Branding, Social Media, UI/UX. Floating hero image with levitation animation.">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://api.fontshare.com/v2/css?f[]=clash-display@400,700,600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(145deg, #fef9ff 0%, #f4f0fa 100%);
+      color: #1e293b;
+      overflow-x: hidden;
+      scroll-behavior: smooth;
+    }
+    :root {
+      --glass-bg: rgba(255, 255, 255, 0.72);
+      --glass-border: rgba(255, 255, 255, 0.5);
+      --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.05);
+      --accent: #d946ef;
+      --accent-soft: #f0abfc;
+      --card-radius: 28px;
+      --transition-smooth: all 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+      --text-muted: #5b6e8c;
+    }
+    .glass-card {
+      background: var(--glass-bg);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid var(--glass-border);
+      box-shadow: var(--glass-shadow);
+      border-radius: var(--card-radius);
+    }
+    header {
+      position: sticky;
+      top: 16px;
+      z-index: 100;
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+    .header-container {
+      background: rgba(255, 255, 255, 0.8);
+      backdrop-filter: blur(20px);
+      border-radius: 48px;
+      padding: 8px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border: 1px solid rgba(255,255,255,0.6);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.02);
+    }
+    .logo-area { display: flex; align-items: center; gap: 12px; }
+    .logo-icon {
+      width: 42px; height: 42px;
+      background: linear-gradient(135deg, #d946ef, #a21caf);
+      border-radius: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800; font-size: 20px; color: white;
+      box-shadow: 0 6px 14px rgba(217,70,239,0.25);
+      background-image: url('logo.png');
+      background-size: cover;
+      background-position: center;
+    }
+    .logo-text {
+      font-weight: 700; font-size: 22px;
+      background: linear-gradient(135deg, #1e293b, #3b2e5e);
+      -webkit-background-clip: text; background-clip: text; color: transparent;
+    }
+    .nav-links { display: flex; gap: 28px; align-items: center; }
+    .nav-links a {
+      text-decoration: none; font-weight: 500; font-size: 15px;
+      color: #1e293b; transition: 0.2s; padding: 6px 0; position: relative;
+    }
+    .nav-links a:hover, .nav-links a.active { color: var(--accent); font-weight: 600; }
+    .nav-links a.active::after {
+      content: ''; position: absolute; bottom: -2px; left: 0;
+      width: 100%; height: 2.5px; background: var(--accent); border-radius: 4px;
+    }
+    .mobile-menu-btn { display: none; background: none; border: none; font-size: 28px; cursor: pointer; }
+    @media (max-width: 760px) {
+      .nav-links { display: none; }
+      .mobile-menu-btn { display: block; }
+      .header-container { padding: 8px 16px; }
+    }
+    .hero {
+      max-width: 1280px;
+      margin: 40px auto 20px;
+      padding: 20px 24px;
+    }
+    .hero-grid {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 48px;
+    }
+    .hero-content { flex: 1; }
+    .hero-badge {
+      background: rgba(217,70,239,0.12);
+      color: var(--accent);
+      display: inline-block;
+      padding: 6px 14px;
+      border-radius: 40px;
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 20px;
+    }
+    .hero-title {
+      font-size: clamp(38px, 6vw, 64px);
+      font-weight: 800;
+      line-height: 1.1;
+      letter-spacing: -1px;
+      background: linear-gradient(135deg, #1e1b4b, #4c1d95, #db2777);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+    .hero-desc {
+      font-size: 18px;
+      color: var(--text-muted);
+      margin: 20px 0 32px;
+      max-width: 520px;
+    }
+    .cta-button {
+      background: var(--accent);
+      border: none;
+      padding: 14px 32px;
+      border-radius: 60px;
+      font-weight: 600;
+      font-size: 16px;
+      color: white;
+      cursor: pointer;
+      transition: 0.2s;
+      box-shadow: 0 6px 14px rgba(217,70,239,0.3);
+    }
+    .cta-button:hover { transform: scale(1.02); background: #c026d3; }
+    .hero-visual { flex: 1; display: flex; justify-content: center; }
+    /* Floating image - no cropping, levitation + soft animation */
+    .floating-phone {
+      width: 280px;
+      height: 560px;
+      background: transparent;
+      background-image: url('home.png');
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: center;
+      animation: levitate 5s ease-in-out infinite;
+      filter: drop-shadow(0 15px 25px rgba(0, 0, 0, 0.15));
+    }
+    @keyframes levitate {
+      0% { transform: translateY(0px) scale(1) rotate(0deg); }
+      50% { transform: translateY(-12px) scale(1.02) rotate(1deg); }
+      100% { transform: translateY(0px) scale(1) rotate(0deg); }
+    }
+    @media (max-width: 860px) {
+      .hero-grid { flex-direction: column; text-align: center; }
+      .hero-desc { margin-left: auto; margin-right: auto; }
+      .floating-phone { width: 220px; height: 440px; }
+    }
+    section {
+      max-width: 1280px;
+      margin: 60px auto;
+      padding: 20px 24px;
+    }
+    .section-header { margin-bottom: 32px; }
+    .section-title {
+      font-size: 32px;
+      font-weight: 700;
+      letter-spacing: -0.3px;
+      font-family: 'Clash Display', sans-serif;
+    }
+    .section-sub {
+      color: var(--accent);
+      font-weight: 500;
+      margin-top: 6px;
+      font-size: 15px;
+    }
+
+    /* Compact Service Cards (modal trigger) */
+    .service-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 24px;
+    }
+    .service-card {
+      background: rgba(255,255,255,0.7);
+      backdrop-filter: blur(12px);
+      border-radius: 32px;
+      padding: 28px 20px;
+      border: 1px solid rgba(255,255,255,0.6);
+      transition: var(--transition-smooth);
+      text-align: center;
+      cursor: pointer;
+    }
+    .service-card:hover {
+      transform: translateY(-6px);
+      background: rgba(255,255,255,0.85);
+      border-color: var(--accent);
+    }
+    .service-icon {
+      font-size: 48px;
+      margin-bottom: 12px;
+    }
+    .service-card h3 {
+      font-size: 24px;
+      font-weight: 800;
+      margin-bottom: 8px;
+      color: var(--accent);
+    }
+    .service-preview {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin: 12px 0;
+      line-height: 1.4;
+    }
+    .view-details-btn {
+      background: rgba(217,70,239,0.15);
+      border: none;
+      padding: 8px 20px;
+      border-radius: 40px;
+      font-weight: 600;
+      font-size: 13px;
+      color: var(--accent);
+      cursor: pointer;
+      transition: 0.2s;
+      margin-top: 12px;
+    }
+    .view-details-btn:hover {
+      background: var(--accent);
+      color: white;
+    }
+
+    /* Modal Styles */
+    .service-modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.7);
+      backdrop-filter: blur(20px);
+      z-index: 2000;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .service-modal.active {
+      display: flex;
+    }
+    .modal-container {
+      background: rgba(255,255,255,0.95);
+      backdrop-filter: blur(24px);
+      border-radius: 48px;
+      max-width: 550px;
+      width: 100%;
+      max-height: 85vh;
+      overflow-y: auto;
+      padding: 28px;
+      border: 1px solid rgba(255,255,255,0.8);
+      box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25);
+      position: relative;
+    }
+    .modal-close {
+      position: absolute;
+      top: 20px;
+      right: 24px;
+      background: rgba(0,0,0,0.1);
+      border: none;
+      font-size: 28px;
+      width: 40px;
+      height: 40px;
+      border-radius: 40px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: 0.2s;
+    }
+    .modal-close:hover {
+      background: rgba(0,0,0,0.2);
+    }
+    .modal-icon {
+      font-size: 56px;
+      text-align: center;
+      margin-bottom: 8px;
+    }
+    .modal-title {
+      font-size: 28px;
+      font-weight: 800;
+      text-align: center;
+      color: var(--accent);
+      margin-bottom: 20px;
+    }
+    .modal-list {
+      list-style: none;
+      margin: 16px 0;
+    }
+    .modal-list li {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      padding: 10px 0;
+      border-bottom: 1px solid rgba(0,0,0,0.08);
+      font-size: 15px;
+    }
+    .modal-list li span:first-child {
+      font-weight: 500;
+    }
+    .modal-list li span:last-child {
+      font-weight: 700;
+      color: var(--accent);
+    }
+    .modal-note {
+      font-size: 13px;
+      color: var(--text-muted);
+      background: rgba(0,0,0,0.03);
+      padding: 12px;
+      border-radius: 24px;
+      margin: 16px 0;
+      text-align: center;
+    }
+    .modal-inq-btn {
+      background: var(--accent);
+      border: none;
+      width: 100%;
+      padding: 14px;
+      border-radius: 60px;
+      font-weight: 700;
+      font-size: 16px;
+      color: white;
+      cursor: pointer;
+      margin-top: 16px;
+      transition: 0.2s;
+    }
+    .modal-inq-btn:hover {
+      background: #c026d3;
+      transform: scale(1.01);
+    }
+
+    /* Details Cards (Strategy & Fast) */
+    .details-wrapper {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 32px;
+      margin-top: 20px;
+    }
+    .detail-card {
+      flex: 1;
+      background: rgba(255,255,255,0.65);
+      backdrop-filter: blur(12px);
+      border-radius: 36px;
+      padding: 32px;
+      border: 1px solid rgba(255,255,255,0.5);
+      transition: 0.25s;
+    }
+    .detail-card:hover {
+      background: rgba(255,255,255,0.8);
+      border-color: var(--accent);
+    }
+    .detail-icon { font-size: 44px; margin-bottom: 20px; }
+    .detail-card h3 { font-size: 26px; font-weight: 700; margin-bottom: 12px; }
+    .detail-card p { color: var(--text-muted); line-height: 1.5; }
+
+    /* Workflow Section */
+    .workflow-section {
+      background: rgba(255,255,255,0.5);
+      backdrop-filter: blur(12px);
+      border-radius: 48px;
+      padding: 40px 28px;
+      margin-top: 20px;
+      border: 1px solid rgba(255,255,255,0.6);
+    }
+    .workflow-steps {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 24px;
+      margin-top: 24px;
+    }
+    .workflow-step {
+      flex: 1;
+      min-width: 180px;
+      text-align: center;
+      background: rgba(255,255,255,0.6);
+      backdrop-filter: blur(8px);
+      border-radius: 32px;
+      padding: 24px 16px;
+      transition: 0.2s;
+    }
+    .workflow-step:hover {
+      transform: translateY(-4px);
+      background: rgba(255,255,255,0.8);
+    }
+    .step-number {
+      width: 48px;
+      height: 48px;
+      background: var(--accent);
+      color: white;
+      font-size: 24px;
+      font-weight: 800;
+      border-radius: 60px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 16px;
+    }
+    .workflow-step h4 {
+      font-size: 20px;
+      margin-bottom: 8px;
+    }
+    .workflow-step p {
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    /* Packages Section */
+    .packages-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 28px;
+      margin-top: 20px;
+    }
+    .package-card {
+      background: rgba(255,255,255,0.7);
+      backdrop-filter: blur(12px);
+      border-radius: 32px;
+      padding: 28px;
+      border: 1px solid rgba(255,255,255,0.6);
+      transition: transform 0.2s;
+      display: flex;
+      flex-direction: column;
+    }
+    .package-card:hover {
+      transform: translateY(-4px);
+      border-color: var(--accent);
+    }
+    .package-card h3 {
+      font-size: 26px;
+      font-weight: 800;
+      margin-bottom: 12px;
+      color: var(--accent);
+    }
+    .package-price {
+      font-size: 28px;
+      font-weight: 800;
+      margin: 16px 0;
+      color: #1e293b;
+    }
+    .package-price span {
+      font-size: 16px;
+      font-weight: 500;
+      color: var(--text-muted);
+    }
+    .package-list {
+      list-style: none;
+      margin: 16px 0;
+    }
+    .package-list li {
+      padding: 8px 0;
+      border-bottom: 1px solid rgba(0,0,0,0.05);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 14px;
+    }
+    .package-list li::before {
+      content: "✓";
+      color: var(--accent);
+      font-weight: bold;
+    }
+    .package-note {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 16px;
+      padding-top: 12px;
+      border-top: 1px dashed rgba(0,0,0,0.1);
+    }
+    .badge-icon {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(217,70,239,0.1);
+      padding: 4px 12px;
+      border-radius: 30px;
+      font-size: 12px;
+      font-weight: 600;
+      margin-bottom: 12px;
+      align-self: flex-start;
+    }
+    .package-inq-btn {
+      background: rgba(217,70,239,0.15);
+      border: none;
+      padding: 10px 20px;
+      border-radius: 60px;
+      font-weight: 700;
+      font-size: 14px;
+      color: var(--accent);
+      cursor: pointer;
+      transition: 0.2s;
+      margin-top: 20px;
+      width: 100%;
+    }
+    .package-inq-btn:hover {
+      background: var(--accent);
+      color: white;
+    }
+
+    /* Portfolio (swiper) */
+    .portfolio-section { background: transparent; }
+    .album-tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 28px;
+      justify-content: center;
+    }
+    .album-btn {
+      background: rgba(255,255,255,0.6);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(0,0,0,0.06);
+      border-radius: 60px;
+      padding: 10px 24px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+    .album-btn.active {
+      background: var(--accent);
+      color: white;
+      border-color: var(--accent);
+      box-shadow: 0 6px 14px rgba(217,70,239,0.3);
+    }
+    .portfolio-swiper {
+      width: 100%;
+      padding: 20px 0 40px;
+      overflow: hidden;
+    }
+    .portfolio-swiper .swiper-slide {
+      background: rgba(255,255,255,0.4);
+      backdrop-filter: blur(8px);
+      border-radius: 28px;
+      overflow: hidden;
+      aspect-ratio: 3 / 4;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+      transition: transform 0.3s;
+    }
+    .portfolio-swiper .swiper-slide:hover { transform: scale(1.02); }
+    .portfolio-swiper .swiper-slide img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .swiper-pagination-bullet-active { background: var(--accent) !important; }
+    .swiper-button-next, .swiper-button-prev {
+      color: var(--accent);
+      background: rgba(255,255,255,0.5);
+      backdrop-filter: blur(4px);
+      width: 40px;
+      height: 40px;
+      border-radius: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .swiper-button-next:after, .swiper-button-prev:after { font-size: 18px; font-weight: bold; }
+
+    /* Print Estimator */
+    .estimator-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 28px;
+    }
+    .estimator-card {
+      background: rgba(255,255,255,0.7);
+      backdrop-filter: blur(12px);
+      border-radius: 32px;
+      padding: 28px;
+      border: 1px solid rgba(255,255,255,0.6);
+      transition: transform 0.2s;
+    }
+    .estimator-card:hover { transform: translateY(-4px); border-color: var(--accent); }
+    .estimator-card h3 { font-size: 24px; margin-bottom: 16px; color: var(--accent); }
+    .estimator-field { margin-bottom: 20px; }
+    .estimator-field label { font-size: 14px; font-weight: 600; display: block; margin-bottom: 8px; color: #1e293b; }
+    .estimator-select, .estimator-input {
+      width: 100%;
+      padding: 12px 16px;
+      border-radius: 20px;
+      border: 1px solid rgba(0,0,0,0.1);
+      background: white;
+      font-size: 14px;
+      outline: none;
+      transition: 0.2s;
+    }
+    .estimate-result {
+      margin-top: 24px;
+      padding-top: 16px;
+      border-top: 2px dashed var(--accent);
+      text-align: center;
+    }
+    .estimate-price {
+      font-size: 32px;
+      font-weight: 800;
+      color: var(--accent);
+    }
+    .price-breakdown {
+      font-size: 11px;
+      color: var(--text-muted);
+      background: rgba(0,0,0,0.03);
+      border-radius: 16px;
+      padding: 10px;
+      margin-top: 8px;
+      text-align: left;
+    }
+
+    .back-to-top {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      background: rgba(255,255,255,0.8);
+      backdrop-filter: blur(12px);
+      width: 48px;
+      height: 48px;
+      border-radius: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      cursor: pointer;
+      border: 1px solid rgba(0,0,0,0.08);
+      box-shadow: 0 6px 12px rgba(0,0,0,0.05);
+      opacity: 0;
+      transition: 0.2s;
+      pointer-events: none;
+      z-index: 999;
+    }
+    .back-to-top.visible { opacity: 1; pointer-events: auto; }
+    footer {
+      text-align: center;
+      padding: 40px 20px;
+      color: var(--text-muted);
+      border-top: 1px solid rgba(0,0,0,0.05);
+      margin-top: 40px;
+      font-size: 13px;
+    }
+    @media (max-width: 700px) {
+      .swiper-button-next, .swiper-button-prev { display: none; }
+      .album-btn { padding: 6px 16px; font-size: 12px; }
+      .estimator-grid, .packages-grid { grid-template-columns: 1fr; }
+      .workflow-steps { flex-direction: column; }
+    }
+    html { scroll-padding-top: 90px; }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="header-container">
+    <div class="logo-area">
+      <div class="logo-icon"></div>
+      <div class="logo-text">GRAPHINK</div>
+    </div>
+    <div class="nav-links" id="navLinks">
+      <a href="#home" class="active">Home</a>
+      <a href="#details">Details</a>
+      <a href="#services">What We Do</a>
+      <a href="#workflow">Workflow</a>
+      <a href="#packages">Packages</a>
+      <a href="#portfolio">Portfolio</a>
+      <a href="#print-estimator">Print Estimate</a>
+    </div>
+    <button class="mobile-menu-btn" id="mobileMenuBtn">☰</button>
+  </div>
+  <div id="mobileDropdown" style="display: none; flex-direction: column; background: rgba(255,255,255,0.95); backdrop-filter: blur(20px); border-radius: 32px; margin-top: 12px; padding: 16px; gap: 12px;"></div>
+</header>
+
+<!-- HOME SECTION with floating home.png -->
+<section id="home" class="hero">
+  <div class="hero-grid">
+    <div class="hero-content">
+      <div class="hero-badge">✧ Design That Builds Identity ✧</div>
+      <h1 class="hero-title">GRAPHINK<br>Visual Impact</h1>
+      <p class="hero-desc">We create strategy-driven visuals that capture attention, build trust, and accelerate growth — from logos to complete brand ecosystems.</p>
+      <button class="cta-button" id="exploreBtn">Explore Services →</button>
+    </div>
+    <div class="hero-visual">
+      <div class="floating-phone"></div>
+    </div>
+  </div>
+</section>
+
+<!-- DETAILS SECTION (Strategy-Driven + Fast Workflow) -->
+<div style="max-width:1280px; margin:0 auto; padding:0 24px;" id="details">
+  <div class="details-wrapper">
+    <div class="detail-card"><div class="detail-icon">🎯</div><h3>Strategy-Driven Design</h3><p>Not just aesthetics — we build purpose into every pixel. Your brand will speak clearly, connect emotionally, and stand out in competitive markets.</p></div>
+    <div class="detail-card"><div class="detail-icon">⚡</div><h3>Fast & Smooth Workflow</h3><p>From concept to final assets: Understand goals → Create concepts → Refine with revisions → Deliver ready-to-use files. Agile, transparent, and efficient.</p></div>
+  </div>
+</div>
+
+<!-- WHAT WE DO (compact cards with modal) -->
+<section id="services">
+  <div class="section-header">
+    <h2 class="section-title">What We Do</h2>
+    <div class="section-sub">Comprehensive design solutions for every need</div>
+  </div>
+  <div class="service-grid" id="serviceGrid"></div>
+</section>
+
+<!-- WORKFLOW -->
+<section id="workflow">
+  <div class="workflow-section">
+    <div class="section-header" style="margin-bottom: 16px;">
+      <h2 class="section-title">Our Workflow</h2>
+      <div class="section-sub">Simple, transparent, and efficient</div>
+    </div>
+    <div class="workflow-steps">
+      <div class="workflow-step"><div class="step-number">1</div><h4>Brief & Discovery</h4><p>Understand your goals, target audience, and brand values.</p></div>
+      <div class="workflow-step"><div class="step-number">2</div><h4>Concept & Design</h4><p>Create initial concepts, mood boards, and design directions.</p></div>
+      <div class="workflow-step"><div class="step-number">3</div><h4>Revision & Refinement</h4><p>Collaborative feedback loops to perfect the design.</p></div>
+      <div class="workflow-step"><div class="step-number">4</div><h4>Final Delivery</h4><p>Provide print-ready files, source assets, and brand guidelines.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- DESIGN PACKAGES -->
+<section id="packages">
+  <div class="section-header"><h2 class="section-title">Design Packages</h2><div class="section-sub">Choose the perfect plan for your brand</div></div>
+  <div class="packages-grid" id="packagesGrid">
+    <div class="package-card">
+      <div class="badge-icon">🎨 LOGO DESIGN</div>
+      <h3>Custom Logo Concept</h3>
+      <div class="package-price">RM280</div>
+      <ul class="package-list">
+        <li>Custom logo concept (not template)</li>
+        <li>2-3 initial concepts</li>
+        <li>2 revisions per concept</li>
+        <li>High resolution files (PNG, JPG, PDF)</li>
+        <li>Black & White + Color versions</li>
+      </ul>
+      <div><strong>Best for:</strong> New Businesses, Rebranding, Personal Branding</div>
+      <div class="package-note">Turnaround: 5-7 working days</div>
+      <div class="package-note">Prices start from stated amount. Final pricing depends on project scope, revisions &amp; timeline.</div>
+      <button class="package-inq-btn" data-package="Logo Design">Inquire about Logo Design</button>
+    </div>
+    <div class="package-card">
+      <div class="badge-icon">🏷️ BRANDING & IDENTITY</div>
+      <h3>Complete Brand Identity</h3>
+      <div class="package-price">From RM700</div>
+      <ul class="package-list">
+        <li>Logo refinement</li>
+        <li>Color palette & typography</li>
+        <li>Brand usage guideline</li>
+        <li>Social media & print ready assets</li>
+        <li>Custom logo concept (not template)</li>
+        <li>2-3 initial concepts, 2 revisions</li>
+        <li>High resolution files (PNG, JPG, PDF)</li>
+        <li>Black & White + Color versions</li>
+      </ul>
+      <div><strong>Best for:</strong> SMEs, Corporate Brands, Long-Term Brand Growth</div>
+      <div class="package-note">Turnaround: 7-14 working days (generate ideas and concept)</div>
+      <div class="package-note">Prices start from stated amount. Final pricing depends on project scope, revisions &amp; timeline.</div>
+      <button class="package-inq-btn" data-package="Branding & Identity">Inquire about Branding</button>
+    </div>
+    <div class="package-card">
+      <div class="badge-icon">📱 MONTHLY PACKAGE</div>
+      <h3>Social Media Management</h3>
+      <div class="package-price">RM600 <span>/ month</span></div>
+      <ul class="package-list">
+        <li>Custom post design</li>
+        <li>On-brand layout and color</li>
+        <li>Feed consistency</li>
+        <li>Content ready visual</li>
+        <li>24 posters per month</li>
+        <li>3 revisions per poster</li>
+      </ul>
+      <div><strong>Option:</strong> Single post – RM30</div>
+      <div><strong>Terms:</strong> Content must be provided. Urgent design = extra charge</div>
+      <div class="package-note">Prices start from stated amount. Final pricing depends on project scope, revisions &amp; timeline.</div>
+      <button class="package-inq-btn" data-package="Monthly Package">Inquire about Monthly Package</button>
+    </div>
+  </div>
+  <p style="text-align: center; margin-top: 20px; font-size: 13px; color: var(--text-muted);">📢 All prices are estimates. Final quote depends on project complexity, number of revisions, and timeline.</p>
+</section>
+
+<!-- PORTFOLIO (moved after Packages) -->
+<section id="portfolio" class="portfolio-section">
+  <div class="section-header"><h2 class="section-title">Portfolio</h2><div class="section-sub">swipe through our work — subcategory albums</div></div>
+  <div class="album-tabs" id="albumTabs"></div>
+  <div class="swiper portfolio-swiper" id="portfolioSwiper"><div class="swiper-wrapper" id="swiperWrapper"></div><div class="swiper-pagination"></div><div class="swiper-button-next"></div><div class="swiper-button-prev"></div></div>
+</section>
+
+<!-- PRINT PRICE ESTIMATOR -->
+<section id="print-estimator">
+  <div class="section-header"><h2 class="section-title">🖨️ Print Price Estimate</h2><div class="section-sub">Instant pricing for sublimation, silkscreen, DTF, lanyard, bunting & banner</div></div>
+  <div class="estimator-grid">
+    <div class="estimator-card"><h3>🔥 Sublimation (Basic-Roundneck)</h3><div class="estimator-field"><label>Quantity (pcs)</label><input type="number" id="sub_qty" class="estimator-input" min="0" value="0" step="1"></div><div class="estimator-field"><label>Material / Upgrade</label><select id="sub_material" class="estimator-select"><option value="0">Standard Microfiber</option><option value="3">Diamond 155GSM (+RM3/pc)</option><option value="8">Lycra 280GSM (+RM8/pc)</option></select></div><div class="estimate-result"><div class="estimate-price" id="sub_estimate">RM 0.00</div><div class="estimate-note">*Full jersey print + material upgrade only</div></div></div>
+    <div class="estimator-card"><h3>🎨 Silkscreen (T-Shirt)</h3><div class="estimator-field"><label>Quantity (pcs)</label><input type="number" id="ss_qty" class="estimator-input" min="0" value="0" step="1"></div><div class="estimator-field"><label>Base Shirt Type</label><select id="ss_shirt" class="estimator-select"><option value="13.50">Roundneck (RM13.50)</option><option value="18.50">Collar (RM18.50)</option><option value="23.00">Polo (RM23.00)</option></select></div><div class="estimator-field"><label>Front Colors</label><select id="ss_front" class="estimator-select"><option value="0">1 Color</option><option value="1">2 Colors</option><option value="2">3 Colors</option><option value="3">4 Colors</option><option value="4">5 Colors</option><option value="5">6 Colors</option><option value="6">7 Colors</option><option value="7">8 Colors</option></select></div><div class="estimator-field"><label>Back Colors</label><select id="ss_back" class="estimator-select"><option value="-1">No Print</option><option value="0">1 Color</option><option value="1">2 Colors</option><option value="2">3 Colors</option><option value="3">4 Colors</option><option value="4">5 Colors</option><option value="5">6 Colors</option><option value="6">7 Colors</option><option value="7">8 Colors</option></select></div><div class="estimate-result"><div class="estimate-price" id="ss_estimate">RM 0.00</div><div class="estimate-note">*Includes base shirt + print cost</div></div></div>
+    <div class="estimator-card"><h3>✨ DTF Transfer (Any Garment)</h3><div class="estimator-field"><label>Quantity (pcs)</label><input type="number" id="dtf_qty" class="estimator-input" min="0" value="0" step="1"></div><div class="estimator-field"><label>Print Size (Front)</label><select id="dtf_front" class="estimator-select"><option value="0">No Print</option><option value="4">Smaller than A4 (RM4)</option><option value="8">A4 (RM8)</option><option value="10">A3 (RM10)</option><option value="12">Bigger than A3 (RM12)</option></select></div><div class="estimator-field"><label>Print Size (Back)</label><select id="dtf_back" class="estimator-select"><option value="0">No Print</option><option value="4">Smaller than A4 (RM4)</option><option value="8">A4 (RM8)</option><option value="10">A3 (RM10)</option><option value="12">Bigger than A3 (RM12)</option></select></div><div class="estimator-field"><label>Sleeve Prints (per arm)</label><input type="number" id="dtf_sleeve" class="estimator-input" min="0" value="0" step="1"></div><div class="estimate-result"><div class="estimate-price" id="dtf_estimate">RM 0.00</div><div class="estimate-note">*Transfer only, garment not included</div></div></div>
+    <div class="estimator-card"><h3>📎 Lanyard (Sublimation)</h3><div class="estimator-field"><label>Quantity (pcs)</label><input type="number" id="lan_qty" class="estimator-input" min="0" value="0" step="1"></div><div class="estimator-field"><label>Size</label><select id="lan_size" class="estimator-select"><option value="20">20MM</option><option value="25">25MM</option></select></div><div class="estimator-field"><label>Buckle</label><select id="lan_buckle" class="estimator-select"><option value="with">With Buckle</option><option value="no">No Buckle</option></select></div><div class="estimate-result"><div class="estimate-price" id="lan_estimate">RM 0.00</div><div class="estimate-note">*Full colour print + clip included</div></div></div>
+    <div class="estimator-card"><h3>🏳️ Bunting (Vertical) - Custom Size</h3><div class="estimator-field"><label>Quantity</label><input type="number" id="bun_qty" class="estimator-input" min="0" value="0" step="1"></div><div class="estimator-field"><label>Height (ft)</label><input type="number" id="bun_h" class="estimator-input" min="0" value="0" step="0.5" placeholder="e.g., 6"></div><div class="estimator-field"><label>Width (ft)</label><input type="number" id="bun_w" class="estimator-input" min="0" value="0" step="0.5" placeholder="e.g., 2"></div><div class="estimate-result"><div class="estimate-price" id="bun_estimate">RM 0.00</div><div class="estimate-note">*Tarpaulin 380gsm, hem & eyelets. Price = max(RM23, area×2+3) per piece.</div></div></div>
+    <div class="estimator-card"><h3>📰 Banner (Horizontal) - Custom Size</h3><div class="estimator-field"><label>Quantity</label><input type="number" id="banner_qty" class="estimator-input" min="0" value="0" step="1"></div><div class="estimator-field"><label>Height (ft)</label><input type="number" id="banner_h" class="estimator-input" min="0" value="0" step="0.5" placeholder="e.g., 3"></div><div class="estimator-field"><label>Width (ft)</label><input type="number" id="banner_w" class="estimator-input" min="0" value="0" step="0.5" placeholder="e.g., 6"></div><div class="estimate-result"><div class="estimate-price" id="banner_estimate">RM 0.00</div><div class="estimate-note">*Tarpaulin 380gsm, hem & eyelets. Price = max(RM23, area×2+3) per piece.</div></div></div>
+  </div>
+  <p style="text-align: center; margin-top: 20px; font-size: 13px; color: var(--text-muted);">📢 Prices are estimates. Final quote depends on artwork complexity, rush order, and shipping.</p>
+</section>
+
+<div style="max-width:1280px; margin: 40px auto; text-align: center; padding: 0 24px;">
+  <button id="contactBtn" class="cta-button" style="background: #1e293b; box-shadow: none;">Let’s build your brand. 🚀</button>
+</div>
+<footer>© 2026 GRAPHINK — “Inks Your Ideas” | Setia Alam | AFIQ 019 908 3295</footer>
+<div class="back-to-top" id="backToTop">↑</div>
+
+<!-- MODAL FOR SERVICE DETAILS -->
+<div id="serviceModal" class="service-modal">
+  <div class="modal-container">
+    <button class="modal-close" id="closeModalBtn">&times;</button>
+    <div id="modalContent"></div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+<script>
+  const WHATSAPP_NUMBER = "60199083295";
+
+  // Full service data for "What We Do" modal
+  const servicesFull = [
+    {
+      name: "Corporate Identity",
+      icon: "🏢",
+      items: [
+        { label: "Business Card", price: "RM70" },
+        { label: "ID Card", price: "RM100" },
+        { label: "Company Profile", price: "RM700" },
+        { label: "Lanyard", price: "RM70" },
+        { label: "T-Shirt", price: "RM50+" },
+        { label: "Corporate Shirt", price: "RM100" },
+        { label: "Sublimation Jersey", price: "RM100" }
+      ],
+      note: "Print-Ready Files, CMYK Setup, Bleed and Margin Ready. All designs include mockup preview.",
+      preview: "Business cards, ID cards, company profile, lanyards, apparel"
+    },
+    {
+      name: "Advertising Design",
+      icon: "📢",
+      items: [
+        { label: "Bunting", price: "RM60" },
+        { label: "Banner", price: "RM80" },
+        { label: "Backdrop", price: "RM100" },
+        { label: "Signboard", price: "RM300+" },
+        { label: "Flags", price: "RM70" },
+        { label: "Flyer", price: "RM30-50" },
+        { label: "Poster", price: "RM30-50" },
+        { label: "Menu", price: "RM100+" },
+        { label: "Stickers", price: "RM30-50" }
+      ],
+      note: "Print-Ready Files, CMYK Setup, Bleed and Margin Ready. All designs include mockup preview.",
+      preview: "Bunting, banners, backdrops, signboards, flyers, posters, menus, stickers"
+    },
+    {
+      name: "Logo Design",
+      icon: "✧",
+      items: [
+        { label: "Custom Logo Concept", price: "RM280" },
+        { label: "2-3 Concepts", price: "included" },
+        { label: "2 Revisions", price: "included" },
+        { label: "High-Res Files", price: "included" }
+      ],
+      note: "Modern, minimal, bold — unique identity",
+      preview: "Custom logo from RM280, 2-3 concepts, 2 revisions, high-res files"
+    },
+    {
+      name: "Brand Identity",
+      icon: "🎨",
+      items: [
+        { label: "Complete Identity", price: "from RM700" },
+        { label: "Color Palette", price: "included" },
+        { label: "Typography", price: "included" },
+        { label: "Brand Guide", price: "included" }
+      ],
+      note: "Colors, typography, brand guide",
+      preview: "Full brand identity from RM700, color palette, typography, guidelines"
+    },
+    {
+      name: "Social Media Design",
+      icon: "📱",
+      items: [
+        { label: "Custom Post Design", price: "RM30/post" },
+        { label: "Monthly Package (24 posts)", price: "RM600" },
+        { label: "3 Revisions per post", price: "included" }
+      ],
+      note: "Posts, ads creatives, carousels",
+      preview: "Single post RM30 or monthly package RM600 (24 posts)"
+    },
+    {
+      name: "Website / UI Design",
+      icon: "🖥️",
+      items: [
+        { label: "Website / UI Design", price: "from RM400" }
+      ],
+      note: "Clean, conversion-focused interfaces",
+      preview: "Modern website & UI design starting from RM400"
+    }
+  ];
+
+  function renderCompactServices() {
+    const container = document.getElementById('serviceGrid');
+    if(!container) return;
+    container.innerHTML = servicesFull.map(service => `
+      <div class="service-card" data-service-name="${service.name}">
+        <div class="service-icon">${service.icon}</div>
+        <h3>${service.name}</h3>
+        <div class="service-preview">${service.preview.substring(0, 80)}${service.preview.length > 80 ? '…' : ''}</div>
+        <button class="view-details-btn">View Details</button>
+      </div>
+    `).join('');
+
+    document.querySelectorAll('.service-card').forEach(card => {
+      const serviceName = card.getAttribute('data-service-name');
+      const service = servicesFull.find(s => s.name === serviceName);
+      if(service) {
+        card.addEventListener('click', (e) => {
+          if(e.target.classList.contains('view-details-btn') || e.target.closest('.view-details-btn')) {
+            e.stopPropagation();
+          }
+          openServiceModal(service);
+        });
+        card.querySelector('.view-details-btn')?.addEventListener('click', (e) => {
+          e.stopPropagation();
+          openServiceModal(service);
+        });
+      }
+    });
+  }
+
+  function openServiceModal(service) {
+    const modal = document.getElementById('serviceModal');
+    const modalContent = document.getElementById('modalContent');
+    modalContent.innerHTML = `
+      <div class="modal-icon">${service.icon}</div>
+      <div class="modal-title">${service.name}</div>
+      <ul class="modal-list">
+        ${service.items.map(item => `<li><span>${item.label}</span><span>${item.price}</span></li>`).join('')}
+      </ul>
+      <div class="modal-note">${service.note}</div>
+      <button class="modal-inq-btn" data-service="${service.name}">Inquire about ${service.name}</button>
+    `;
+    modal.classList.add('active');
+    document.body.style.overflow = 'hidden';
+    history.pushState({ modalOpen: true }, '');
+
+    const inqBtn = modalContent.querySelector('.modal-inq-btn');
+    if(inqBtn) {
+      inqBtn.addEventListener('click', () => {
+        const serviceName = inqBtn.getAttribute('data-service');
+        window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(`Hi GRAPHINK, I'm interested in ${serviceName}. Let's discuss.`)}`, '_blank');
+      });
+    }
+  }
+
+  function closeModal() {
+    const modal = document.getElementById('serviceModal');
+    if (!modal.classList.contains('active')) return;
+    modal.classList.remove('active');
+    document.body.style.overflow = '';
+    if (history.state && history.state.modalOpen) {
+      history.back();
+    }
+  }
+
+  window.addEventListener('popstate', function(event) {
+    const modal = document.getElementById('serviceModal');
+    if (modal.classList.contains('active')) {
+      closeModal();
+      event.preventDefault();
+    }
+  });
+
+  function attachPackageInquiry() {
+    document.querySelectorAll('.package-inq-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const packageName = btn.getAttribute('data-package');
+        window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(`Hi GRAPHINK, I'm interested in your ${packageName} package. Can you share more details?`)}`, '_blank');
+      });
+    });
+  }
+
+  // Portfolio Albums
+  const albums = {
+    "Branding": ["image1.png", "image2.png", "image3.png"],
+    "Packaging": ["image4.png", "image5.png", "image6.png"],
+    "UI/UX": ["image7.png", "image8.png", "image9.png"],
+    "Social Media": ["image10.png", "image11.png", "image12.png"]
+  };
+  let activeAlbum = "Branding";
+  let swiperInstance = null;
+
+  function buildAlbumTabs() {
+    const tabsContainer = document.getElementById('albumTabs');
+    tabsContainer.innerHTML = '';
+    Object.keys(albums).forEach(albumName => {
+      const btn = document.createElement('button');
+      btn.className = `album-btn ${albumName === activeAlbum ? 'active' : ''}`;
+      btn.textContent = albumName;
+      btn.addEventListener('click', () => {
+        activeAlbum = albumName;
+        document.querySelectorAll('.album-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        updateSwiperSlides();
+      });
+      tabsContainer.appendChild(btn);
+    });
+  }
+
+  function updateSwiperSlides() {
+    const images = albums[activeAlbum] || [];
+    const wrapper = document.getElementById('swiperWrapper');
+    wrapper.innerHTML = images.map(src => `<div class="swiper-slide"><img src="${src}" alt="${activeAlbum} work" onerror="this.src='https://placehold.co/600x800/f0abfc/ffffff?text=Image+Not+Found'"></div>`).join('');
+    if (swiperInstance) {
+      swiperInstance.update();
+      swiperInstance.slideTo(0);
+    } else {
+      swiperInstance = new Swiper('.portfolio-swiper', {
+        slidesPerView: 1,
+        spaceBetween: 20,
+        loop: true,
+        pagination: { el: '.swiper-pagination', clickable: true },
+        navigation: { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' },
+        breakpoints: { 640: { slidesPerView: 2 }, 1024: { slidesPerView: 3 } }
+      });
+    }
+  }
+
+  // Print estimator logic (unchanged)
+  const ssMatrix = [
+    [7.82,8.84,9.86,10.88,11.90,12.92,13.94,15.30],[5.55,6.57,7.59,8.61,9.63,10.65,11.67,13.03],
+    [3.74,4.76,5.78,6.80,7.82,8.84,9.86,11.22],[2.72,3.74,4.76,5.78,6.80,7.82,8.84,10.20],
+    [1.99,3.01,4.03,5.05,6.07,7.09,8.11,9.47],[1.78,2.80,3.82,4.84,5.86,6.88,7.90,9.26],
+    [1.59,2.61,3.63,4.65,5.67,6.69,7.71,9.07],[1.29,2.31,3.33,4.35,5.37,6.39,7.41,8.77],
+    [1.20,2.22,3.24,4.26,5.28,6.30,7.32,8.68],[1.10,2.12,3.14,4.16,5.18,6.20,7.22,8.58]
+  ];
+  function getSSTier(q) { if(q<11) return 0; if(q<21) return 1; if(q<31) return 2; if(q<51) return 3; if(q<81) return 4; if(q<101) return 5; if(q<201) return 6; if(q<301) return 7; if(q<501) return 8; return 9; }
+
+  function updateSublimation() {
+    let qty = parseInt(document.getElementById('sub_qty')?.value) || 0; if(qty<0) qty=0;
+    let unitBase = 0;
+    if(qty>0) { if(qty<=10) unitBase=45; else if(qty<=30) unitBase=35; else if(qty<=50) unitBase=33; else if(qty<=100) unitBase=30; else if(qty<=200) unitBase=28; else if(qty<=300) unitBase=25; else if(qty<=500) unitBase=23; else if(qty<=1000) unitBase=20; else unitBase=18; }
+    let material = parseFloat(document.getElementById('sub_material')?.value) || 0;
+    let base = qty * unitBase; let materialCost = qty * material; let total = base + materialCost;
+    let breakdown = `🧾 Base: ${qty} x RM${unitBase} = RM${base}<br>${material?`➕ Material: +RM${materialCost}<br>`:''}💰 <strong>Total = RM${total}</strong>`;
+    document.getElementById('sub_estimate').innerHTML = `RM ${total.toFixed(2)}<div class="price-breakdown">${breakdown}</div>`;
+  }
+  function updateSilkscreen() {
+    let qty = parseInt(document.getElementById('ss_qty')?.value) || 0; if(qty<0) qty=0;
+    let shirt = parseFloat(document.getElementById('ss_shirt')?.value) || 0;
+    let frontColors = parseInt(document.getElementById('ss_front')?.value) || 0;
+    let backColors = parseInt(document.getElementById('ss_back')?.value) || -1;
+    let baseShirt = qty * shirt;
+    let frontCost = 0, backCost = 0;
+    if(qty>0) { let tier = getSSTier(qty); if(frontColors>=0) frontCost = qty * ssMatrix[tier][frontColors]; if(backColors>=0) backCost = qty * ssMatrix[tier][backColors]; }
+    let total = baseShirt + frontCost + backCost;
+    let breakdown = `👕 Base shirt: ${qty} x RM${shirt} = RM${baseShirt}<br>🎨 Front ${frontColors+1}C: RM${frontCost.toFixed(2)}<br>${backColors>=0?`🎨 Back ${backColors+1}C: RM${backCost.toFixed(2)}<br>`:''}💰 <strong>Total = RM${total}</strong>`;
+    document.getElementById('ss_estimate').innerHTML = `RM ${total.toFixed(2)}<div class="price-breakdown">${breakdown}</div>`;
+  }
+  function updateDTF() {
+    let qty = parseInt(document.getElementById('dtf_qty')?.value) || 0; if(qty<0) qty=0;
+    let front = parseFloat(document.getElementById('dtf_front')?.value) || 0;
+    let back = parseFloat(document.getElementById('dtf_back')?.value) || 0;
+    let sleeve = parseInt(document.getElementById('dtf_sleeve')?.value) || 0;
+    let frontTotal = qty * front; let backTotal = qty * back; let sleeveTotal = sleeve * 3;
+    let total = frontTotal + backTotal + sleeveTotal;
+    let breakdown = `🖨️ Front: RM${frontTotal}<br>🖨️ Back: RM${backTotal}<br>💪 Sleeves: RM${sleeveTotal}<br>💰 <strong>Total = RM${total}</strong>`;
+    document.getElementById('dtf_estimate').innerHTML = `RM ${total.toFixed(2)}<div class="price-breakdown">${breakdown}</div>`;
+  }
+  function updateLanyard() {
+    let qty = parseInt(document.getElementById('lan_qty')?.value) || 0; if(qty<0) qty=0;
+    let unit = 0;
+    if(qty>0) { if(qty>=20000) unit=3.5; else if(qty>=10000) unit=4; else if(qty>=1000) unit=5.5; else if(qty>=500) unit=7.5; else if(qty>=200) unit=9; else if(qty>=100) unit=10; else if(qty>=50) unit=13; else if(qty>=30) unit=15; else if(qty>=20) unit=16; else unit=19; }
+    let total = qty * unit;
+    let breakdown = `📏 ${qty} pcs x RM${unit.toFixed(2)} = RM${total.toFixed(2)}<br>💰 <strong>Total = RM${total}</strong>`;
+    document.getElementById('lan_estimate').innerHTML = `RM ${total.toFixed(2)}<div class="price-breakdown">${breakdown}</div>`;
+  }
+  function updateBunting() {
+    let qty = parseInt(document.getElementById('bun_qty')?.value) || 0; if(qty<0) qty=0;
+    let w = parseFloat(document.getElementById('bun_w')?.value) || 0; let h = parseFloat(document.getElementById('bun_h')?.value) || 0;
+    let area = w * h; let unitPrice = area>0 ? Math.max(23, area*2+3) : 0;
+    let total = qty * unitPrice;
+    let breakdown = `📐 Size: ${w}' x ${h}' = ${area} sq ft<br>Unit price: RM${unitPrice.toFixed(2)}<br>${qty} pcs x RM${unitPrice.toFixed(2)} = RM${total.toFixed(2)}<br>💰 <strong>Total = RM${total}</strong>`;
+    document.getElementById('bun_estimate').innerHTML = `RM ${total.toFixed(2)}<div class="price-breakdown">${breakdown}</div>`;
+  }
+  function updateBanner() {
+    let qty = parseInt(document.getElementById('banner_qty')?.value) || 0; if(qty<0) qty=0;
+    let w = parseFloat(document.getElementById('banner_w')?.value) || 0; let h = parseFloat(document.getElementById('banner_h')?.value) || 0;
+    let area = w * h; let unitPrice = area>0 ? Math.max(23, area*2+3) : 0;
+    let total = qty * unitPrice;
+    let breakdown = `📐 Size: ${w}' x ${h}' = ${area} sq ft<br>Unit price: RM${unitPrice.toFixed(2)}<br>${qty} pcs x RM${unitPrice.toFixed(2)} = RM${total.toFixed(2)}<br>💰 <strong>Total = RM${total}</strong>`;
+    document.getElementById('banner_estimate').innerHTML = `RM ${total.toFixed(2)}<div class="price-breakdown">${breakdown}</div>`;
+  }
+
+  document.getElementById('sub_qty')?.addEventListener('input', updateSublimation);
+  document.getElementById('sub_material')?.addEventListener('change', updateSublimation);
+  document.getElementById('ss_qty')?.addEventListener('input', updateSilkscreen);
+  document.getElementById('ss_shirt')?.addEventListener('change', updateSilkscreen);
+  document.getElementById('ss_front')?.addEventListener('change', updateSilkscreen);
+  document.getElementById('ss_back')?.addEventListener('change', updateSilkscreen);
+  document.getElementById('dtf_qty')?.addEventListener('input', updateDTF);
+  document.getElementById('dtf_front')?.addEventListener('change', updateDTF);
+  document.getElementById('dtf_back')?.addEventListener('change', updateDTF);
+  document.getElementById('dtf_sleeve')?.addEventListener('input', updateDTF);
+  document.getElementById('lan_qty')?.addEventListener('input', updateLanyard);
+  document.getElementById('lan_size')?.addEventListener('change', updateLanyard);
+  document.getElementById('lan_buckle')?.addEventListener('change', updateLanyard);
+  document.getElementById('bun_qty')?.addEventListener('input', updateBunting);
+  document.getElementById('bun_w')?.addEventListener('input', updateBunting);
+  document.getElementById('bun_h')?.addEventListener('input', updateBunting);
+  document.getElementById('banner_qty')?.addEventListener('input', updateBanner);
+  document.getElementById('banner_w')?.addEventListener('input', updateBanner);
+  document.getElementById('banner_h')?.addEventListener('input', updateBanner);
+
+  updateSublimation(); updateSilkscreen(); updateDTF(); updateLanyard(); updateBunting(); updateBanner();
+
+  const modal = document.getElementById('serviceModal');
+  const closeModalBtn = document.getElementById('closeModalBtn');
+  closeModalBtn.addEventListener('click', closeModal);
+  modal.addEventListener('click', (e) => { if(e.target === modal) closeModal(); });
+
+  const backBtn = document.getElementById('backToTop');
+  window.addEventListener('scroll', () => backBtn.classList.toggle('visible', window.scrollY > 400));
+  backBtn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+  const mobileBtn = document.getElementById('mobileMenuBtn');
+  const mobileDropdown = document.getElementById('mobileDropdown');
+  if(mobileBtn) {
+    mobileBtn.addEventListener('click', () => {
+      mobileDropdown.style.display = mobileDropdown.style.display === 'flex' ? 'none' : 'flex';
+      mobileDropdown.innerHTML = '<a href="#home">Home</a><a href="#details">Details</a><a href="#services">What We Do</a><a href="#workflow">Workflow</a><a href="#packages">Packages</a><a href="#portfolio">Portfolio</a><a href="#print-estimator">Print Estimate</a>';
+      mobileDropdown.querySelectorAll('a').forEach(a => a.addEventListener('click', () => mobileDropdown.style.display = 'none'));
+    });
+  }
+  document.getElementById('exploreBtn')?.addEventListener('click', () => document.getElementById('services').scrollIntoView({ behavior: 'smooth' }));
+  document.getElementById('contactBtn')?.addEventListener('click', () => window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent('Hi GRAPHINK! I want to build my brand identity.')}`, '_blank'));
+
+  const sections = ['home', 'details', 'services', 'workflow', 'packages', 'portfolio', 'print-estimator'];
+  const navLinks = document.querySelectorAll('.nav-links a');
+  function updateActiveNav() {
+    let current = '';
+    const scrollPos = window.scrollY + 150;
+    sections.forEach(id => {
+      const el = document.getElementById(id);
+      if(el && el.offsetTop <= scrollPos && el.offsetTop + el.offsetHeight > scrollPos) current = id;
+    });
+    navLinks.forEach(link => {
+      link.classList.remove('active');
+      if(link.getAttribute('href')?.substring(1) === current) link.classList.add('active');
+    });
+  }
+  window.addEventListener('scroll', updateActiveNav);
+  window.addEventListener('load', updateActiveNav);
+  navLinks.forEach(link => link.addEventListener('click', (e) => {
+    e.preventDefault();
+    const targetId = link.getAttribute('href').substring(1);
+    document.getElementById(targetId)?.scrollIntoView({ behavior: 'smooth' });
+  }));
+
+  buildAlbumTabs();
+  updateSwiperSlides();
+  renderCompactServices();
+  attachPackageInquiry();
+</script>
+</body>
+</html>
