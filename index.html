@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <title>GRAPHINK | Design Studio | Expandable Price Breakdown</title>
-  <meta name="description" content="GraphINK – Corporate Identity, Advertising Design, Logo, Branding, Social Media, UI/UX.">
+  <title>GRAPHINK | Design Studio | Pink Theme</title>
+  <meta name="description" content="GraphINK – Corporate Identity, Advertising Design, Logo, Branding, Social Media, UI/UX. Pink theme, print estimator with expandable breakdown.">
   <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800&display=swap" rel="stylesheet">
   <link href="https://api.fontshare.com/v2/css?f[]=clash-display@400,700,600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
@@ -21,8 +21,8 @@
       --glass-bg: rgba(255, 255, 255, 0.72);
       --glass-border: rgba(255, 255, 255, 0.5);
       --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.05);
-      --accent: #d946ef;
-      --accent-soft: #f0abfc;
+      --accent: #ff4d8c;  /* pink */
+      --accent-soft: #ffb3c6;
       --card-radius: 28px;
       --transition-smooth: all 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1);
       --text-muted: #5b6e8c;
@@ -57,13 +57,13 @@
     .logo-area { display: flex; align-items: center; gap: 12px; }
     .logo-icon {
       width: 42px; height: 42px;
-      background: linear-gradient(135deg, #d946ef, #a21caf);
+      background: linear-gradient(135deg, #ff4d8c, #cc3366);
       border-radius: 18px;
       display: flex;
       align-items: center;
       justify-content: center;
       font-weight: 800; font-size: 20px; color: white;
-      box-shadow: 0 6px 14px rgba(217,70,239,0.25);
+      box-shadow: 0 6px 14px rgba(255,77,140,0.25);
       background-image: url('logo.png');
       background-size: cover;
       background-position: center;
@@ -97,7 +97,6 @@
       .header-container { padding: 8px 16px; }
       .logo-text { font-size: 20px; }
     }
-    /* Hero - bigger size */
     .hero {
       max-width: 1280px;
       margin: 60px auto 30px;
@@ -111,7 +110,7 @@
     }
     .hero-content { flex: 1; }
     .hero-badge {
-      background: rgba(217,70,239,0.12);
+      background: rgba(255,77,140,0.12);
       color: var(--accent);
       display: inline-block;
       padding: 8px 18px;
@@ -147,9 +146,9 @@
       color: white;
       cursor: pointer;
       transition: 0.2s;
-      box-shadow: 0 6px 14px rgba(217,70,239,0.3);
+      box-shadow: 0 6px 14px rgba(255,77,140,0.3);
     }
-    .cta-button:hover { transform: scale(1.02); background: #c026d3; }
+    .cta-button:hover { transform: scale(1.02); background: #e6396e; }
     @media (max-width: 860px) {
       .hero-grid { flex-direction: column; text-align: center; }
       .hero-desc { margin-left: auto; margin-right: auto; }
@@ -212,7 +211,7 @@
       line-height: 1.4;
     }
     .view-details-btn {
-      background: rgba(217,70,239,0.15);
+      background: rgba(255,77,140,0.15);
       border: none;
       padding: 8px 20px;
       border-radius: 40px;
@@ -329,7 +328,7 @@
       transition: 0.2s;
     }
     .modal-inq-btn:hover {
-      background: #c026d3;
+      background: #e6396e;
       transform: scale(1.01);
     }
 
@@ -475,7 +474,7 @@
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      background: rgba(217,70,239,0.1);
+      background: rgba(255,77,140,0.1);
       padding: 4px 12px;
       border-radius: 30px;
       font-size: 12px;
@@ -484,7 +483,7 @@
       align-self: flex-start;
     }
     .package-inq-btn {
-      background: rgba(217,70,239,0.15);
+      background: rgba(255,77,140,0.15);
       border: none;
       padding: 10px 20px;
       border-radius: 60px;
@@ -525,7 +524,7 @@
       background: var(--accent);
       color: white;
       border-color: var(--accent);
-      box-shadow: 0 6px 14px rgba(217,70,239,0.3);
+      box-shadow: 0 6px 14px rgba(255,77,140,0.3);
     }
     .portfolio-swiper {
       width: 100%;
@@ -613,13 +612,13 @@
       padding: 10px;
       margin-top: 8px;
       text-align: left;
-      display: none; /* hidden by default, toggle on click */
+      display: none;
     }
     .price-breakdown.show {
       display: block;
     }
     .breakdown-toggle-btn {
-      background: rgba(217,70,239,0.1);
+      background: rgba(255,77,140,0.1);
       border: none;
       color: var(--accent);
       font-size: 12px;
