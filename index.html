@@ -1,3 +1,5 @@
+Here is the updated HTML with the **Design Packages** reverted to a **white background** (original glassmorphic style) and the **Portfolio album order** changed to: **Social Media, Branding, Packaging, UI/UX** – keeping the same image filenames (`image10.png` etc.). All other features (pink accent, print estimator, mobile menu) remain intact.
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -411,7 +413,7 @@
       color: var(--text-muted);
     }
 
-    /* Packages Section - Pink background, white/black text */
+    /* Packages Section - Original white background (glass) */
     .packages-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
@@ -419,37 +421,35 @@
       margin-top: 20px;
     }
     .package-card {
-      background: var(--accent);  /* pink background */
+      background: rgba(255,255,255,0.7);
       backdrop-filter: blur(12px);
       border-radius: 32px;
       padding: 28px;
-      border: 1px solid rgba(255,255,255,0.3);
+      border: 1px solid rgba(255,255,255,0.6);
       transition: transform 0.2s;
       display: flex;
       flex-direction: column;
-      color: #1e293b; /* dark text for contrast */
     }
     .package-card:hover {
       transform: translateY(-4px);
-      border-color: white;
-      box-shadow: 0 12px 24px rgba(0,0,0,0.1);
+      border-color: var(--accent);
     }
     .package-card h3 {
       font-size: 26px;
       font-weight: 800;
       margin-bottom: 12px;
-      color: white;
+      color: var(--accent);
     }
     .package-price {
       font-size: 28px;
       font-weight: 800;
       margin: 16px 0;
-      color: white;
+      color: #1e293b;
     }
     .package-price span {
       font-size: 16px;
       font-weight: 500;
-      color: rgba(255,255,255,0.8);
+      color: var(--text-muted);
     }
     .package-list {
       list-style: none;
@@ -457,7 +457,7 @@
     }
     .package-list li {
       padding: 8px 0;
-      border-bottom: 1px solid rgba(255,255,255,0.2);
+      border-bottom: 1px solid rgba(0,0,0,0.05);
       display: flex;
       align-items: center;
       gap: 10px;
@@ -466,31 +466,31 @@
     }
     .package-list li::before {
       content: "✓";
-      color: white;
+      color: var(--accent);
       font-weight: bold;
     }
     .package-note {
       font-size: 12px;
-      color: rgba(0,0,0,0.7);
+      color: var(--text-muted);
       margin-top: 16px;
       padding-top: 12px;
-      border-top: 1px dashed rgba(255,255,255,0.3);
+      border-top: 1px dashed rgba(0,0,0,0.1);
     }
     .badge-icon {
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      background: rgba(255,255,255,0.2);
+      background: rgba(217,70,239,0.1);
       padding: 4px 12px;
       border-radius: 30px;
       font-size: 12px;
       font-weight: 600;
       margin-bottom: 12px;
       align-self: flex-start;
-      color: white;
+      color: var(--accent);
     }
     .package-inq-btn {
-      background: white;
+      background: rgba(217,70,239,0.15);
       border: none;
       padding: 10px 20px;
       border-radius: 60px;
@@ -503,11 +503,11 @@
       width: 100%;
     }
     .package-inq-btn:hover {
-      background: #1e293b;
+      background: var(--accent);
       color: white;
     }
 
-    /* Portfolio (swiper) */
+    /* Portfolio (swiper) with reordered albums */
     .portfolio-section { background: transparent; }
     .album-tabs {
       display: flex;
@@ -754,7 +754,7 @@
   </div>
 </section>
 
-<!-- DESIGN PACKAGES (pink background) -->
+<!-- DESIGN PACKAGES (original white background) -->
 <section id="packages">
   <div class="section-header"><h2 class="section-title">Design Packages</h2><div class="section-sub">Choose the perfect plan for your brand</div></div>
   <div class="packages-grid" id="packagesGrid">
@@ -814,14 +814,14 @@
   <p style="text-align: center; margin-top: 20px; font-size: 13px; color: var(--text-muted);">📢 All prices are estimates. Final quote depends on project complexity, number of revisions, and timeline.</p>
 </section>
 
-<!-- PORTFOLIO -->
+<!-- PORTFOLIO with reordered albums: Social Media, Branding, Packaging, UI/UX -->
 <section id="portfolio" class="portfolio-section">
   <div class="section-header"><h2 class="section-title">Portfolio</h2><div class="section-sub">swipe through our work — subcategory albums</div></div>
   <div class="album-tabs" id="albumTabs"></div>
   <div class="swiper portfolio-swiper" id="portfolioSwiper"><div class="swiper-wrapper" id="swiperWrapper"></div><div class="swiper-pagination"></div><div class="swiper-button-next"></div><div class="swiper-button-prev"></div></div>
 </section>
 
-<!-- PRINT PRICE ESTIMATOR (clean notes) -->
+<!-- PRINT PRICE ESTIMATOR -->
 <section id="print-estimator">
   <div class="section-header"><h2 class="section-title">🖨️ Print Price Estimate</h2><div class="section-sub">Instant pricing for sublimation, silkscreen, DTF, lanyard, bunting & banner</div></div>
   <div class="estimator-grid">
@@ -1015,14 +1015,15 @@
     });
   }
 
-  // Portfolio Albums
+  // Portfolio Albums - reordered: Social Media, Branding, Packaging, UI/UX
+  // Keep same filenames: Social Media uses image10-12, Branding image1-3, Packaging image4-6, UI/UX image7-9
   const albums = {
+    "Social Media": ["image10.png", "image11.png", "image12.png"],
     "Branding": ["image1.png", "image2.png", "image3.png"],
     "Packaging": ["image4.png", "image5.png", "image6.png"],
-    "UI/UX": ["image7.png", "image8.png", "image9.png"],
-    "Social Media": ["image10.png", "image11.png", "image12.png"]
+    "UI/UX": ["image7.png", "image8.png", "image9.png"]
   };
-  let activeAlbum = "Branding";
+  let activeAlbum = "Social Media";  // first tab active
   let swiperInstance = null;
 
   function buildAlbumTabs() {
@@ -1230,3 +1231,4 @@
 </script>
 </body>
 </html>
+```
