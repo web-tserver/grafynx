@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Grafynx | Print Price Estimator</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://api.fontshare.com/v2/css?f[]=clash-display@400,700,600&display=swap" rel="stylesheet">
+  <style>
+    /* Minimal style to reuse same glassmorphic look */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(145deg, #fef9ff 0%, #f4f0fa 100%);
+      color: #1e293b;
+    }
+    :root {
+      --glass-bg: rgba(255, 255, 255, 0.72);
+      --glass-border: rgba(255, 255, 255, 0.5);
+      --accent: #ff4d8c;
+      --text-muted: #5b6e8c;
+    }
+    .container {
+      max-width: 1280px;
+      margin: 60px auto;
+      padding: 20px 24px;
+    }
+    .section-header { margin-bottom: 32px; text-align: center; }
+    .section-title {
+      font-size: 32px;
+      font-weight: 700;
+      font-family: 'Clash Display', sans-serif;
+    }
+    .section-sub {
+      color: var(--accent);
+      font-weight: 500;
+      margin-top: 6px;
+      font-size: 15px;
+    }
+    .estimator-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 28px;
+    }
+    .estimator-card {
+      background: rgba(255,255,255,0.7);
+      backdrop-filter: blur(12px);
+      border-radius: 32px;
+      padding: 28px;
+      border: 1px solid rgba(255,255,255,0.6);
+      transition: transform 0.2s;
+    }
+    .estimator-card:hover { transform: translateY(-4px); border-color: var(--accent); }
+    .estimator-card h3 {
+      font-size: 24px;
+      margin-bottom: 16px;
+      color: var(--accent);
+    }
+    .estimator-field { margin-bottom: 20px; }
+    .estimator-field label {
+      font-size: 14px;
+      font-weight: 600;
+      display: block;
+      margin-bottom: 8px;
+      color: #1e293b;
+    }
+    .estimator-select, .estimator-input {
+      width: 100%;
+      padding: 12px 16px;
+      border-radius: 20px;
+      border: 1px solid rgba(0,0,0,0.1);
+      background: white;
+      font-size: 14px;
+      outline: none;
+    }
+    .estimate-result {
+      margin-top: 24px;
+      padding-top: 16px;
+      border-top: 2px dashed var(--accent);
+      text-align: center;
+    }
+    .estimate-price {
+      font-size: 32px;
+      font-weight: 800;
+      color: var(--accent);
+    }
+    .price-breakdown {
+      font-size: 11px;
+      color: var(--text-muted);
+      background: rgba(0,0,0,0.03);
+      border-radius: 16px;
+      padding: 10px;
+      margin-top: 8px;
+      text-align: left;
+      display: none;
+    }
+    .price-breakdown.show { display: block; }
+    .breakdown-toggle-btn {
+      background: rgba(255,77,140,0.1);
+      border: none;
+      color: var(--accent);
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 8px;
+      padding: 6px 12px;
+      border-radius: 40px;
+      display: inline-block;
+    }
+    .estimate-note {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 8px;
+    }
+    .back-link {
+      display: inline-block;
+      margin-bottom: 30px;
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 600;
+    }
+    .back-link:hover { text-decoration: underline; }
+    @media (max-width: 700px) {
+      .estimator-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <a href="index.html" class="back-link">← Back to Home</a>
+  <div class="section-header">
+    <h2 class="section-title">🖨️ Print Price Estimate</h2>
+    <div class="section-sub">Instant pricing for sublimation, silkscreen, DTF, lanyard, bunting & banner</div>
+  </div>
+  <div class="estimator-grid">
+    <!-- Same 6 estimator cards as in original -->
+    <div class="estimator-card"><h3>🔥 Sublimation (Basic-Roundneck)</h3><div class="estimator-field"><label>Quantity (pcs)</label><input type="number" id="sub_qty" class="estimator-input" min="0" value="0" step="1"></div><div class="estimator-field"><label>Material / Upgrade</label><select id="sub_material" class="estimator-select"><option value="0">Standard Microfiber</option><option value="3">Diamond 155GSM (+RM3/pc)</option><option value="8">Lycra 280GSM (+RM8/pc)</option></select></div><div class="estimate-result"><div class="estimate-price" id="sub_estimate">RM 0.00</div><button class="breakdown-toggle-btn" data-target="sub_breakdown">Show breakdown</button><div id="sub_breakdown" class="price-breakdown"></div><div class="estimate-note">*Full jersey print + material upgrade only</div></div></div>
+    <div class="estimator-card"><h3>🎨 Silkscreen (T-Shirt)</h3><div class="estimator-field"><label>Quantity (pcs)</label><input type="number" id="ss_qty" class="estimator-input" min="0" value="0" step="1"></div><div class="estimator-field"><label>Base Shirt Type</label><select id="ss_shirt" class="estimator-select"><option value="13.50">Roundneck (RM13.50)</option><option value="18.50">Collar (RM18.50)</option><option value="23.00">Polo (RM23.00)</option></select></div><div class="estimator-field"><label>Front Colors</label><select id="ss_front" class="estimator-select"><option value="0">1 Color</option><option value="1">2 Colors</option><option value="2">3 Colors</option><option value="3">4 Colors</option><option value="4">5 Colors</option><option value="5">6 Colors</option><option value="6">7 Colors</option><option value="7">8 Colors</option></select></div><div class="estimator-field"><label>Back Colors</label><select id="ss_back" class="estimator-select"><option value="-1">No Print</option><option value="0">1 Color</option><option value="1">2 Colors</option><option value="2">3 Colors</option><option value="3">4 Colors</option><option value="4">5 Colors</option><option value="5">6 Colors</option><option value="6">7 Colors</option><option value="7">8 Colors</option></select></div><div class="estimate-result"><div class="estimate-price" id="ss_estimate">RM 0.00</div><button class="breakdown-toggle-btn" data-target="ss_breakdown">Show breakdown</button><div id="ss_breakdown" class="price-breakdown"></div><div class="estimate-note">*Includes base shirt + print cost</div></div></div>
+    <div class="estimator-card"><h3>✨ DTF Transfer (Any Garment)</h3><div class="estimator-field"><label>Quantity (pcs)</label><input type="number" id="dtf_qty" class="estimator-input" min="0" value="0" step="1"></div><div class="estimator-field"><label>Print Size (Front)</label><select id="dtf_front" class="estimator-select"><option value="0">No Print</option><option value="4">Smaller than A4 (RM4)</option><option value="8">A4 (RM8)</option><option value="10">A3 (RM10)</option><option value="12">Bigger than A3 (RM12)</option></select></div><div class="estimator-field"><label>Print Size (Back)</label><select id="dtf_back" class="estimator-select"><option value="0">No Print</option><option value="4">Smaller than A4 (RM4)</option><option value="8">A4 (RM8)</option><option value="10">A3 (RM10)</option><option value="12">Bigger than A3 (RM12)</option></select></div><div class="estimator-field"><label>Sleeve Prints (per arm)</label><input type="number" id="dtf_sleeve" class="estimator-input" min="0" value="0" step="1"></div><div class="estimate-result"><div class="estimate-price" id="dtf_estimate">RM 0.00</div><button class="breakdown-toggle-btn" data-target="dtf_breakdown">Show breakdown</button><div id="dtf_breakdown" class="price-breakdown"></div><div class="estimate-note">*Transfer only, garment not included</div></div></div>
+    <div class="estimator-card"><h3>📎 Lanyard (Sublimation)</h3><div class="estimator-field"><label>Quantity (pcs)</label><input type="number" id="lan_qty" class="estimator-input" min="0" value="0" step="1"></div><div class="estimator-field"><label>Size</label><select id="lan_size" class="estimator-select"><option value="20">20MM</option><option value="25">25MM</option></select></div><div class="estimator-field"><label>Buckle</label><select id="lan_buckle" class="estimator-select"><option value="with">With Buckle</option><option value="no">No Buckle</option></select></div><div class="estimate-result"><div class="estimate-price" id="lan_estimate">RM 0.00</div><button class="breakdown-toggle-btn" data-target="lan_breakdown">Show breakdown</button><div id="lan_breakdown" class="price-breakdown"></div><div class="estimate-note">*Full colour print + clip included</div></div></div>
+    <div class="estimator-card"><h3>🏳️ Bunting (Vertical) - Custom Size</h3><div class="estimator-field"><label>Quantity</label><input type="number" id="bun_qty" class="estimator-input" min="0" value="0" step="1"></div><div class="estimator-field"><label>Height (ft)</label><input type="number" id="bun_h" class="estimator-input" min="0" value="0" step="0.5" placeholder="e.g., 6"></div><div class="estimator-field"><label>Width (ft)</label><input type="number" id="bun_w" class="estimator-input" min="0" value="0" step="0.5" placeholder="e.g., 2"></div><div class="estimate-result"><div class="estimate-price" id="bun_estimate">RM 0.00</div><button class="breakdown-toggle-btn" data-target="bun_breakdown">Show breakdown</button><div id="bun_breakdown" class="price-breakdown"></div><div class="estimate-note">*Tarpaulin 380gsm, hem & eyelets</div></div></div>
+    <div class="estimator-card"><h3>📰 Banner (Horizontal) - Custom Size</h3><div class="estimator-field"><label>Quantity</label><input type="number" id="banner_qty" class="estimator-input" min="0" value="0" step="1"></div><div class="estimator-field"><label>Height (ft)</label><input type="number" id="banner_h" class="estimator-input" min="0" value="0" step="0.5" placeholder="e.g., 3"></div><div class="estimator-field"><label>Width (ft)</label><input type="number" id="banner_w" class="estimator-input" min="0" value="0" step="0.5" placeholder="e.g., 6"></div><div class="estimate-result"><div class="estimate-price" id="banner_estimate">RM 0.00</div><button class="breakdown-toggle-btn" data-target="banner_breakdown">Show breakdown</button><div id="banner_breakdown" class="price-breakdown"></div><div class="estimate-note">*Tarpaulin 380gsm, hem & eyelets</div></div></div>
+  </div>
+  <p style="text-align: center; margin-top: 20px; font-size: 13px; color: var(--text-muted);">📢 Prices are estimates. Final quote depends on artwork complexity, rush order, and shipping.</p>
+</div>
+
+<script>
+  // Replicate all estimator logic from original (same as previous)
+  const ssMatrix = [
+    [7.82,8.84,9.86,10.88,11.90,12.92,13.94,15.30],[5.55,6.57,7.59,8.61,9.63,10.65,11.67,13.03],
+    [3.74,4.76,5.78,6.80,7.82,8.84,9.86,11.22],[2.72,3.74,4.76,5.78,6.80,7.82,8.84,10.20],
+    [1.99,3.01,4.03,5.05,6.07,7.09,8.11,9.47],[1.78,2.80,3.82,4.84,5.86,6.88,7.90,9.26],
+    [1.59,2.61,3.63,4.65,5.67,6.69,7.71,9.07],[1.29,2.31,3.33,4.35,5.37,6.39,7.41,8.77],
+    [1.20,2.22,3.24,4.26,5.28,6.30,7.32,8.68],[1.10,2.12,3.14,4.16,5.18,6.20,7.22,8.58]
+  ];
+  function getSSTier(q) { if(q<11) return 0; if(q<21) return 1; if(q<31) return 2; if(q<51) return 3; if(q<81) return 4; if(q<101) return 5; if(q<201) return 6; if(q<301) return 7; if(q<501) return 8; return 9; }
+
+  function updateSublimation() {
+    let qty = parseInt(document.getElementById('sub_qty')?.value) || 0; if(qty<0) qty=0;
+    let unitBase = 0;
+    if(qty>0) { if(qty<=10) unitBase=45; else if(qty<=30) unitBase=35; else if(qty<=50) unitBase=33; else if(qty<=100) unitBase=30; else if(qty<=200) unitBase=28; else if(qty<=300) unitBase=25; else if(qty<=500) unitBase=23; else if(qty<=1000) unitBase=20; else unitBase=18; }
+    let material = parseFloat(document.getElementById('sub_material')?.value) || 0;
+    let base = qty * unitBase; let materialCost = qty * material; let total = base + materialCost;
+    let breakdown = `🧾 Base: ${qty} x RM${unitBase} = RM${base}<br>${material?`➕ Material: +RM${materialCost}<br>`:''}💰 <strong>Total = RM${total}</strong>`;
+    document.getElementById('sub_estimate').innerHTML = `RM ${total.toFixed(2)}`;
+    const breakdownDiv = document.getElementById('sub_breakdown');
+    if(breakdownDiv) breakdownDiv.innerHTML = breakdown;
+  }
+  function updateSilkscreen() {
+    let qty = parseInt(document.getElementById('ss_qty')?.value) || 0; if(qty<0) qty=0;
+    let shirt = parseFloat(document.getElementById('ss_shirt')?.value) || 0;
+    let frontColors = parseInt(document.getElementById('ss_front')?.value) || 0;
+    let backColors = parseInt(document.getElementById('ss_back')?.value) || -1;
+    let baseShirt = qty * shirt;
+    let frontCost = 0, backCost = 0;
+    if(qty>0) { let tier = getSSTier(qty); if(frontColors>=0) frontCost = qty * ssMatrix[tier][frontColors]; if(backColors>=0) backCost = qty * ssMatrix[tier][backColors]; }
+    let total = baseShirt + frontCost + backCost;
+    let breakdown = `👕 Base shirt: ${qty} x RM${shirt} = RM${baseShirt}<br>🎨 Front ${frontColors+1}C: RM${frontCost.toFixed(2)}<br>${backColors>=0?`🎨 Back ${backColors+1}C: RM${backCost.toFixed(2)}<br>`:''}💰 <strong>Total = RM${total}</strong>`;
+    document.getElementById('ss_estimate').innerHTML = `RM ${total.toFixed(2)}`;
+    const breakdownDiv = document.getElementById('ss_breakdown');
+    if(breakdownDiv) breakdownDiv.innerHTML = breakdown;
+  }
+  function updateDTF() {
+    let qty = parseInt(document.getElementById('dtf_qty')?.value) || 0; if(qty<0) qty=0;
+    let front = parseFloat(document.getElementById('dtf_front')?.value) || 0;
+    let back = parseFloat(document.getElementById('dtf_back')?.value) || 0;
+    let sleeve = parseInt(document.getElementById('dtf_sleeve')?.value) || 0;
+    let frontTotal = qty * front; let backTotal = qty * back; let sleeveTotal = sleeve * 3;
+    let total = frontTotal + backTotal + sleeveTotal;
+    let breakdown = `🖨️ Front: RM${frontTotal}<br>🖨️ Back: RM${backTotal}<br>💪 Sleeves: RM${sleeveTotal}<br>💰 <strong>Total = RM${total}</strong>`;
+    document.getElementById('dtf_estimate').innerHTML = `RM ${total.toFixed(2)}`;
+    const breakdownDiv = document.getElementById('dtf_breakdown');
+    if(breakdownDiv) breakdownDiv.innerHTML = breakdown;
+  }
+  function updateLanyard() {
+    let qty = parseInt(document.getElementById('lan_qty')?.value) || 0; if(qty<0) qty=0;
+    let unit = 0;
+    if(qty>0) { if(qty>=20000) unit=3.5; else if(qty>=10000) unit=4; else if(qty>=1000) unit=5.5; else if(qty>=500) unit=7.5; else if(qty>=200) unit=9; else if(qty>=100) unit=10; else if(qty>=50) unit=13; else if(qty>=30) unit=15; else if(qty>=20) unit=16; else unit=19; }
+    let total = qty * unit;
+    let breakdown = `📏 ${qty} pcs x RM${unit.toFixed(2)} = RM${total.toFixed(2)}<br>💰 <strong>Total = RM${total}</strong>`;
+    document.getElementById('lan_estimate').innerHTML = `RM ${total.toFixed(2)}`;
+    const breakdownDiv = document.getElementById('lan_breakdown');
+    if(breakdownDiv) breakdownDiv.innerHTML = breakdown;
+  }
+  function updateBunting() {
+    let qty = parseInt(document.getElementById('bun_qty')?.value) || 0; if(qty<0) qty=0;
+    let w = parseFloat(document.getElementById('bun_w')?.value) || 0; let h = parseFloat(document.getElementById('bun_h')?.value) || 0;
+    let area = w * h; let unitPrice = area>0 ? Math.max(23, area*2+3) : 0;
+    let total = qty * unitPrice;
+    let breakdown = `📐 Size: ${w}' x ${h}' = ${area} sq ft<br>Unit price: RM${unitPrice.toFixed(2)}<br>${qty} pcs x RM${unitPrice.toFixed(2)} = RM${total.toFixed(2)}<br>💰 <strong>Total = RM${total}</strong>`;
+    document.getElementById('bun_estimate').innerHTML = `RM ${total.toFixed(2)}`;
+    const breakdownDiv = document.getElementById('bun_breakdown');
+    if(breakdownDiv) breakdownDiv.innerHTML = breakdown;
+  }
+  function updateBanner() {
+    let qty = parseInt(document.getElementById('banner_qty')?.value) || 0; if(qty<0) qty=0;
+    let w = parseFloat(document.getElementById('banner_w')?.value) || 0; let h = parseFloat(document.getElementById('banner_h')?.value) || 0;
+    let area = w * h; let unitPrice = area>0 ? Math.max(23, area*2+3) : 0;
+    let total = qty * unitPrice;
+    let breakdown = `📐 Size: ${w}' x ${h}' = ${area} sq ft<br>Unit price: RM${unitPrice.toFixed(2)}<br>${qty} pcs x RM${unitPrice.toFixed(2)} = RM${total.toFixed(2)}<br>💰 <strong>Total = RM${total}</strong>`;
+    document.getElementById('banner_estimate').innerHTML = `RM ${total.toFixed(2)}`;
+    const breakdownDiv = document.getElementById('banner_breakdown');
+    if(breakdownDiv) breakdownDiv.innerHTML = breakdown;
+  }
+
+  document.getElementById('sub_qty')?.addEventListener('input', updateSublimation);
+  document.getElementById('sub_material')?.addEventListener('change', updateSublimation);
+  document.getElementById('ss_qty')?.addEventListener('input', updateSilkscreen);
+  document.getElementById('ss_shirt')?.addEventListener('change', updateSilkscreen);
+  document.getElementById('ss_front')?.addEventListener('change', updateSilkscreen);
+  document.getElementById('ss_back')?.addEventListener('change', updateSilkscreen);
+  document.getElementById('dtf_qty')?.addEventListener('input', updateDTF);
+  document.getElementById('dtf_front')?.addEventListener('change', updateDTF);
+  document.getElementById('dtf_back')?.addEventListener('change', updateDTF);
+  document.getElementById('dtf_sleeve')?.addEventListener('input', updateDTF);
+  document.getElementById('lan_qty')?.addEventListener('input', updateLanyard);
+  document.getElementById('lan_size')?.addEventListener('change', updateLanyard);
+  document.getElementById('lan_buckle')?.addEventListener('change', updateLanyard);
+  document.getElementById('bun_qty')?.addEventListener('input', updateBunting);
+  document.getElementById('bun_w')?.addEventListener('input', updateBunting);
+  document.getElementById('bun_h')?.addEventListener('input', updateBunting);
+  document.getElementById('banner_qty')?.addEventListener('input', updateBanner);
+  document.getElementById('banner_w')?.addEventListener('input', updateBanner);
+  document.getElementById('banner_h')?.addEventListener('input', updateBanner);
+
+  // Toggle breakdown buttons
+  document.querySelectorAll('.breakdown-toggle-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const targetId = btn.getAttribute('data-target');
+      const targetDiv = document.getElementById(targetId);
+      if(targetDiv) {
+        targetDiv.classList.toggle('show');
+        btn.textContent = targetDiv.classList.contains('show') ? 'Hide breakdown' : 'Show breakdown';
+      }
+    });
+  });
+
+  updateSublimation(); updateSilkscreen(); updateDTF(); updateLanyard(); updateBunting(); updateBanner();
+</script>
+</body>
+</html>
