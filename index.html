@@ -643,979 +643,286 @@
   <div class="packages-grid" id="packagesGrid">
     <div class="package-card">
       <div class="badge-icon">🎨 LOGO DESIGN</div>
- 
-    .nav-links {
-      display: flex;
-      gap: 28px;
-      align-items: center;
-    }
-
-    .nav-links a {
-      text-decoration: none;
-      font-weight: 500;
-      font-size: 15px;
-      color: #1e293b;
-      transition: 0.2s;
-      padding: 6px 0;
-      position: relative;
-    }
-
-    .nav-links a:hover,
-    .nav-links a.active {
-      color: var(--accent);
-      font-weight: 600;
-    }
-
-    .nav-links a.active::after {
-      content: '';
-      position: absolute;
-      bottom: -2px;
-      left: 0;
-      width: 100%;
-      height: 2.5px;
-      background: var(--accent);
-      border-radius: 4px;
-    }
-
-    .mobile-menu-btn {
-      display: none;
-      background: none;
-      border: none;
-      font-size: 28px;
-      cursor: pointer;
-    }
-
-    @media (max-width: 760px) {
-      .nav-links {
-        display: none;
-      }
-      .mobile-menu-btn {
-        display: block;
-      }
-      .header-container {
-        padding: 8px 16px;
-      }
-      .logo-text {
-        font-size: 20px;
-      }
-    }
-
-    /* main layout (estimator grid) */
-    .estimator-main {
-      max-width: 1280px;
-      margin: 40px auto 40px;
-      padding: 0 24px;
-    }
-
-    .estimator-hero {
-      margin-bottom: 32px;
-    }
-
-    .hero-badge {
-      background: rgba(255, 77, 140, 0.12);
-      color: var(--accent);
-      display: inline-block;
-      padding: 8px 18px;
-      border-radius: 40px;
-      font-size: 14px;
-      font-weight: 600;
-      margin-bottom: 20px;
-    }
-
-    .hero-title {
-      font-family: 'Clash Display', sans-serif;
-      font-size: clamp(36px, 6vw, 52px);
-      font-weight: 800;
-      line-height: 1.2;
-      letter-spacing: -1px;
-    }
-
-    .hero-title .pink-highlight {
-      color: var(--accent);
-    }
-
-    .layout-wrapper {
-      display: grid;
-      grid-template-columns: 1fr 380px;
-      gap: 28px;
-      align-items: start;
-    }
-
-    .left-panel {
-      background: rgba(255, 255, 255, 0.75);
-      backdrop-filter: blur(12px);
-      border-radius: 36px;
-      padding: 28px;
-      border: 1px solid rgba(255, 255, 255, 0.6);
-      box-shadow: var(--glass-shadow);
-    }
-
-    .right-panel {
-      position: sticky;
-      top: 100px;
-      display: flex;
-      flex-direction: column;
-      gap: 24px;
-    }
-
-    .right-box {
-      background: rgba(255, 255, 255, 0.8);
-      backdrop-filter: blur(12px);
-      border-radius: 32px;
-      padding: 28px 24px;
-      border: 1px solid rgba(255, 255, 255, 0.7);
-      text-align: center;
-    }
-
-    /* category grid */
-    .category-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-      gap: 14px;
-      margin-bottom: 32px;
-    }
-
-    .category-card {
-      background: rgba(255, 255, 255, 0.6);
-      border: 2px solid var(--border-input);
-      border-radius: 24px;
-      padding: 12px 6px;
-      text-align: center;
-      cursor: pointer;
-      transition: all 0.2s ease;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .category-card:hover {
-      background: rgba(255, 255, 255, 0.9);
-      transform: translateY(-2px);
-    }
-
-    .category-card.active {
-      border-color: var(--accent);
-      background: rgba(255, 77, 140, 0.15);
-    }
-
-    .cat-icon {
-      margin-bottom: 6px;
-      color: var(--text-muted);
-    }
-
-    .category-card.active .cat-icon,
-    .category-card.active .cat-name {
-      color: var(--accent);
-    }
-
-    .cat-name {
-      font-size: 12px;
-      font-weight: 700;
-      color: #1e293b;
-    }
-
-    /* form & panels */
-    .panel {
-      display: none;
-      animation: fadeIn 0.3s ease;
-    }
-
-    .panel.active {
-      display: block;
-    }
-
-    @keyframes fadeIn {
-      from {
-        opacity: 0;
-        transform: translateY(8px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    .panel-banner {
-      background: linear-gradient(135deg, rgba(255, 77, 140, 0.12), rgba(204, 51, 102, 0.05));
-      border-radius: 28px;
-      padding: 16px 20px;
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      margin-bottom: 24px;
-      border: 1px solid rgba(255, 77, 140, 0.2);
-    }
-
-    .panel-banner svg {
-      width: 36px;
-      height: 36px;
-      stroke: var(--accent);
-      stroke-width: 1.8;
-    }
-
-    .panel-banner h2 {
-      font-size: 22px;
-      font-weight: 700;
-      font-family: 'Clash Display', sans-serif;
-      color: #1e293b;
-    }
-
-    .grid-layout {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-      gap: 20px;
-    }
-
-    .form-group {
-      background: rgba(255, 255, 255, 0.5);
-      border-radius: 24px;
-      padding: 20px;
-      border: 1px solid var(--glass-border);
-    }
-
-    .section-title {
-      font-weight: 700;
-      font-size: 18px;
-      margin-bottom: 16px;
-      display: block;
-      color: #1e293b;
-    }
-
-    .field-label {
-      font-size: 13px;
-      font-weight: 600;
-      color: var(--text-muted);
-      margin-bottom: 8px;
-      display: block;
-    }
-
-    .input-field,
-    .select-field {
-      width: 100%;
-      padding: 12px 16px;
-      border-radius: 20px;
-      border: 1px solid var(--border-input);
-      background: white;
-      font-size: 14px;
-      outline: none;
-      transition: 0.2s;
-    }
-
-    .input-field:focus,
-    .select-field:focus {
-      border-color: var(--accent);
-      box-shadow: 0 0 0 2px rgba(255, 77, 140, 0.2);
-    }
-
-    /* ========== REDESIGNED SIZE CARDS ========== */
-    .size-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
-      gap: 14px;
-      margin-bottom: 16px;
-    }
-
-    .size-item {
-      background: white;
-      border-radius: 20px;
-      padding: 14px 8px;
-      text-align: center;
-      border: 1px solid var(--border-input);
-      transition: all 0.2s;
-      box-shadow: 0 1px 2px rgba(0,0,0,0.02);
-    }
-
-    .size-item:hover {
-      transform: translateY(-2px);
-      border-color: var(--accent-soft);
-    }
-
-    .size-header {
-      margin-bottom: 8px;
-    }
-
-    .size-label {
-      font-weight: 800;
-      font-size: 16px;
-      display: inline-block;
-      margin-right: 6px;
-      color: #1e293b;
-    }
-
-    .surcharge-badge {
-      font-size: 11px;
-      font-weight: 700;
-      color: var(--accent);
-      background: rgba(255, 77, 140, 0.12);
-      display: inline-block;
-      padding: 2px 8px;
-      border-radius: 20px;
-    }
-
-    /* compact stepper inside size card (no spinners) */
-    .size-stepper {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: #f8f9fc;
-      border-radius: 40px;
-      border: 1px solid var(--border-input);
-      width: 100%;
-      max-width: 110px;
-      margin: 0 auto;
-      overflow: hidden;
-    }
-
-    .size-stepper button {
-      background: transparent;
-      border: none;
-      width: 32px;
-      height: 34px;
-      font-size: 18px;
-      font-weight: 700;
-      color: var(--accent);
-      cursor: pointer;
-      transition: 0.1s;
-    }
-
-    .size-stepper button:hover {
-      background: rgba(255, 77, 140, 0.1);
-    }
-
-    .size-stepper input {
-      width: 40px;
-      text-align: center;
-      border: none;
-      background: transparent;
-      font-weight: 600;
-      font-size: 15px;
-      outline: none;
-      -moz-appearance: textfield;
-      appearance: textfield;
-    }
-
-    .size-stepper input::-webkit-outer-spin-button,
-    .size-stepper input::-webkit-inner-spin-button {
-      -webkit-appearance: none;
-      margin: 0;
-    }
-
-    /* total pill */
-    .total-pill {
-      background: rgba(255, 77, 140, 0.12);
-      color: var(--accent);
-      padding: 6px 14px;
-      border-radius: 40px;
-      font-size: 13px;
-      font-weight: 600;
-      display: inline-block;
-      margin-top: 6px;
-    }
-
-    /* addons list (clean row style) */
-    .addons-list {
-      display: flex;
-      flex-direction: column;
-      gap: 0;
-    }
-
-    .addon-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 14px 0;
-      border-bottom: 1px solid rgba(0, 0, 0, 0.06);
-    }
-
-    .addon-row:last-child {
-      border-bottom: none;
-    }
-
-    .addon-info {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: baseline;
-      gap: 8px;
-    }
-
-    .addon-label {
-      font-weight: 600;
-      font-size: 15px;
-      color: #1e293b;
-    }
-
-    .addon-price {
-      font-size: 13px;
-      font-weight: 500;
-      color: var(--accent);
-      background: rgba(255, 77, 140, 0.1);
-      padding: 2px 10px;
-      border-radius: 30px;
-    }
-
-    /* compact stepper for addons (no spinners) */
-    .compact-stepper {
-      display: flex;
-      align-items: center;
-      background: #f8f9fc;
-      border-radius: 40px;
-      border: 1px solid var(--border-input);
-      overflow: hidden;
-      width: 96px;
-    }
-
-    .compact-stepper button {
-      background: transparent;
-      border: none;
-      width: 30px;
-      height: 34px;
-      font-size: 18px;
-      font-weight: 700;
-      color: var(--accent);
-      cursor: pointer;
-    }
-
-    .compact-stepper input {
-      width: 36px;
-      text-align: center;
-      border: none;
-      background: transparent;
-      font-weight: 600;
-      font-size: 15px;
-      outline: none;
-      -moz-appearance: textfield;
-      appearance: textfield;
-    }
-
-    .compact-stepper input::-webkit-outer-spin-button,
-    .compact-stepper input::-webkit-inner-spin-button {
-      -webkit-appearance: none;
-      margin: 0;
-    }
-
-    /* general stepper (for simple quantity) */
-    .general-stepper {
-      display: flex;
-      background: #f8f9fc;
-      border-radius: 40px;
-      overflow: hidden;
-      border: 1px solid var(--border-input);
-      width: 110px;
-    }
-
-    .general-stepper input {
-      flex: 1;
-      text-align: center;
-      border: none;
-      background: transparent;
-      font-weight: 600;
-      outline: none;
-      -moz-appearance: textfield;
-      appearance: textfield;
-    }
-
-    .general-stepper input::-webkit-outer-spin-button,
-    .general-stepper input::-webkit-inner-spin-button {
-      -webkit-appearance: none;
-      margin: 0;
-    }
-
-    .general-stepper button {
-      width: 34px;
-      background: transparent;
-      border: none;
-      font-size: 18px;
-      font-weight: bold;
-      color: var(--accent);
-      cursor: pointer;
-    }
-
-    .custom-size-box {
-      margin-top: 12px;
-      display: none;
-    }
-
-    /* right panel */
-    .price-breakdown {
-      display: flex;
-      justify-content: space-between;
-      gap: 16px;
-      margin-bottom: 16px;
-    }
-
-    .price-breakdown div {
-      background: rgba(0, 0, 0, 0.03);
-      padding: 12px;
-      border-radius: 24px;
-      flex: 1;
-      font-size: 13px;
-      font-weight: 500;
-    }
-
-    .price-breakdown strong {
-      display: block;
-      font-size: 22px;
-      margin-top: 6px;
-      color: #1e293b;
-    }
-
-    .total-price {
-      font-size: 18px;
-      font-weight: 600;
-      padding-top: 20px;
-      border-top: 1px solid rgba(0, 0, 0, 0.08);
-      margin-top: 12px;
-    }
-
-    .total-price span {
-      font-size: 44px;
-      font-weight: 800;
-      color: var(--accent);
-      display: block;
-      font-family: 'Clash Display', sans-serif;
-    }
-
-    .breakdown-toggle {
-      font-size: 13px;
-      color: var(--accent);
-      cursor: pointer;
-      margin: 16px 0 8px;
-      font-weight: 600;
-    }
-
-    .breakdown-list {
-      display: none;
-      text-align: left;
-      background: white;
-      border-radius: 24px;
-      padding: 14px;
-      font-size: 12px;
-      max-height: 200px;
-      overflow-y: auto;
-      border: 1px solid var(--border-input);
-    }
-
-    .breakdown-list.show {
-      display: block;
-    }
-
-    .breakdown-list ul {
-      padding-left: 18px;
-    }
-
-    .wa-btn,
-    .preview-btn,
-    .download-btn {
-      width: 100%;
-      padding: 14px;
-      border-radius: 60px;
-      font-weight: 700;
-      font-size: 15px;
-      border: none;
-      cursor: pointer;
-      transition: 0.2s;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      margin-top: 12px;
-    }
-
-    .wa-btn {
-      background: #34C759;
-      color: white;
-      box-shadow: 0 4px 12px rgba(52, 199, 89, 0.2);
-    }
-
-    .preview-btn {
-      background: var(--accent);
-      color: white;
-    }
-
-    .download-btn {
-      background: rgba(0, 0, 0, 0.05);
-      color: #1e293b;
-      border: 1px solid var(--border-input);
-    }
-
-    .wa-btn:hover,
-    .preview-btn:hover {
-      transform: scale(1.01);
-      filter: brightness(0.96);
-    }
-
-    /* receipt capture (hidden) */
-    #receipt-capture {
-      position: absolute;
-      left: -9999px;
-      top: 0;
-      width: 450px;
-      background: #ffffff;
-      padding: 28px;
-      border-radius: 28px;
-      font-family: 'Inter', sans-serif;
-    }
-
-    #receipt-capture h2 {
-      color: var(--accent);
-      font-family: 'Clash Display', sans-serif;
-      margin-bottom: 12px;
-    }
-
-    /* modal preview */
-    .preview-modal {
-      display: none;
-      position: fixed;
-      inset: 0;
-      background: rgba(0, 0, 0, 0.85);
-      backdrop-filter: blur(16px);
-      z-index: 2000;
-      align-items: center;
-      justify-content: center;
-      padding: 24px;
-    }
-
-    .preview-modal.active {
-      display: flex;
-    }
-
-    .preview-content {
-      background: white;
-      border-radius: 32px;
-      max-width: 90vw;
-      max-height: 90vh;
-      overflow: auto;
-      padding: 20px;
-      position: relative;
-      text-align: center;
-    }
-
-    .preview-image {
-      max-width: 100%;
-      max-height: 70vh;
-      border-radius: 20px;
-    }
-
-    .preview-close {
-      position: absolute;
-      top: 12px;
-      right: 20px;
-      background: rgba(0, 0, 0, 0.5);
-      border: none;
-      font-size: 26px;
-      width: 38px;
-      height: 38px;
-      border-radius: 30px;
-      color: white;
-      cursor: pointer;
-    }
-
-    .toast-container {
-      position: fixed;
-      top: 20px;
-      left: 50%;
-      transform: translateX(-50%);
-      z-index: 9999;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      pointer-events: none;
-    }
-
-    .toast {
-      background: white;
-      padding: 12px 24px;
-      border-radius: 60px;
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
-      font-weight: 600;
-      font-size: 13px;
-      border-left: 4px solid var(--accent);
-    }
-
-    footer {
-      text-align: center;
-      padding: 40px 20px;
-      color: var(--text-muted);
-      border-top: 1px solid rgba(0, 0, 0, 0.05);
-      margin-top: 40px;
-      font-size: 13px;
-    }
-
-    .back-to-top {
-      position: fixed;
-      bottom: 30px;
-      right: 30px;
-      background: rgba(255, 255, 255, 0.8);
-      backdrop-filter: blur(12px);
-      width: 48px;
-      height: 48px;
-      border-radius: 30px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 24px;
-      cursor: pointer;
-      opacity: 0;
-      transition: 0.2s;
-      pointer-events: none;
-      z-index: 99;
-    }
-
-    .back-to-top.visible {
-      opacity: 1;
-      pointer-events: auto;
-    }
-
-    @media (max-width: 900px) {
-      .layout-wrapper {
-        grid-template-columns: 1fr;
-      }
-      .right-panel {
-        position: static;
-      }
-      .category-grid {
-        gap: 10px;
-      }
-      .size-grid {
-        grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
-      }
-    }
-  </style>
-</head>
-<body>
-
-  <div class="toast-container" id="toastContainer"></div>
-
-  <header>
-    <div class="header-container">
-      <div class="logo-area" onclick="window.location.href='index.html'">
-        <div class="logo-icon">G</div>
-        <div class="logo-text"><span class="graf">Graf</span><span class="ynx">ynx</span></div>
-      </div>
-      <div class="nav-links" id="navLinks">
-        <a href="index.html">Home</a>
-        <a href="index.html#about-us">About Us</a>
-        <a href="index.html#services">What We Do</a>
-        <a href="index.html#workflow">Workflow</a>
-        <a href="index.html#packages">Packages</a>
-        <a href="index.html#portfolio">Portfolio</a>
-        <a href="#" class="active">Print Estimate</a>
-      </div>
-      <button class="mobile-menu-btn" id="mobileMenuBtn">☰</button>
+      <h3>Custom Logo Concept</h3>
+      <div class="package-price">RM280</div>
+      <ul class="package-list">
+        <li>Custom logo concept (not template)</li>
+        <li>2-3 initial concepts</li>
+        <li>2 revisions per concept</li>
+        <li>High resolution files (PNG, JPG, PDF)</li>
+        <li>Black & White + Color versions</li>
+      </ul>
+      <div><strong>Best for:</strong> New Businesses, Rebranding, Personal Branding</div>
+      <div class="package-note">Turnaround: 5-7 working days</div>
+      <div class="package-note">Prices start from stated amount. Final pricing depends on project scope, revisions &amp; timeline.</div>
+      <button class="package-inq-btn" data-package="Logo Design">Inquire about Logo Design</button>
     </div>
-    <div id="mobileDropdown" style="display: none; flex-direction: column; background: rgba(255,255,255,0.96); backdrop-filter: blur(20px); border-radius: 32px; margin-top: 12px; padding: 16px; gap: 12px;"></div>
-  </header>
-
-  <div class="estimator-main">
-    <div class="estimator-hero">
-      <div class="hero-badge">⚡ instant print estimator · transparent pricing</div>
-      <h1 class="hero-title">Print <span class="pink-highlight">Estimate</span><br>in real time</h1>
+    <div class="package-card">
+      <div class="badge-icon">🏷️ BRANDING & IDENTITY</div>
+      <h3>Complete Brand Identity</h3>
+      <div class="package-price">From RM700</div>
+      <ul class="package-list">
+        <li>Logo refinement</li>
+        <li>Color palette & typography</li>
+        <li>Brand usage guideline</li>
+        <li>Social media & print ready assets</li>
+        <li>Custom logo concept (not template)</li>
+        <li>2-3 initial concepts, 2 revisions</li>
+        <li>High resolution files (PNG, JPG, PDF)</li>
+        <li>Black & White + Color versions</li>
+      </ul>
+      <div><strong>Best for:</strong> SMEs, Corporate Brands, Long-Term Brand Growth</div>
+      <div class="package-note">Turnaround: 7-14 working days (generate ideas and concept)</div>
+      <div class="package-note">Prices start from stated amount. Final pricing depends on project scope, revisions &amp; timeline.</div>
+      <button class="package-inq-btn" data-package="Branding & Identity">Inquire about Branding</button>
     </div>
+    <div class="package-card">
+      <div class="badge-icon">📱 MONTHLY PACKAGE</div>
+      <h3>Social Media Management</h3>
+      <div class="package-price">RM600 <span>/ month</span></div>
+      <ul class="package-list">
+        <li>Custom post design</li>
+        <li>On-brand layout and color</li>
+        <li>Feed consistency</li>
+        <li>Content ready visual</li>
+        <li>24 posters per month</li>
+        <li>3 revisions per poster</li>
+      </ul>
+      <div><strong>Option:</strong> Single post – RM30</div>
+      <div><strong>Terms:</strong> Content must be provided. Urgent design = extra charge</div>
+      <div class="package-note">Prices start from stated amount. Final pricing depends on project scope, revisions &amp; timeline.</div>
+      <button class="package-inq-btn" data-package="Monthly Package">Inquire about Monthly Package</button>
+    </div>
+  </div>
+  <p style="text-align: center; margin-top: 20px; font-size: 13px; color: var(--text-muted);">📢 All prices are estimates. Final quote depends on project complexity, number of revisions, and timeline.</p>
+</section>
 
-    <div class="layout-wrapper">
-      <!-- left panel: categories & forms -->
-      <div class="left-panel">
-        <div class="category-grid" id="categoryGrid"></div>
-        <div id="panelsContainer"></div>
-      </div>
+<!-- PORTFOLIO with reordered albums -->
+<section id="portfolio" class="portfolio-section">
+  <div class="section-header"><h2 class="section-title">Portfolio</h2><div class="section-sub">swipe through our work — subcategory albums</div></div>
+  <div class="album-tabs" id="albumTabs"></div>
+  <div class="swiper portfolio-swiper" id="portfolioSwiper"><div class="swiper-wrapper" id="swiperWrapper"></div><div class="swiper-pagination"></div><div class="swiper-button-next"></div><div class="swiper-button-prev"></div></div>
+</section>
 
-      <!-- right panel: quote summary -->
-      <div class="right-panel">
-        <div class="right-box">
-          <div class="price-breakdown">
-            <div>Base Cost <strong id="out_base">RM 0.00</strong></div>
-            <div>Surcharges <strong id="out_surcharge">RM 0.00</strong></div>
+<div style="max-width:1280px; margin: 40px auto; text-align: center; padding: 0 24px;">
+  <button id="contactBtn" class="cta-button" style="background: #1e293b; box-shadow: none;">Let’s build your brand. 🚀</button>
+</div>
+<footer>© 2026 Grafynx — “Inks Your Ideas” | Setia Alam | AFIQ 019 908 3295</footer>
+<div class="back-to-top" id="backToTop">↑</div>
+
+<!-- MODAL FOR SERVICE DETAILS -->
+<div id="serviceModal" class="service-modal">
+  <div class="modal-container">
+    <button class="modal-close" id="closeModalBtn">&times;</button>
+    <div id="modalContent"></div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+<script>
+  const WHATSAPP_NUMBER = "60199083295";
+
+  // Full service data for "What We Do" modal – Printing Service has no details, uses direct WhatsApp button
+  const servicesFull = [
+    { name: "Corporate Identity", icon: "🏢", items: [ { label: "Business Card", price: "RM70" }, { label: "ID Card", price: "RM100" }, { label: "Company Profile", price: "RM700" }, { label: "Lanyard", price: "RM70" }, { label: "T-Shirt", price: "RM50+" }, { label: "Corporate Shirt", price: "RM100" }, { label: "Sublimation Jersey", price: "RM100" } ], note: "Print-Ready Files, CMYK Setup, Bleed and Margin Ready. All designs include mockup preview.", preview: "Business cards, ID cards, company profile, lanyards, apparel" },
+    { name: "Advertising Design", icon: "📢", items: [ { label: "Bunting", price: "RM60" }, { label: "Banner", price: "RM80" }, { label: "Backdrop", price: "RM100" }, { label: "Signboard", price: "RM300+" }, { label: "Flags", price: "RM70" }, { label: "Flyer", price: "RM30-50" }, { label: "Poster", price: "RM30-50" }, { label: "Menu", price: "RM100+" }, { label: "Stickers", price: "RM30-50" } ], note: "Print-Ready Files, CMYK Setup, Bleed and Margin Ready. All designs include mockup preview.", preview: "Bunting, banners, backdrops, signboards, flyers, posters, menus, stickers" },
+    { name: "Logo Design", icon: "✧", items: [ { label: "Custom Logo Concept", price: "RM280" }, { label: "2-3 Concepts", price: "included" }, { label: "2 Revisions", price: "included" }, { label: "High-Res Files", price: "included" } ], note: "Modern, minimal, bold — unique identity", preview: "Custom logo from RM280, 2-3 concepts, 2 revisions, high-res files" },
+    { name: "Brand Identity", icon: "🎨", items: [ { label: "Complete Identity", price: "from RM700" }, { label: "Color Palette", price: "included" }, { label: "Typography", price: "included" }, { label: "Brand Guide", price: "included" } ], note: "Colors, typography, brand guide", preview: "Full brand identity from RM700, color palette, typography, guidelines" },
+    { name: "Social Media Design", icon: "📱", items: [ { label: "Custom Post Design", price: "RM30/post" }, { label: "Monthly Package (24 posts)", price: "RM600" }, { label: "3 Revisions per post", price: "included" } ], note: "Posts, ads creatives, carousels", preview: "Single post RM30 or monthly package RM600 (24 posts)" },
+    { name: "Website / UI Design", icon: "🖥️", items: [ { label: "Website / UI Design", price: "from RM400" } ], note: "Clean, conversion-focused interfaces", preview: "Modern website & UI design starting from RM400" },
+    // PRINTING SERVICE: no items, direct WhatsApp button
+    { name: "Printing Service", icon: "🖨️", items: [], note: "Get custom designs for all your printing needs – sublimation, DTF, silkscreen, banners, bunting, lanyards, aprons, caps, and more. Contact us for a quote.", preview: "Custom design for sublimation, DTF, silkscreen, banner, bunting, lanyard, apron, cap, and more." }
+  ];
+
+  function renderCompactServices() {
+    const container = document.getElementById('serviceGrid');
+    if(!container) return;
+    container.innerHTML = servicesFull.map(service => {
+      // Special handling for Printing Service: no "View Details" button, instead a direct WhatsApp button
+      if (service.name === "Printing Service") {
+        return `
+          <div class="service-card" data-service-name="${service.name}" style="cursor: default;">
+            <div class="service-icon">${service.icon}</div>
+            <h3>${service.name}</h3>
+            <div class="service-preview">${service.preview}</div>
+            <button class="view-details-btn" style="background: var(--accent); color: white;" onclick="window.open('https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent('Hi Grafynx, I need printing service. Please share more details.')}', '_blank')">Inquire Now →</button>
           </div>
-          <div class="total-price">Estimated Grand Total <span id="out_total">RM 0.00</span></div>
-          <div class="breakdown-toggle" onclick="document.getElementById('breakdownList').classList.toggle('show')">▼ Show detailed breakdown</div>
-          <div id="breakdownList" class="breakdown-list"></div>
+        `;
+      }
+      return `
+        <div class="service-card" data-service-name="${service.name}">
+          <div class="service-icon">${service.icon}</div>
+          <h3>${service.name}</h3>
+          <div class="service-preview">${service.preview.substring(0, 80)}${service.preview.length > 80 ? '…' : ''}</div>
+          <button class="view-details-btn">View Details</button>
         </div>
-        <div class="right-box">
-          <div class="section-title" style="margin-bottom: 12px;">📲 Request Quote</div>
-          <div style="display: flex; gap: 8px; margin-bottom: 16px;">
-            <select id="wa_country_code" class="select-field" style="width: 100px;"><option value="60" selected>+60</option><option value="65">+65</option><option value="62">+62</option><option value="1">+1</option><option value="44">+44</option></select>
-            <input type="tel" id="wa_target_number" class="input-field" placeholder="Phone number">
-          </div>
-          <button class="wa-btn" id="sendWhatsAppBtn">📨 Send Quote via WhatsApp</button>
-          <button class="preview-btn" id="previewQuoteBtn">🖼️ Preview Quote Image</button>
-          <button class="download-btn" id="downloadQuoteBtn">⬇️ Download Quote Image</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <footer>© 2026 Grafynx — “Inks Your Ideas” | Setia Alam | AFIQ 019 908 3295</footer>
-  <div class="back-to-top" id="backToTop">↑</div>
-
-  <!-- hidden receipt capture -->
-  <div id="receipt-capture">
-    <h2>Grafynx Quotation</h2>
-    <p style="color: #5b6e8c; font-size: 12px;" id="receiptDate"></p>
-    <p style="font-weight: bold;" id="receiptProduct"></p>
-    <div id="receiptItems"></div>
-    <div style="font-size: 24px; font-weight: 800; text-align: right; border-top: 2px solid #eaeaea; padding-top: 12px;" id="receiptTotal"></div>
-  </div>
-
-  <!-- preview modal -->
-  <div id="previewModal" class="preview-modal">
-    <div class="preview-content">
-      <button class="preview-close" onclick="closePreviewModal()">✕</button>
-      <img id="previewImage" class="preview-image" alt="quote preview">
-      <button class="download-btn" id="downloadFromPreviewBtn" style="margin-top: 16px;">Save Image</button>
-    </div>
-  </div>
-
-  <script>
-    // ----------------------------- GRAFYNX ESTIMATOR LOGIC (optimized, no spinners) -----------------------------
-    let currentCategory = 'sublimation';
-    let currentBase = 0, currentSur = 0, currentTotal = 0;
-    let currentBreakdownList = [];
-    let previewCanvas = null;
-
-    // Categories definition
-    const categories = [
-      { id: 'sublimation', name: 'Sublimation', icon: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.38 3.46L16 2a8.5 8.5 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.47a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.47a2 2 0 0 0-1.34-2.23z"/></svg>' },
-      { id: 'silkscreen', name: 'Silkscreen', icon: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.38 3.46L16 2a8.5 8.5 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.47a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.47a2 2 0 0 0-1.34-2.23z"/></svg>' },
-      { id: 'dtf_shirt', name: 'DTF Shirt', icon: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.38 3.46L16 2a8.5 8.5 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.47a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.47a2 2 0 0 0-1.34-2.23z"/></svg>' },
-      { id: 'lanyard', name: 'Lanyard', icon: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 2h4M12 2v4M8 6h8a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2zM9 10h6M9 14h4"/></svg>' },
-      { id: 'apron', name: 'Apron', icon: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 2h8v4M6 6h12l1.5 16H4.5L6 6zM9 12h6v5H9z"/></svg>' },
-      { id: 'cap', name: 'Cap', icon: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 16h14"/><path d="M6 16a6 6 0 0 1 12 0"/><path d="M18 16c2 0 3 1 4 2"/><circle cx="12" cy="9" r="1"/></svg>' },
-      { id: 'bunting', name: 'Bunting', icon: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="7" y="4" width="10" height="12" rx="1"/><path d="M12 16v6M9 22h6M12 4V2"/></svg>' },
-      { id: 'banner', name: 'Banner', icon: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="6" width="16" height="8" rx="1"/><path d="M4 4v16M20 4v16"/></svg>' }
-    ];
-
-    // size config
-    const shirtSizes = ['XS','S','M','L','XL','2XL','3XL','5XL','7XL'];
-    const sizeSurcharge = { '3XL':3, '5XL':6, '7XL':9 };
-    function getSSTier(qty) { if(qty<11) return 0; if(qty<21) return 1; if(qty<31) return 2; if(qty<51) return 3; if(qty<81) return 4; if(qty<101) return 5; if(qty<201) return 6; if(qty<301) return 7; if(qty<501) return 8; return 9; }
-    const ssMatrix = [[7.82,8.84,9.86,10.88,11.90,12.92,13.94,15.30],[5.55,6.57,7.59,8.61,9.63,10.65,11.67,13.03],[3.74,4.76,5.78,6.80,7.82,8.84,9.86,11.22],[2.72,3.74,4.76,5.78,6.80,7.82,8.84,10.20],[1.99,3.01,4.03,5.05,6.07,7.09,8.11,9.47],[1.78,2.80,3.82,4.84,5.86,6.88,7.90,9.26],[1.59,2.61,3.63,4.65,5.67,6.69,7.71,9.07],[1.29,2.31,3.33,4.35,5.37,6.39,7.41,8.77],[1.20,2.22,3.24,4.26,5.28,6.30,7.32,8.68],[1.10,2.12,3.14,4.16,5.18,6.20,7.22,8.58]];
-
-    // Helper to render panels dynamically
-    function buildFullPanels() {
-      const container = document.getElementById('panelsContainer');
-      container.innerHTML = `
-        <div id="panel-sublimation" class="panel active">${sublimationHTML()}</div>
-        <div id="panel-silkscreen" class="panel">${silkscreenHTML()}</div>
-        <div id="panel-dtf_shirt" class="panel">${dtfHTML()}</div>
-        <div id="panel-lanyard" class="panel">${simplePanel('lanyard','Lanyard (Sublimation)','lan')}</div>
-        <div id="panel-apron" class="panel">${simplePanel('apron','Custom Apron','apr')}</div>
-        <div id="panel-cap" class="panel">${simplePanel('cap','Custom Cap','cap')}</div>
-        <div id="panel-bunting" class="panel">${buntingBannerPanel('bunting','Bunting (Vertical)','bun')}</div>
-        <div id="panel-banner" class="panel">${buntingBannerPanel('banner','Banner (Horizontal)','banner')}</div>
       `;
-      attachEventDelegation();
-    }
+    }).join('');
 
-    // Updated addonList using compact stepper
-    function addonList() { 
-      const adds = [
-        {id:'sub_add_collar', label:'Collar Upgrade', price:5},
-        {id:'sub_add_long', label:'Long Sleeves', price:5},
-        {id:'sub_add_muslimah', label:'Muslimah Cut', price:15},
-        {id:'sub_add_oversize', label:'Oversize Cut', price:15},
-        {id:'sub_add_name', label:'Personal Name', price:4},
-        {id:'sub_add_namenum', label:'Name & Number', price:7}
-      ];
-      return `<div class="addons-list">` + adds.map(a => `
-        <div class="addon-row">
-          <div class="addon-info">
-            <span class="addon-label">${a.label}</span>
-            <span class="addon-price">+RM${a.price}/pcs</span>
-          </div>
-          <div class="compact-stepper">
-            <button onclick="stepVal('${a.id}',-1)">−</button>
-            <input type="number" id="${a.id}" class="calc-trigger" min="0" value="0">
-            <button onclick="stepVal('${a.id}',1)">+</button>
-          </div>
-        </div>
-      `).join('') + `</div>`;
-    }
+    // Attach modal triggers for non-printing cards
+    document.querySelectorAll('.service-card').forEach(card => {
+      const serviceName = card.getAttribute('data-service-name');
+      if (serviceName === "Printing Service") return; // skip, already has direct button
+      const service = servicesFull.find(s => s.name === serviceName);
+      if(service) {
+        card.addEventListener('click', (e) => {
+          if(e.target.classList.contains('view-details-btn') || e.target.closest('.view-details-btn')) e.stopPropagation();
+          openServiceModal(service);
+        });
+        card.querySelector('.view-details-btn')?.addEventListener('click', (e) => {
+          e.stopPropagation();
+          openServiceModal(service);
+        });
+      }
+    });
+  }
 
-    function sublimationHTML() { return `<div class="panel-banner"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M20.38 3.46L16 2a8.5 8.5 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.47a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.47a2 2 0 0 0-1.34-2.23z"/></svg><h2>Full Print Sublimation Jersey</h2></div><div class="form-group"><div class="section-title">Sizes & Quantity</div><div class="size-grid" id="sub_sizeGrid"></div><div id="sub_totalQtySpan" class="total-pill">Total: 0</div></div><div class="form-group"><label class="field-label">Design Type</label><select id="sub_design" class="select-field calc-trigger"><option value="0">Catalogue Design (Free)</option><option value="50">Custom Design (+RM50)</option></select><label class="field-label">Production</label><select id="sub_urgent" class="select-field calc-trigger"><option value="0">Standard</option><option value="5">Urgent (+RM5/pcs)</option></select><label class="field-label">Material</label><select id="sub_material" class="select-field calc-trigger"><option value="0">Microfiber Reverse</option><option value="3">Diamond 155GSM (+RM3)</option><option value="8">Lycra 280GSM (+RM8)</option></select></div><div class="form-group"><div class="section-title">Add-ons</div>${addonList()}</div>`; }
-    
-    function silkscreenHTML(){ return `<div class="panel-banner"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M20.38 3.46L16 2a8.5 8.5 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.47a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.47a2 2 0 0 0-1.34-2.23z"/></svg><h2>T-Shirt (Silkscreen)</h2></div><div class="form-group"><div class="section-title">Sizes & Quantity</div><div class="size-grid" id="silk_sizeGrid"></div><div id="silk_totalQtySpan" class="total-pill">Total: 0</div></div><div class="form-group"><label class="field-label">Shirt Type</label><select id="silk_shirtType" class="calc-trigger"><option value="13.50">Roundneck</option><option value="18.50">Collar</option><option value="23">Polo</option></select><div class="addon-row" style="border-bottom:none; padding:8px 0;"><span>Long Sleeve</span><div class="compact-stepper"><button onclick="stepVal('silk_ls_qty',-1)">-</button><input type="number" id="silk_ls_qty" class="calc-trigger" min="0" value="0"><button onclick="stepVal('silk_ls_qty',1)">+</button></div></div></div><div class="form-group"><label class="field-label">Front Colors</label><select id="silk_front_colors" class="calc-trigger"><option value="-1">No Print</option><option value="0" selected>1C</option><option value="1">2C</option><option value="2">3C</option><option value="3">4C</option></select><label class="field-label">Back Colors</label><select id="silk_back_colors" class="calc-trigger"><option value="-1" selected>No Print</option><option value="0">1C</option><option value="1">2C</option></select></div>`; }
-    
-    function dtfHTML(){ return `<div class="panel-banner"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M20.38 3.46L16 2a8.5 8.5 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.47a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.47a2 2 0 0 0-1.34-2.23z"/></svg><h2>T-Shirt (DTF)</h2></div><div class="form-group"><div class="section-title">Sizes & Quantity</div><div class="size-grid" id="dtf_sizeGrid"></div><div id="dtf_totalQtySpan" class="total-pill">Total: 0</div></div><div class="form-group"><label>Shirt Type</label><select id="dtf_shirtType" class="calc-trigger"><option value="13.50">Roundneck</option><option value="18.50">Collar</option><option value="23">Polo</option></select><div class="addon-row" style="border-bottom:none; padding:8px 0;"><span>Long Sleeve</span><div class="compact-stepper"><button onclick="stepVal('dtf_ls_qty',-1)">-</button><input type="number" id="dtf_ls_qty" class="calc-trigger" min="0" value="0"><button onclick="stepVal('dtf_ls_qty',1)">+</button></div></div></div><div class="form-group"><label>Front Print Size</label><select id="dtf_front_size" class="calc-trigger"><option value="0">No Print</option><option value="8" selected>A4 (RM8)</option><option value="10">A3 (RM10)</option></select><label>Back Print Size</label><select id="dtf_back_size" class="calc-trigger"><option value="0" selected>No Print</option><option value="8">A4 (RM8)</option></select><div class="addon-row" style="border-bottom:none; padding:8px 0;"><span>Sleeve Print (per arm)</span><div class="compact-stepper"><button onclick="stepVal('dtf_sleeve_qty',-1)">-</button><input type="number" id="dtf_sleeve_qty" class="calc-trigger" min="0" value="0"><button onclick="stepVal('dtf_sleeve_qty',1)">+</button></div></div></div>`; }
-    
-    function simplePanel(id,title,prefix){ return `<div class="panel-banner"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 2v4M8 6h8l2 16H6L8 6z"/></svg><h2>${title}</h2></div><div class="form-group"><label class="field-label">Quantity (min ${id==='lanyard'||id==='cap'?10:1})</label><div class="general-stepper"><button onclick="stepVal('${prefix}_qty',-1)">-</button><input type="number" id="${prefix}_qty" class="calc-trigger" min="${id==='lanyard'||id==='cap'?10:1}" value="10"><button onclick="stepVal('${prefix}_qty',1)">+</button></div>${id==='apron'?`<label class="field-label">Type</label><select id="apr_type" class="calc-trigger"><option value="basic">Basic</option><option value="exclusive">Exclusive</option></select>`:''}${id==='cap'?`<label class="field-label">Print Type</label><select id="cap_type" class="calc-trigger"><option value="dtf">DTF</option><option value="embroidery">Embroidery</option></select>`:''}</div>`;}
-    function buntingBannerPanel(id,title,pre){ return `<div class="panel-banner"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="4" y="6" width="16" height="8" rx="1"/><path d="M4 4v16M20 4v16"/></svg><h2>${title}</h2></div><div class="form-group"><label class="field-label">Quantity</label><div class="general-stepper"><button onclick="stepVal('${pre}_qty',-1)">-</button><input type="number" id="${pre}_qty" class="calc-trigger" min="1" value="1"><button onclick="stepVal('${pre}_qty',1)">+</button></div><label class="field-label">Size</label><select id="${pre}_size" class="calc-trigger"><option value="custom">Custom Size...</option><option value="32">2x6 ft (RM32)</option><option value="23">2x2 ft (RM23)</option></select><div id="${pre}_custom_box" class="custom-size-box"><input type="number" id="${pre}_w" placeholder="Width (ft)" class="input-field calc-trigger"><input type="number" id="${pre}_h" placeholder="Height (ft)" class="input-field calc-trigger"></div></div>`; }
-
-    // Build size grids with compact card style (no spinners)
-    function buildSizeGrids(){ 
-      ['sub','silk','dtf'].forEach(p => { 
-        let container = document.getElementById(`${p}_sizeGrid`);
-        if(!container) return;
-        let html = ''; 
-        shirtSizes.forEach(sz => { 
-          let sur = sizeSurcharge[sz]||0; 
-          let badgeHtml = sur ? `<span class="surcharge-badge">+RM${sur}</span>` : '';
-          html += `<div class="size-item">
-            <div class="size-header">
-              <span class="size-label">${sz}</span>
-              ${badgeHtml}
-            </div>
-            <div class="size-stepper">
-              <button onclick="stepVal('${p}_qty_${sz.toLowerCase()}',-1)">−</button>
-              <input type="number" id="${p}_qty_${sz.toLowerCase()}" class="calc-trigger" min="0" value="0">
-              <button onclick="stepVal('${p}_qty_${sz.toLowerCase()}',1)">+</button>
-            </div>
-          </div>`; 
-        }); 
-        container.innerHTML = html; 
-      }); 
-    }
-
-    window.stepVal = function(id, delta) { let el = document.getElementById(id); if(el) { let val = (parseInt(el.value)||0)+delta; if(val<0) val=0; el.value=val; calculate(); }};
-
-    function calculate() {
-      let cat = currentCategory;
-      let res = { base:0, sur:0, total:0, breakdown:[] };
-      if(cat === 'sublimation') res = calcSub();
-      else if(cat === 'silkscreen') res = calcSilk();
-      else if(cat === 'dtf_shirt') res = calcDTF();
-      else res = calcSimple(cat);
-      animateValue('out_base', currentBase, res.base);
-      animateValue('out_surcharge', currentSur, res.sur);
-      animateValue('out_total', currentTotal, res.total);
-      currentBase = res.base; currentSur = res.sur; currentTotal = res.total; currentBreakdownList = res.breakdown;
-      document.getElementById('breakdownList').innerHTML = res.breakdown.length ? `<ul><li>${res.breakdown.join('</li><li>')}</li></ul>` : '<i>No items</i>';
-      // update total pills
-      ['sub','silk','dtf'].forEach(p => { 
-        let total = 0; 
-        shirtSizes.forEach(sz => total += parseInt(document.getElementById(`${p}_qty_${sz.toLowerCase()}`)?.value||0)); 
-        let span = document.getElementById(`${p}_totalQtySpan`); 
-        if(span) span.innerText = `Total: ${total}`; 
+  function openServiceModal(service) {
+    const modal = document.getElementById('serviceModal');
+    const modalContent = document.getElementById('modalContent');
+    modalContent.innerHTML = `
+      <div class="modal-icon">${service.icon}</div>
+      <div class="modal-title">${service.name}</div>
+      <ul class="modal-list">
+        ${service.items.map(item => `<li><span>${item.label}</span><span>${item.price}</span></li>`).join('')}
+      </ul>
+      <div class="modal-note">${service.note}</div>
+      <button class="modal-inq-btn" data-service="${service.name}">Inquire about ${service.name}</button>
+    `;
+    modal.classList.add('active');
+    document.body.style.overflow = 'hidden';
+    history.pushState({ modalOpen: true }, '');
+    const inqBtn = modalContent.querySelector('.modal-inq-btn');
+    if(inqBtn) {
+      inqBtn.addEventListener('click', () => {
+        const serviceName = inqBtn.getAttribute('data-service');
+        window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(`Hi Grafynx, I'm interested in ${serviceName}. Let's discuss.`)}`, '_blank');
       });
     }
+  }
 
-    function calcSub(){ let qty=0, sur=0; shirtSizes.forEach(sz=>{ let v=parseInt(document.getElementById(`sub_qty_${sz.toLowerCase()}`)?.value||0); qty+=v; sur+=v*(sizeSurcharge[sz]||0); }); let unit= qty<=10?45: qty<=30?35: qty<=50?33: qty<=100?30:28; let base=qty*unit; let addOns=0; ['sub_add_collar','sub_add_long','sub_add_muslimah','sub_add_oversize','sub_add_name','sub_add_namenum'].forEach(id=>{ let cnt=parseInt(document.getElementById(id)?.value||0); let p={sub_add_collar:5,sub_add_long:5,sub_add_muslimah:15,sub_add_oversize:15,sub_add_name:4,sub_add_namenum:7}[id]; addOns+=cnt*p; }); let material=parseFloat(document.getElementById('sub_material')?.value||0); let urgent=parseFloat(document.getElementById('sub_urgent')?.value||0); let design=parseFloat(document.getElementById('sub_design')?.value||0); let extra = (material+urgent)*qty + addOns + sur + design; return { base, sur:extra, total:base+extra, breakdown:[`${qty} pcs jersey: RM${base}`, `Surcharges: RM${extra}`] }; }
-    function calcSilk(){ let qty=0, sur=0; shirtSizes.forEach(sz=>{ let v=parseInt(document.getElementById(`silk_qty_${sz.toLowerCase()}`)?.value||0); qty+=v; sur+=v*(sizeSurcharge[sz]||0); }); let shirtBase=parseFloat(document.getElementById('silk_shirtType')?.value||0); let base=qty*shirtBase; let front=parseInt(document.getElementById('silk_front_colors')?.value||-1); let back=parseInt(document.getElementById('silk_back_colors')?.value||-1); let tier=getSSTier(qty); let printCost=0; if(front>=0) printCost+=qty*ssMatrix[tier][front]; if(back>=0) printCost+=qty*ssMatrix[tier][back]; let ls=parseInt(document.getElementById('silk_ls_qty')?.value||0)*5; let extra=printCost+ls+sur; return { base, sur:extra, total:base+extra, breakdown:[`Shirt: RM${base}`, `Print: RM${printCost}`, `Extras: RM${ls+sur}`] }; }
-    function calcDTF(){ let qty=0, sur=0; shirtSizes.forEach(sz=>{ let v=parseInt(document.getElementById(`dtf_qty_${sz.toLowerCase()}`)?.value||0); qty+=v; sur+=v*(sizeSurcharge[sz]||0); }); let shirtBase=parseFloat(document.getElementById('dtf_shirtType')?.value||0); let base=qty*shirtBase; let front=parseFloat(document.getElementById('dtf_front_size')?.value||0); let back=parseFloat(document.getElementById('dtf_back_size')?.value||0); let sleeve=parseInt(document.getElementById('dtf_sleeve_qty')?.value||0)*3; let ls=parseInt(document.getElementById('dtf_ls_qty')?.value||0)*5; let printCost=(front+back)*qty+sleeve+ls+sur; return { base, sur:printCost, total:base+printCost, breakdown:[] }; }
-    function calcSimple(cat){ let prefix={lanyard:'lan',apron:'apr',cap:'cap',bunting:'bun',banner:'banner'}[cat]; let qty=parseInt(document.getElementById(`${prefix}_qty`)?.value||0); if(qty===0) return {base:0,sur:0,total:0,breakdown:[]}; let unit=0; if(cat==='lanyard') unit = qty>=1000?5.5: qty>=500?7.5: qty>=100?10: qty>=50?13:19; else if(cat==='apron') { let type=document.getElementById('apr_type')?.value; unit = type==='basic'? (qty<20?19:15) : (qty<20?25:20); } else if(cat==='cap') { let type=document.getElementById('cap_type')?.value; unit = type==='dtf'? (qty<=20?14.5:13) : (qty<=20?19.6:15.7); } else if(cat==='bunting'||cat==='banner') { let sizeVal=document.getElementById(`${prefix}_size`)?.value; if(sizeVal==='custom'){ let w=parseFloat(document.getElementById(`${prefix}_w`)?.value||0), h=parseFloat(document.getElementById(`${prefix}_h`)?.value||0); unit= w*h ? Math.max(23,(w*h*2)+3) : 0; } else unit=parseFloat(sizeVal)||0; } let base= qty*unit; return { base, sur:0, total:base, breakdown:[`${qty} x RM${unit.toFixed(2)} = RM${base}`] }; }
+  function closeModal() {
+    const modal = document.getElementById('serviceModal');
+    if (!modal.classList.contains('active')) return;
+    modal.classList.remove('active');
+    document.body.style.overflow = '';
+    if (history.state && history.state.modalOpen) history.back();
+  }
 
-    function animateValue(id, start, end) { let el=document.getElementById(id); if(!el) return; let step= (end-start)/20, curr=start; let inter=setInterval(()=>{ curr+=step; if((step>0 && curr>=end)||(step<0 && curr<=end)){ curr=end; clearInterval(inter); } el.innerHTML = `RM ${curr.toFixed(2)}`; },10); }
+  window.addEventListener('popstate', function(event) {
+    const modal = document.getElementById('serviceModal');
+    if (modal.classList.contains('active')) {
+      closeModal();
+      event.preventDefault();
+    }
+  });
 
-    function attachEventDelegation(){ document.querySelectorAll('.calc-trigger').forEach(el=>el.addEventListener('change',calculate)); document.querySelectorAll('.size-stepper input, .compact-stepper input, .general-stepper input').forEach(el=>el.addEventListener('input',calculate)); }
-    function switchCategory(cat){ currentCategory=cat; document.querySelectorAll('.category-card').forEach(c=>c.classList.remove('active')); document.querySelector(`.category-card[data-cat="${cat}"]`).classList.add('active'); document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active')); document.getElementById(`panel-${cat}`).classList.add('active'); calculate(); }
+  function attachPackageInquiry() {
+    document.querySelectorAll('.package-inq-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const packageName = btn.getAttribute('data-package');
+        window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(`Hi Grafynx, I'm interested in your ${packageName} package. Can you share more details?`)}`, '_blank');
+      });
+    });
+  }
 
-    function renderCategories(){ const grid=document.getElementById('categoryGrid'); grid.innerHTML=categories.map(c=>`<div class="category-card ${c.id===currentCategory?'active':''}" data-cat="${c.id}" onclick="switchCategory('${c.id}')"><div class="cat-icon">${c.icon}</div><span class="cat-name">${c.name}</span></div>`).join(''); }
-    function initMobile(){ let btn=document.getElementById('mobileMenuBtn'), dd=document.getElementById('mobileDropdown'); if(btn) btn.onclick=()=>{ dd.style.display=dd.style.display==='flex'?'none':'flex'; dd.innerHTML='<a href="index.html">Home</a><a href="index.html#services">Services</a><a href="index.html#packages">Packages</a><a href="#" class="active">Print Estimate</a>'; }; }
-    function backToTop(){ let btn=document.getElementById('backToTop'); window.onscroll=()=>btn.classList.toggle('visible',window.scrollY>300); btn.onclick=()=>window.scrollTo({top:0,behavior:'smooth'}); }
-    function sendWhatsApp(){ if(currentTotal===0) return showToast("Calculate a total first."); let num=document.getElementById('wa_target_number').value.replace(/\D/g,''); if(!num) return showToast("Enter number"); let msg=`*Grafynx Quote*\nProduct: ${currentCategory}\nTotal: RM ${currentTotal.toFixed(2)}\nDetails: ${currentBreakdownList.join(', ')}`; window.open(`https://wa.me/${document.getElementById('wa_country_code').value}${num}?text=${encodeURIComponent(msg)}`,'_blank'); }
-    function showToast(t){ let c=document.getElementById('toastContainer'); let tdiv=document.createElement('div'); tdiv.className='toast'; tdiv.innerText=t; c.appendChild(tdiv); setTimeout(()=>tdiv.remove(),3000); }
-    function prepareReceipt(){ document.getElementById('receiptDate').innerText=new Date().toLocaleString(); document.getElementById('receiptProduct').innerText=currentCategory; document.getElementById('receiptItems').innerHTML=`<ul>${currentBreakdownList.map(i=>`<li>${i}</li>`).join('')}</ul>`; document.getElementById('receiptTotal').innerHTML=`TOTAL: RM ${currentTotal.toFixed(2)}`; }
-    function downloadQuote(){ if(currentTotal===0) return showToast("Calculate first"); prepareReceipt(); html2canvas(document.getElementById('receipt-capture'),{scale:2}).then(c=>{let a=document.createElement('a'); a.download='grafynx_quote.png'; a.href=c.toDataURL(); a.click(); showToast("Image saved");}); }
-    function previewQuote(){ if(currentTotal===0) return showToast("Calculate first"); prepareReceipt(); html2canvas(document.getElementById('receipt-capture'),{scale:2}).then(c=>{ previewCanvas=c; document.getElementById('previewImage').src=c.toDataURL(); document.getElementById('previewModal').classList.add('active'); }); }
-    function closePreviewModal(){ document.getElementById('previewModal').classList.remove('active'); }
-    window.closePreviewModal=closePreviewModal; window.downloadFromPreview=()=>{if(previewCanvas){let a=document.createElement('a'); a.download='quote.png'; a.href=previewCanvas.toDataURL(); a.click();}};
-    document.getElementById('sendWhatsAppBtn')?.addEventListener('click',sendWhatsApp);
-    document.getElementById('downloadQuoteBtn')?.addEventListener('click',downloadQuote);
-    document.getElementById('previewQuoteBtn')?.addEventListener('click',previewQuote);
-    document.getElementById('downloadFromPreviewBtn')?.addEventListener('click',window.downloadFromPreview);
+  // Portfolio Albums (reordered)
+  const albums = {
+    "Social Media": ["image10.png", "image11.png", "image12.png"],
+    "Branding": ["image1.png", "image2.png", "image3.png"],
+    "Packaging": ["image4.png", "image5.png", "image6.png"],
+    "UI/UX": ["image7.png", "image8.png", "image9.png"]
+  };
+  let activeAlbum = "Social Media";
+  let swiperInstance = null;
 
-    buildFullPanels(); buildSizeGrids(); renderCategories(); initMobile(); backToTop(); calculate();
-    document.querySelectorAll('#bun_size, #banner_size').forEach(s=>s?.addEventListener('change',function(){document.getElementById(this.id.replace('size','custom_box')).style.display=this.value==='custom'?'flex':'none';}));
-  </script>
+  function buildAlbumTabs() {
+    const tabsContainer = document.getElementById('albumTabs');
+    tabsContainer.innerHTML = '';
+    Object.keys(albums).forEach(albumName => {
+      const btn = document.createElement('button');
+      btn.className = `album-btn ${albumName === activeAlbum ? 'active' : ''}`;
+      btn.textContent = albumName;
+      btn.addEventListener('click', () => {
+        activeAlbum = albumName;
+        document.querySelectorAll('.album-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        updateSwiperSlides();
+      });
+      tabsContainer.appendChild(btn);
+    });
+  }
+
+  function updateSwiperSlides() {
+    const images = albums[activeAlbum] || [];
+    const wrapper = document.getElementById('swiperWrapper');
+    wrapper.innerHTML = images.map(src => `<div class="swiper-slide"><img src="${src}" alt="${activeAlbum} work" onerror="this.src='https://placehold.co/600x800/f0abfc/ffffff?text=Image+Not+Found'"></div>`).join('');
+    if (swiperInstance) {
+      swiperInstance.update();
+      swiperInstance.slideTo(0);
+    } else {
+      swiperInstance = new Swiper('.portfolio-swiper', {
+        slidesPerView: 1,
+        spaceBetween: 20,
+        loop: true,
+        pagination: { el: '.swiper-pagination', clickable: true },
+        navigation: { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' },
+        breakpoints: { 640: { slidesPerView: 2 }, 1024: { slidesPerView: 3 } }
+      });
+    }
+  }
+
+  // Back to top, mobile menu, etc.
+  const backBtn = document.getElementById('backToTop');
+  window.addEventListener('scroll', () => backBtn.classList.toggle('visible', window.scrollY > 400));
+  backBtn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+  const mobileBtn = document.getElementById('mobileMenuBtn');
+  const mobileDropdown = document.getElementById('mobileDropdown');
+  if(mobileBtn) {
+    mobileBtn.addEventListener('click', () => {
+      mobileDropdown.style.display = mobileDropdown.style.display === 'flex' ? 'none' : 'flex';
+      mobileDropdown.innerHTML = '<a href="#home">Home</a><a href="#about-us">About Us</a><a href="#services">What We Do</a><a href="#workflow">Workflow</a><a href="#packages">Packages</a><a href="#portfolio">Portfolio</a><a href="print-estimate.html">Print Estimate</a>';
+      mobileDropdown.querySelectorAll('a').forEach(a => a.addEventListener('click', () => mobileDropdown.style.display = 'none'));
+    });
+  }
+  document.getElementById('exploreBtn')?.addEventListener('click', () => document.getElementById('services').scrollIntoView({ behavior: 'smooth' }));
+  document.getElementById('contactBtn')?.addEventListener('click', () => window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent('Hi Grafynx! I want to build my brand identity.')}`, '_blank'));
+
+  // Active nav highlight for scroll (excluding external link)
+  const sections = ['home', 'about-us', 'services', 'workflow', 'packages', 'portfolio'];
+  const navLinks = document.querySelectorAll('.nav-links a:not([href*=".html"])');
+  function updateActiveNav() {
+    let current = '';
+    const scrollPos = window.scrollY + 150;
+    sections.forEach(id => {
+      const el = document.getElementById(id);
+      if(el && el.offsetTop <= scrollPos && el.offsetTop + el.offsetHeight > scrollPos) current = id;
+    });
+    navLinks.forEach(link => {
+      link.classList.remove('active');
+      if(link.getAttribute('href')?.substring(1) === current) link.classList.add('active');
+    });
+  }
+  window.addEventListener('scroll', updateActiveNav);
+  window.addEventListener('load', updateActiveNav);
+  navLinks.forEach(link => link.addEventListener('click', (e) => {
+    e.preventDefault();
+    const targetId = link.getAttribute('href').substring(1);
+    document.getElementById(targetId)?.scrollIntoView({ behavior: 'smooth' });
+  }));
+
+  // Modal close event listeners (X button and backdrop click)
+  const modal = document.getElementById('serviceModal');
+  const closeModalBtn = document.getElementById('closeModalBtn');
+  closeModalBtn.addEventListener('click', closeModal);
+  modal.addEventListener('click', (e) => {
+    if (e.target === modal) closeModal();
+  });
+
+  buildAlbumTabs();
+  updateSwiperSlides();
+  renderCompactServices();
+  attachPackageInquiry();
+</script>
 </body>
 </html>
