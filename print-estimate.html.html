@@ -47,6 +47,8 @@
       --text-primary: #1e293b;
     }
     .glass-card, .left-panel, .right-box, .category-card, .form-group, .size-item { contain: layout style; }
+    
+    /* Header */
     header {
       position: sticky;
       top: 16px;
@@ -93,6 +95,8 @@
       color: #1e293b; padding: 8px; border-radius: 16px; transition: background 0.15s;
     }
     .mobile-menu-btn:active { background: rgba(0,0,0,0.05); }
+    
+    /* Main Layout */
     .main-content { padding: 32px 24px; flex: 1; max-width: 1280px; margin: 0 auto; width: 100%; }
     .layout-wrapper { display: grid; grid-template-columns: 1fr 380px; gap: 24px; align-items: start; }
     .left-panel { 
@@ -113,6 +117,8 @@
       min-height: 44px; min-width: 100px;
     }
     .reset-btn:active { transform: scale(0.97); background: #e5e5ea; }
+    
+    /* Category Grid */
     .category-grid { 
       display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 12px; margin-bottom: 32px; 
     }
@@ -127,6 +133,8 @@
     .cat-icon { margin-bottom: 8px; color: var(--text-muted); }
     .category-card.active .cat-icon, .category-card.active .cat-name { color: var(--accent); }
     .cat-name { font-size: 12px; font-weight: 700; color: #1e293b; }
+    
+    /* Form Elements */
     .grid-layout { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; }
     .form-group { 
       background: rgba(255, 255, 255, 0.5); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
@@ -149,6 +157,8 @@
       background-repeat: no-repeat; background-position: right 16px center; padding-right: 40px;
     }
     .input-field:focus, .select-field:focus { box-shadow: 0 0 0 3px rgba(255, 77, 140, 0.2); border-color: var(--accent); }
+    
+    /* Size Cards */
     .size-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(90px, 1fr)); gap: 14px; margin-bottom: 8px; }
     .size-item {
       background: white; border-radius: 20px; padding: 14px 8px; text-align: center;
@@ -180,6 +190,7 @@
     }
     .size-stepper input::-webkit-outer-spin-button,
     .size-stepper input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+    
     .general-stepper { 
       display: flex; width: 100%; background: #f8f9fc; border-radius: 40px; overflow: hidden;
       margin-bottom: 4px; border: 1px solid var(--border-input);
@@ -195,6 +206,7 @@
       cursor: pointer; flex-shrink: 0; touch-action: manipulation;
     }
     .general-stepper button:active { background: rgba(0,0,0,0.05); }
+    
     .addon-row { 
       display: flex; justify-content: space-between; align-items: center; padding: 14px 0;
       border-bottom: 1px solid rgba(0,0,0,0.06);
@@ -205,6 +217,8 @@
       color: var(--accent); font-size: 13px; font-weight: 500; background: rgba(255,77,140,0.1);
       padding: 4px 12px; border-radius: 30px; margin-left: 8px;
     }
+    
+    /* Panel Banner */
     .panel-banner {
       width: 100%; min-height: 100px; border-radius: 24px; margin-bottom: 24px;
       display: flex; align-items: center; padding: 16px 24px; gap: 16px;
@@ -213,10 +227,12 @@
     }
     .panel-banner svg { width: 48px; height: 48px; stroke: var(--accent); stroke-width: 1.8; flex-shrink: 0; }
     .panel-banner h2 { font-size: 22px; font-weight: 700; color: var(--text-primary); letter-spacing: -0.5px; font-family: 'Clash Display', sans-serif; }
+    
     .panel { display: none; contain: layout style; }
     .panel.active { display: block; animation: fadeIn 0.3s ease; }
     @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
-    .custom-size-box { display: none; margin-top: 12px; }
+    
+    /* Right Panel */
     .price-breakdown { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; color: var(--text-muted); font-size: 14px; font-weight: 500; }
     .price-breakdown strong { color: var(--text-primary); font-size: 20px; display: block; margin-top: 6px; font-weight: 700; }
     .total-price { 
@@ -239,6 +255,8 @@
     }
     .breakdown-list.show { display: block; }
     .breakdown-list ul { padding-left: 20px; }
+    
+    /* Buttons */
     .wa-btn, .preview-btn, .download-btn {
       width: 100%; padding: 18px; border-radius: 60px; font-weight: 700; font-size: 16px; border: none;
       cursor: pointer; transition: transform 0.15s, filter 0.15s; display: flex; align-items: center;
@@ -248,6 +266,8 @@
     .wa-btn { background: #34C759; color: white; box-shadow: 0 4px 12px rgba(52, 199, 89, 0.2); }
     .preview-btn { background: var(--accent); color: white; }
     .download-btn { background: rgba(0,0,0,0.05); color: var(--text-primary); border: 1px solid var(--border-input); }
+    
+    /* Preview Modal */
     .preview-modal {
       display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); backdrop-filter: blur(16px);
       -webkit-backdrop-filter: blur(16px); z-index: 2000; align-items: center; justify-content: center; padding: 20px;
@@ -264,6 +284,8 @@
       display: flex; align-items: center; justify-content: center; transition: background 0.15s;
     }
     .preview-close:active { background: rgba(0,0,0,0.6); }
+    
+    /* Toast */
     .toast-container { 
       position: fixed; top: 20px; left: 50%; transform: translateX(-50%); z-index: 9999;
       display: flex; flex-direction: column; gap: 8px; pointer-events: none; max-width: 90vw;
@@ -275,6 +297,8 @@
     }
     @keyframes slideDown { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
     @keyframes fadeOut { to { opacity: 0; transform: translateY(-20px); } }
+    
+    /* Hidden Receipt */
     #receipt-capture { 
       position: absolute; left: -9999px; top: 0; width: 450px; background: #ffffff; color: #000;
       padding: 32px; border-radius: 28px; font-family: 'Inter', sans-serif;
@@ -282,6 +306,7 @@
     #receipt-capture h2 { margin-bottom: 16px; color: var(--accent); border-bottom: 2px solid #E5E5EA; padding-bottom: 10px; font-family: 'Clash Display', sans-serif; }
     #receipt-capture ul { padding-left: 20px; margin-bottom: 20px; font-size: 14px; line-height: 1.8; }
     #receipt-capture .r-total { font-size: 28px; font-weight: 900; text-align: right; border-top: 2px solid #000; padding-top: 16px; }
+    
     footer {
       text-align: center; padding: 36px 20px; color: var(--text-muted);
       border-top: 1px solid rgba(0,0,0,0.05); margin-top: 40px; font-size: 13px;
@@ -296,6 +321,8 @@
     }
     .back-to-top.visible { opacity: 1; pointer-events: auto; }
     .back-to-top:active { transform: scale(0.9); }
+    
+    /* Responsive */
     @media (max-width: 900px) { .layout-wrapper { grid-template-columns: 1fr; } .right-panel { position: static; } }
     @media (max-width: 760px) {
       .nav-links { display: none; }
@@ -453,7 +480,7 @@
         if(q<501)return 8; return 9;
       }
 
-      // Render functions
+      // Render categories
       function renderCategories() {
         const categories = [
           { id: 'sublimation', name: 'Sublimation', icon: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.38 3.46L16 2a8.5 8.5 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.47a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.47a2 2 0 0 0-1.34-2.23z"/></svg>' },
@@ -523,8 +550,74 @@
           <div id="panel-lanyard" class="panel"><div class="panel-banner"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M10 2h4M12 2v4M8 6h8a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2zM9 10h6M9 14h4"/></svg><h2>Lanyard (Sublimation)</h2></div><div class="form-group"><label class="field-label">Quantity (min 10)</label><div class="general-stepper"><button onclick="stepVal('lan_qty',-1)">−</button><input type="number" id="lan_qty" class="calc-trigger" min="10" value="10"><button onclick="stepVal('lan_qty',1)">+</button></div></div></div>
           <div id="panel-apron" class="panel"><div class="panel-banner"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M8 2h8v4M6 6h12l1.5 16H4.5L6 6zM9 12h6v5H9z"/></svg><h2>Custom Apron</h2></div><div class="form-group"><label class="field-label">Quantity</label><div class="general-stepper"><button onclick="stepVal('apr_qty',-1)">−</button><input type="number" id="apr_qty" class="calc-trigger" min="1" value="10"><button onclick="stepVal('apr_qty',1)">+</button></div><label class="field-label">Type</label><select id="apr_type" class="select-field calc-trigger"><option value="basic">Basic</option><option value="exclusive">Exclusive</option></select></div></div>
           <div id="panel-cap" class="panel"><div class="panel-banner"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M4 16h14"/><path d="M6 16a6 6 0 0 1 12 0"/><path d="M18 16c2 0 3 1 4 2"/><circle cx="12" cy="9" r="1"/></svg><h2>Custom Cap</h2></div><div class="form-group"><label class="field-label">Quantity (min 10)</label><div class="general-stepper"><button onclick="stepVal('cap_qty',-1)">−</button><input type="number" id="cap_qty" class="calc-trigger" min="10" value="10"><button onclick="stepVal('cap_qty',1)">+</button></div><label class="field-label">Print Type</label><select id="cap_type" class="select-field calc-trigger"><option value="dtf">DTF</option><option value="embroidery">Embroidery</option></select></div></div>
-          <div id="panel-bunting" class="panel"><div class="panel-banner"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="7" y="4" width="10" height="12" rx="1"/><path d="M12 16v6M9 22h6M12 4V2"/></svg><h2>Bunting (Vertical)</h2></div><div class="form-group"><label class="field-label">Quantity</label><div class="general-stepper"><button onclick="stepVal('bun_qty',-1)">−</button><input type="number" id="bun_qty" class="calc-trigger" min="1" value="1"><button onclick="stepVal('bun_qty',1)">+</button></div><label class="field-label">Size</label><select id="bun_size" class="select-field calc-trigger"><option value="custom">Custom Size...</option><option value="32">2x6 ft (RM32)</option><option value="23">2x2 ft (RM23)</option></select><div id="bun_custom_box" class="custom-size-box"><input type="number" id="bun_w" placeholder="Width (ft)" class="input-field calc-trigger"><input type="number" id="bun_h" placeholder="Height (ft)" class="input-field calc-trigger"></div></div></div>
-          <div id="panel-banner" class="panel"><div class="panel-banner"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="4" y="6" width="16" height="8" rx="1"/><path d="M4 4v16M20 4v16"/></svg><h2>Banner (Horizontal)</h2></div><div class="form-group"><label class="field-label">Quantity</label><div class="general-stepper"><button onclick="stepVal('banner_qty',-1)">−</button><input type="number" id="banner_qty" class="calc-trigger" min="1" value="1"><button onclick="stepVal('banner_qty',1)">+</button></div><label class="field-label">Size</label><select id="banner_size" class="select-field calc-trigger"><option value="custom">Custom Size...</option><option value="39">3x6 ft (RM39)</option><option value="23">1x2 ft (RM23)</option></select><div id="banner_custom_box" class="custom-size-box"><input type="number" id="banner_w" placeholder="Width (ft)" class="input-field calc-trigger"><input type="number" id="banner_h" placeholder="Height (ft)" class="input-field calc-trigger"></div></div></div>
+          
+          <!-- BUNTING PANEL (UPDATED) -->
+          <div id="panel-bunting" class="panel">
+            <div class="panel-banner"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="7" y="4" width="10" height="12" rx="1"/><path d="M12 16v6M9 22h6M12 4V2"/></svg><h2>Bunting (Vertical)</h2></div>
+            <div class="form-group">
+              <label class="field-label">Quantity</label>
+              <div class="general-stepper"><button onclick="stepVal('bun_qty',-1)">−</button><input type="number" id="bun_qty" class="calc-trigger" min="1" value="1"><button onclick="stepVal('bun_qty',1)">+</button></div>
+              
+              <label class="field-label" style="margin-top:20px;">Custom Size (Width x Height in feet)</label>
+              <div style="display: flex; gap: 12px;">
+                <div style="flex:1;"><input type="number" id="bun_w" placeholder="Width (ft)" class="input-field calc-trigger" min="1" step="0.1"></div>
+                <div style="flex:1;"><input type="number" id="bun_h" placeholder="Height (ft)" class="input-field calc-trigger" min="1" step="0.1"></div>
+              </div>
+              
+              <label class="field-label" style="margin-top:20px;">Or choose a template</label>
+              <select id="bun_size" class="select-field calc-trigger">
+                <option value="">Select a size to fill above...</option>
+                <option value="2x6">Standard: 2 x 6 FT (RM32)</option>
+                <option disabled>--- 1 FT Width ---</option>
+                <option value="1x1">1 x 1 FT (RM23)</option><option value="1x2">1 x 2 FT (RM24)</option><option value="1x3">1 x 3 FT (RM25)</option>
+                <option disabled>--- 2 FT Width ---</option>
+                <option value="2x2">2 x 2 FT (RM23)</option><option value="2x3">2 x 3 FT (RM26)</option><option value="2x4">2 x 4 FT (RM28)</option><option value="2x5">2 x 5 FT (RM30)</option><option value="2x6">2 x 6 FT (RM32)</option><option value="2x7">2 x 7 FT (RM36)</option><option value="2x8">2 x 8 FT (RM38)</option>
+                <option disabled>--- 3 FT Width ---</option>
+                <option value="3x3">3 x 3 FT (RM23)</option><option value="3x4">3 x 4 FT (RM26)</option><option value="3x5">3 x 5 FT (RM30)</option><option value="3x6">3 x 6 FT (RM36)</option><option value="3x7">3 x 7 FT (RM42)</option><option value="3x8">3 x 8 FT (RM48)</option><option value="3x9">3 x 9 FT (RM54)</option><option value="3x10">3 x 10 FT (RM60)</option>
+                <option disabled>--- 4 FT Width ---</option>
+                <option value="4x4">4 x 4 FT (RM32)</option><option value="4x5">4 x 5 FT (RM40)</option><option value="4x6">4 x 6 FT (RM48)</option><option value="4x7">4 x 7 FT (RM56)</option><option value="4x8">4 x 8 FT (RM64)</option><option value="4x9">4 x 9 FT (RM72)</option><option value="4x10">4 x 10 FT (RM80)</option>
+                <option disabled>--- 5 FT Width ---</option>
+                <option value="5x5">5 x 5 FT (RM50)</option><option value="5x6">5 x 6 FT (RM60)</option><option value="5x7">5 x 7 FT (RM70)</option><option value="5x8">5 x 8 FT (RM80)</option><option value="5x9">5 x 9 FT (RM90)</option><option value="5x10">5 x 10 FT (RM100)</option>
+              </select>
+            </div>
+          </div>
+          
+          <!-- BANNER PANEL (UPDATED) -->
+          <div id="panel-banner" class="panel">
+            <div class="panel-banner"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="4" y="6" width="16" height="8" rx="1"/><path d="M4 4v16M20 4v16"/></svg><h2>Banner (Horizontal)</h2></div>
+            <div class="form-group">
+              <label class="field-label">Quantity</label>
+              <div class="general-stepper"><button onclick="stepVal('banner_qty',-1)">−</button><input type="number" id="banner_qty" class="calc-trigger" min="1" value="1"><button onclick="stepVal('banner_qty',1)">+</button></div>
+              
+              <label class="field-label" style="margin-top:20px;">Custom Size (Width x Height in feet)</label>
+              <div style="display: flex; gap: 12px;">
+                <div style="flex:1;"><input type="number" id="banner_w" placeholder="Width (ft)" class="input-field calc-trigger" min="1" step="0.1"></div>
+                <div style="flex:1;"><input type="number" id="banner_h" placeholder="Height (ft)" class="input-field calc-trigger" min="1" step="0.1"></div>
+              </div>
+              
+              <label class="field-label" style="margin-top:20px;">Or choose a template</label>
+              <select id="banner_size" class="select-field calc-trigger">
+                <option value="">Select a size to fill above...</option>
+                <option value="3x6">Standard: 3' x 6' (RM39)</option>
+                <option disabled>--- 1 FT Series ---</option>
+                <option value="1x2">1' x 2' (RM23)</option><option value="1x3">1' x 3' (RM24)</option><option value="1x4">1' x 4' (RM25)</option><option value="1x5">1' x 5' (RM26)</option><option value="1x6">1' x 6' (RM27)</option><option value="1x8">1' x 8' (RM28)</option>
+                <option disabled>--- 2 FT Series ---</option>
+                <option value="2x2">2' x 2' (RM23)</option><option value="2x3">2' x 3' (RM26)</option><option value="2x4">2' x 4' (RM28)</option><option value="2x6">2' x 6' (RM33)</option><option value="2x8">2' x 8' (RM38)</option><option value="2x10">2' x 10' (RM43)</option>
+                <option disabled>--- 3 FT Series ---</option>
+                <option value="3x6">3' x 6' (RM39)</option><option value="3x8">3' x 8' (RM51)</option><option value="3x10">3' x 10' (RM63)</option><option value="3x12">3' x 12' (RM75)</option><option value="3x16">3' x 16' (RM99)</option><option value="3x20">3' x 20' (RM123)</option>
+                <option disabled>--- 4 FT Series ---</option>
+                <option value="4x6">4' x 6' (RM51)</option><option value="4x8">4' x 8' (RM67)</option><option value="4x10">4' x 10' (RM83)</option><option value="4x12">4' x 12' (RM99)</option><option value="4x16">4' x 16' (RM131)</option><option value="4x20">4' x 20' (RM163)</option>
+                <option disabled>--- 6 FT Series ---</option>
+                <option value="6x6">6' x 6' (RM75)</option><option value="6x8">6' x 8' (RM99)</option><option value="6x10">6' x 10' (RM123)</option><option value="6x12">6' x 12' (RM147)</option><option value="6x16">6' x 16' (RM195)</option><option value="6x20">6' x 20' (RM243)</option>
+                <option disabled>--- 8 FT Series ---</option>
+                <option value="8x8">8' x 8' (RM131)</option><option value="8x10">8' x 10' (RM163)</option><option value="8x12">8' x 12' (RM195)</option><option value="8x14">8' x 14' (RM227)</option><option value="8x16">8' x 16' (RM259)</option><option value="8x20">8' x 20' (RM323)</option>
+                <option disabled>--- 10 FT Series ---</option>
+                <option value="10x10">10' x 10' (RM203)</option><option value="10x12">10' x 12' (RM243)</option><option value="10x14">10' x 14' (RM283)</option><option value="10x16">10' x 16' (RM323)</option><option value="10x20">10' x 20' (RM403)</option><option value="10x24">10' x 24' (RM483)</option>
+                <option disabled>--- 12 FT Series ---</option>
+                <option value="12x12">12' x 12' (RM291)</option><option value="12x14">12' x 14' (RM339)</option><option value="12x16">12' x 16' (RM387)</option><option value="12x18">12' x 18' (RM435)</option><option value="12x20">12' x 20' (RM483)</option><option value="12x24">12' x 24' (RM579)</option>
+              </select>
+            </div>
+          </div>
         `;
         ['sub','silk','dtf'].forEach(p => {
           const grid = document.getElementById(`${p}_sizeGrid`);
@@ -541,7 +634,7 @@
         });
       }
 
-      // Calculation functions (same as before, condensed for space but fully functional)
+      // Calculation functions
       function calcSublimation() {
         let qty = 0, sizeSur = 0, bDown = [], sizeBreakdown = [];
         shirtSizeConfig.forEach(s => { let v = parseInt(document.getElementById(`sub_qty_${s.id}`)?.value)||0; qty += v; sizeSur += v*s.sur; if(v) sizeBreakdown.push(`${s.label}:${v}`); });
@@ -617,19 +710,33 @@
           let type = document.getElementById('cap_type')?.value;
           unit = type==='dtf' ? (qty===10?15:qty<=20?14.5:qty<=30?14:qty<=50?13.5:qty<=100?13:12) : (qty===10?22.5:qty<=20?19.6:qty<=30?17.8:qty<=50?16.9:qty<=100?15.7:14.9);
         } else if(cat === 'bunting' || cat === 'banner') {
-          let sizeVal = document.getElementById(prefix+'_size')?.value;
-          if(sizeVal === 'custom') {
-            let w = parseFloat(document.getElementById(prefix+'_w')?.value)||0, h = parseFloat(document.getElementById(prefix+'_h')?.value)||0;
-            let area = w*h;
-            unit = area ? Math.max(23, area*2+3) : 0;
-            bDown.push(`📐 <b>Custom Size (${w}' x ${h}'):</b> ${area} sqft`);
-          } else { unit = parseFloat(sizeVal)||0; }
+          // Prioritize custom width/height
+          let w = parseFloat(document.getElementById(prefix+'_w')?.value) || 0;
+          let h = parseFloat(document.getElementById(prefix+'_h')?.value) || 0;
+          let area = w * h;
+          if (area > 0) {
+            unit = Math.max(23, (area * 2) + 3);
+            bDown.push(`📐 <b>Custom Size (${w}' x ${h}' = ${area} sqft):</b> RM ${unit.toFixed(2)} per unit`);
+          } else {
+            // Fallback to dropdown selection
+            let sizeVal = document.getElementById(prefix+'_size')?.value;
+            if (sizeVal && sizeVal.includes('x')) {
+              let parts = sizeVal.split('x');
+              let selW = parseFloat(parts[0]) || 0;
+              let selH = parseFloat(parts[1]) || 0;
+              let selArea = selW * selH;
+              unit = Math.max(23, (selArea * 2) + 3);
+              bDown.push(`📐 <b>Template Size (${selW}' x ${selH}'):</b> RM ${unit.toFixed(2)} per unit`);
+            } else {
+              unit = 0;
+            }
+          }
         }
-        if(unit > 0) bDown.push(`📦 <b>${cat.toUpperCase()}:</b> ${qty} pcs x RM${unit} = RM${qty*unit}`);
-        return { base: qty*unit, sur: 0, total: qty*unit, breakdown: bDown };
+        if(unit > 0) bDown.push(`📦 <b>${cat.toUpperCase()}:</b> ${qty} pcs x RM${unit.toFixed(2)} = RM${(qty*unit).toFixed(2)}`);
+        return { base: qty * unit, sur: 0, total: qty * unit, breakdown: bDown };
       }
 
-      // FIXED: Animation with requestAnimationFrame
+      // Animation
       function animateValue(id, start, end) {
         const el = document.getElementById(id); if (!el) return;
         if (animFrame) { cancelAnimationFrame(animFrame); animFrame = null; }
@@ -700,8 +807,6 @@
             }
           } catch(e) {}
         }
-        document.getElementById('bun_custom_box').style.display = document.getElementById('bun_size')?.value==='custom'?'block':'none';
-        document.getElementById('banner_custom_box').style.display = document.getElementById('banner_size')?.value==='custom'?'block':'none';
         calculate();
       }
 
@@ -713,8 +818,6 @@
           else if(el.tagName==='SELECT') el.selectedIndex=0;
           else if(el.type==='number'||el.type==='tel') el.value=el.min||'';
         });
-        document.getElementById('bun_custom_box').style.display='none';
-        document.getElementById('banner_custom_box').style.display='none';
         switchCategory('sublimation');
         calculate();
       };
@@ -758,6 +861,23 @@
         });
       };
 
+      // Setup template dropdown auto-fill
+      function setupSizeTemplate(prefix) {
+        const select = document.getElementById(prefix+'_size');
+        const wInput = document.getElementById(prefix+'_w');
+        const hInput = document.getElementById(prefix+'_h');
+        if(!select || !wInput || !hInput) return;
+        select.addEventListener('change', function() {
+          const val = this.value;
+          if(val && val.includes('x')) {
+            const parts = val.split('x');
+            wInput.value = parseFloat(parts[0]) || '';
+            hInput.value = parseFloat(parts[1]) || '';
+          }
+          calculate();
+        });
+      }
+
       function initMobile() {
         let btn = document.getElementById('mobileMenuBtn'), dd = document.getElementById('mobileDropdown');
         btn.onclick = () => {
@@ -774,8 +894,6 @@
 
       document.addEventListener('input', e => { if(e.target.classList.contains('calc-trigger')) calculate(); });
       document.addEventListener('change', e => { if(e.target.classList.contains('calc-trigger')) calculate(); });
-      document.getElementById('bun_size')?.addEventListener('change', function(){ document.getElementById('bun_custom_box').style.display = this.value==='custom'?'block':'none'; });
-      document.getElementById('banner_size')?.addEventListener('change', function(){ document.getElementById('banner_custom_box').style.display = this.value==='custom'?'block':'none'; });
       document.getElementById('sendWhatsAppBtn').onclick = window.sendWhatsApp;
       document.getElementById('previewQuoteBtn').onclick = window.previewQuote;
       document.getElementById('downloadQuoteBtn').onclick = window.downloadQuote;
@@ -783,6 +901,8 @@
 
       renderCategories();
       buildPanels();
+      setupSizeTemplate('bun');
+      setupSizeTemplate('banner');
       initMobile();
       initBackToTop();
       loadState();
