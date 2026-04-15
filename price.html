@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Grafynx | Print Price Estimator</title>
+  
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#ffffff">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+  <!-- Google Fonts + Clash Display -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://api.fontshare.com/v2/css?f[]=clash-display@400,700,600&display=swap" rel="stylesheet">
+
+  <style>
+    /* --- GRAFYNX GLASSMORPHIC THEME (Light mode only) --- */
+    :root {
+      --bg-body: #F7F9FC;
+      --bg-container: #FFFFFF;
+      --bg-card: #FFFFFF;
+      --bg-input: #F2F2F7;
+      --bg-input-hover: #E5E5EA;
+      --border-main: #EAEAEA;
+      --border-input: #EAEAEA;
+      --text-primary: #1C1C1E;
+      --text-secondary: #8E8E93;
+      --accent-color: #ff4d8c;
+      --bg-sticky: rgba(255, 255, 255, 0.85);
+      --toast-shadow: rgba(0,0,0,0.1);
+      --glass-shadow: 0 8px 30px rgba(0,0,0,0.04);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body { 
+      font-family: 'Inter', sans-serif; 
+      background: var(--bg-body); 
+      color: var(--text-primary); 
+      -webkit-font-smoothing: antialiased;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    /* Header & Footer (Grafynx style) */
+    .plain-header {
+      background: var(--bg-container);
+      height: 72px; width: 100%;
+      border-bottom: 1px solid var(--border-main);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 32px;
+      font-weight: 700;
+    }
+    .logo-area { display: flex; align-items: center; gap: 12px; cursor: pointer; }
+    .logo-icon {
+      width: 42px; height: 42px;
+      background: linear-gradient(135deg, #ff4d8c, #cc3366);
+      border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 800; font-size: 20px; color: white;
+      box-shadow: 0 4px 10px rgba(255,77,140,0.3);
+    }
+    .logo-text {
+      font-family: 'Clash Display', sans-serif;
+      font-weight: 700;
+      font-size: 24px;
+      letter-spacing: -0.5px;
+    }
+    .logo-text .graf { color: var(--accent-color); }
+    .logo-text .ynx { color: var(--text-primary); }
+
+    .header-actions {
+      display: flex;
+      gap: 16px;
+      align-items: center;
+    }
+    .home-btn {
+      background: var(--bg-input);
+      border: none;
+      padding: 8px 16px;
+      border-radius: 30px;
+      font-weight: 600;
+      font-size: 14px;
+      color: var(--text-primary);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: 0.2s;
+    }
+    .home-btn:hover {
+      background: rgba(255,77,140,0.1);
+      color: var(--accent-color);
+    }
+
+    .plain-footer {
+      background: var(--bg-container); height: 60px; width: 100%; border-top: 1px solid var(--border-main);
+      display: flex; align-items: center; justify-content: center; font-size: 13px; color: var(--text-secondary); margin-top: auto;
+    }
+
+    .main-content { padding: 40px 24px; flex: 1; }
+    
+    /* Layout */
+    .layout-wrapper { display: grid; grid-template-columns: 1fr 380px; gap: 28px; max-width: 1280px; margin: 0 auto; align-items: start; }
+    .left-panel { background: var(--bg-container); border-radius: 32px; padding: 32px; border: 1px solid var(--border-main); box-shadow: var(--glass-shadow); }
+    .right-panel { position: sticky; top: 24px; display: flex; flex-direction: column; gap: 24px; }
+    .right-box { background: var(--bg-container); border-radius: 32px; padding: 32px 24px; border: 1px solid var(--border-main); box-shadow: var(--glass-shadow); }
+
+    .header-flex { display: flex; justify-content: space-between; align-items: center; margin-bottom: 28px; flex-wrap: wrap; gap: 12px; }
+    .brand-subtitle { color: var(--text-secondary); font-size: 16px; font-weight: 600; letter-spacing: 0.5px; }
+
+    .reset-btn { background: var(--bg-input); color: #FF453A; border: none; padding: 10px 20px; border-radius: 30px; font-size: 13px; font-weight: 600; cursor: pointer; transition: 0.2s; }
+    .reset-btn:hover { background: rgba(255, 69, 58, 0.1); }
+    
+    /* Category Grid */
+    .category-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 14px; margin-bottom: 32px; }
+    .category-card { background: var(--bg-card); border: 2px solid var(--border-input); border-radius: 24px; padding: 14px 8px; text-align: center; cursor: pointer; transition: all 0.2s ease; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+    .category-card:hover { background: var(--bg-input); transform: translateY(-2px); }
+    .category-card.active { border-color: var(--accent-color); background: rgba(255,77,140,0.1); }
+    .cat-icon { margin-bottom: 8px; display: flex; color: var(--text-secondary); }
+    .category-card.active .cat-icon, .category-card.active .cat-name { color: var(--accent-color); }
+    .cat-name { font-size: 12px; font-weight: 600; color: var(--text-secondary); line-height: 1.3; }
+    
+    /* Form Elements */
+    .grid-layout { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px; }
+    .form-group { background: var(--bg-card); padding: 24px; border-radius: 28px; margin-bottom: 16px; border: 1px solid var(--border-input); transition: 0.2s;}
+    .section-title { display: block; font-weight: 700; margin-bottom: 16px; color: var(--text-primary); font-size: 18px; letter-spacing: -0.3px; }
+    label.field-label { font-size: 13px; color: var(--text-secondary); margin-bottom: 8px; display: block; margin-top: 16px; font-weight: 600; }
+
+    .input-field, .select-field { width: 100%; padding: 14px 16px; border-radius: 20px; border: 1px solid var(--border-input); background: var(--bg-input); color: var(--text-primary); font-size: 15px; outline: none; margin-bottom: 4px; appearance: none; transition: 0.2s; }
+    .select-field { background-image: url("data:image/svg+xml,%3Csvg width='12' height='8' viewBox='0 0 12 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1.5L6 6.5L11 1.5' stroke='%2386868B' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 16px center; padding-right: 40px; }
+    .input-field:focus, .select-field:focus { box-shadow: 0 0 0 2px var(--accent-color); background: var(--bg-container); border-color: transparent;}
+    
+    /* Steppers */
+    .size-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(85px, 1fr)); gap: 12px; margin-bottom: 8px; }
+    .size-item { display: flex; flex-direction: column; align-items: center; background: var(--bg-input); padding: 12px 6px; border-radius: 20px; border: 1px solid var(--border-input); transition: 0.2s; }
+    .size-item label { font-size: 14px; font-weight: 700; color: var(--text-primary); margin-bottom: 6px; }
+    .surcharge-badge { font-size: 10px; color: var(--accent-color); margin-bottom: 6px; height: 14px; font-weight: 600; text-align: center; }
+    
+    .stepper-wrapper { display: flex; align-items: center; background: var(--bg-card); border-radius: 30px; overflow: hidden; width: 100%; border: 1px solid var(--border-input);}
+    .stepper-btn { display: flex; align-items: center; justify-content: center; background: none; border: none; color: var(--accent-color); font-size: 18px; width: 30px; height: 36px; cursor: pointer; font-weight: bold; flex-shrink: 0;}
+    .stepper-btn:active { background: var(--bg-input-hover); }
+    .size-input { width: 100%; text-align: center; padding: 8px 0; border: none; background: transparent; color: var(--text-primary); font-weight: 700; font-size: 15px; outline: none; -moz-appearance: textfield; min-width: 0;}
+    .size-input::-webkit-outer-spin-button, .size-input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+
+    .general-stepper { display: flex; width: 100%; background: var(--bg-input); border-radius: 40px; overflow: hidden; margin-bottom: 4px; border: 1px solid var(--border-input);}
+    .general-stepper input { flex: 1; text-align: center; padding: 8px 0; background: transparent; border: none; color: var(--text-primary); font-size: 16px; font-weight: 600; outline: none; -moz-appearance: textfield; min-width: 0;}
+    .general-stepper input::-webkit-outer-spin-button, .general-stepper input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+    .general-stepper button { width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; background: transparent; border: none; color: var(--accent-color); font-size: 20px; font-weight: bold; cursor: pointer; flex-shrink: 0;}
+    .general-stepper button:active { background: var(--bg-input-hover); }
+
+    .addon-row { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid var(--border-main); flex-wrap: wrap; gap: 12px; }
+    .addon-row:last-child { border-bottom: none; padding-bottom: 0; }
+    .addon-label { font-size: 14px; font-weight: 600; color: var(--text-primary); display: block;}
+    .addon-price { color: var(--accent-color); font-size: 12px; font-weight: 500; }
+
+    /* Panel Banners */
+    .panel-banner {
+      width: 100%; height: 100px; border-radius: 24px; margin-bottom: 24px;
+      display: flex; align-items: center; padding: 0 24px; gap: 16px;
+      background: linear-gradient(135deg, rgba(255,77,140,0.15), rgba(204,51,102,0.05));
+      border: 1px solid rgba(255,77,140,0.2);
+      color: var(--accent-color);
+    }
+    .panel-banner svg { width: 48px; height: 48px; opacity: 0.9; }
+    .panel-banner h2 { font-size: 20px; font-weight: 800; color: var(--text-primary); letter-spacing: -0.5px;}
+
+    .panel { display: none; }
+    .panel.active { display: block; animation: fadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    .custom-size-box { display: none; animation: fadeIn 0.3s ease; }
+
+    /* Right Panel */
+    .price-breakdown { display: grid; grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); gap: 16px; color: var(--text-secondary); font-size: 13px; font-weight: 500; text-align: center;}
+    .price-breakdown strong { color: var(--text-primary); font-size: 20px; display: block; margin-top: 4px; font-weight: 700; }
+    .total-price { text-align: center; font-size: 16px; font-weight: 500; color: var(--text-secondary); padding-top: 24px; margin-top: 24px; border-top: 1px solid var(--border-main); }
+    .total-price span { color: var(--text-primary); font-size: 42px; display: block; margin-top: 8px; font-weight: 800; letter-spacing: -1px; }
+    
+    .pill-tag { background: var(--bg-input); color: var(--accent-color); padding: 4px 10px; border-radius: 20px; font-size: 13px; font-weight: 600; margin-left: 8px; vertical-align: middle; }
+
+    .breakdown-toggle { font-size: 13px; color: var(--accent-color); cursor: pointer; font-weight: 600; margin-top: 16px; display: block; text-align: center; padding: 8px; border-radius: 30px; transition: background 0.2s; }
+    .breakdown-toggle:hover { background: rgba(255,77,140,0.05); }
+    .breakdown-list { display: none; text-align: left; background: var(--bg-card); border: 1px solid var(--border-input); padding: 16px; border-radius: 20px; margin-top: 16px; font-size: 13px; color: var(--text-primary); line-height: 1.6; max-height: 200px; overflow-y: auto;}
+    .breakdown-list.show { display: block; }
+    .breakdown-list ul { padding-left: 16px; }
+
+    .wa-btn, .preview-btn {
+      background: #34C759; color: #fff; border: none; padding: 16px; border-radius: 20px; font-weight: 700; font-size: 16px; width: 100%; margin-top: 24px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: transform 0.2s ease, background 0.2s ease; box-shadow: 0 4px 12px rgba(52,199,89,0.2); }
+    .preview-btn { background: var(--accent-color); margin-top: 12px; box-shadow: 0 4px 12px rgba(255,77,140,0.2); }
+    .preview-btn:hover { background: #e6396e; }
+    .wa-btn:active { transform: scale(0.98); background: #2eb04f; }
+    .preview-btn:active { transform: scale(0.98); }
+
+    .download-btn { background: var(--bg-input); color: var(--text-primary); border: 1px solid var(--border-main); padding: 16px; border-radius: 20px; font-weight: 600; font-size: 14px; width: 100%; margin-top: 12px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: 0.2s; }
+    .download-btn:hover { background: var(--bg-input-hover); }
+
+    /* Preview Modal */
+    .preview-modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.85);
+      backdrop-filter: blur(16px);
+      z-index: 10000;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+    .preview-modal.active { display: flex; }
+    .preview-content {
+      background: var(--bg-container);
+      border-radius: 32px;
+      max-width: 90vw;
+      max-height: 90vh;
+      overflow: auto;
+      padding: 20px;
+      position: relative;
+      text-align: center;
+    }
+    .preview-image {
+      max-width: 100%;
+      max-height: 70vh;
+      border-radius: 16px;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.2);
+    }
+    .preview-close {
+      position: absolute;
+      top: 12px;
+      right: 20px;
+      background: rgba(0,0,0,0.5);
+      border: none;
+      font-size: 28px;
+      width: 40px;
+      height: 40px;
+      border-radius: 30px;
+      color: white;
+      cursor: pointer;
+    }
+    .preview-download-btn {
+      background: var(--accent-color);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 40px;
+      font-weight: 700;
+      margin-top: 16px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* Toast */
+    .toast-container { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); z-index: 9999; display: flex; flex-direction: column; gap: 10px; pointer-events: none;}
+    .toast { background: var(--bg-container); color: var(--text-primary); padding: 12px 24px; border-radius: 60px; box-shadow: 0 10px 30px var(--toast-shadow); border: 1px solid var(--border-main); font-weight: 600; font-size: 14px; display: flex; align-items: center; gap: 10px; animation: slideDown 0.4s, fadeOut 0.4s 2.6s forwards; }
+    @keyframes slideDown { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes fadeOut { to { opacity: 0; transform: translateY(-20px); } }
+
+    /* Receipt capture (hidden) */
+    #receipt-capture { position: absolute; left: -9999px; top: 0; width: 450px; background: #ffffff; color: #000; padding: 32px; border-radius: 24px; font-family: sans-serif; z-index: -100; }
+    #receipt-capture h2 { margin-bottom: 16px; color: #ff4d8c; border-bottom: 2px solid #E5E5EA; padding-bottom: 8px; font-family: 'Clash Display', sans-serif;}
+    #receipt-capture ul { padding-left: 20px; margin-bottom: 20px; font-size: 14px; line-height: 1.8;}
+    #receipt-capture .r-total { font-size: 24px; font-weight: 900; text-align: right; border-top: 2px solid #000; padding-top: 12px;}
+
+    @media (max-width: 900px) { .layout-wrapper { grid-template-columns: 1fr; } .right-panel { position: relative; top: 0; } }
+    @media (max-width: 600px) { .plain-header { padding: 0 16px; } .main-content { padding: 20px 16px; } .left-panel { padding: 20px; } .right-box { padding: 24px 16px; } .category-grid { grid-template-columns: repeat(4, 1fr); gap: 8px;} .total-price span { font-size: 32px; } .wa-btn { padding: 14px; font-size: 15px;} .panel-banner h2 {font-size: 16px;} .panel-banner {padding: 0 16px; height: 80px;} .home-btn span { display: none; } }
+  </style>
+</head>
+<body>
+
+  <div id="toast-container" class="toast-container"></div>
+
+  <header class="plain-header">
+    <div class="logo-area" onclick="window.location.href='index.html'">
+      <div class="logo-icon">G</div>
+      <div class="logo-text">
+        <span class="graf">Graf</span><span class="ynx">ynx</span>
+      </div>
+    </div>
+    <div class="header-actions">
+      <button class="home-btn" onclick="window.location.href='index.html'">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        <span>Home</span>
+      </button>
+    </div>
+  </header>
+
+  <main class="main-content">
+    <div class="layout-wrapper">
+      
+      <div class="left-panel">
+        
+        <div class="header-flex">
+          <div class="brand-subtitle">Print Price Calculator</div>
+          <button class="reset-btn" onclick="resetForm()">Clear Form</button>
+        </div>
+
+        <div class="category-grid">
+          <div class="category-card active" data-category="sublimation" onclick="switchCategory('sublimation')">
+            <div class="cat-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.38 3.46L16 2a8.5 8.5 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.47a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.47a2 2 0 0 0-1.34-2.23z"/></svg></div>
+            <span class="cat-name">Sublimation</span>
+          </div>
+          <div class="category-card" data-category="silkscreen" onclick="switchCategory('silkscreen')">
+            <div class="cat-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.38 3.46L16 2a8.5 8.5 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.47a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.47a2 2 0 0 0-1.34-2.23z"/></svg></div>
+            <span class="cat-name">Silkscreen</span>
+          </div>
+          <div class="category-card" data-category="dtf_shirt" onclick="switchCategory('dtf_shirt')">
+            <div class="cat-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.38 3.46L16 2a8.5 8.5 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.47a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.47a2 2 0 0 0-1.34-2.23z"/></svg></div>
+            <span class="cat-name">DTF Shirt</span>
+          </div>
+          <div class="category-card" data-category="lanyard" onclick="switchCategory('lanyard')">
+            <div class="cat-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 2h4M12 2v4M8 6h8a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2zM9 10h6M9 14h4"/></svg></div>
+            <span class="cat-name">Lanyard</span>
+          </div>
+          <div class="category-card" data-category="apron" onclick="switchCategory('apron')">
+            <div class="cat-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 2h8v4M6 6h12l1.5 16H4.5L6 6zM9 12h6v5H9z"/></svg></div>
+            <span class="cat-name">Apron</span>
+          </div>
+          <div class="category-card" data-category="cap" onclick="switchCategory('cap')">
+            <div class="cat-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 16h14"/><path d="M6 16a6 6 0 0 1 12 0"/><path d="M18 16c2 0 3 1 4 2"/><circle cx="12" cy="9" r="1"/></svg></div>
+            <span class="cat-name">Cap</span>
+          </div>
+          <div class="category-card" data-category="bunting" onclick="switchCategory('bunting')">
+            <div class="cat-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="7" y="4" width="10" height="12" rx="1"/><path d="M12 16v6M9 22h6M12 4V2"/></svg></div>
+            <span class="cat-name">Bunting</span>
+          </div>
+          <div class="category-card" data-category="banner" onclick="switchCategory('banner')">
+            <div class="cat-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="6" width="16" height="8" rx="1"/><path d="M4 4v16M20 4v16"/></svg></div>
+            <span class="cat-name">Banner</span>
+          </div>
+        </div>
+
+        <!-- ALL PANELS (identical to original KidzStudios, no changes in content) -->
+        <div id="panel-sublimation" class="panel active">
+          <div class="panel-banner"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.38 3.46L16 2a8.5 8.5 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.47a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.47a2 2 0 0 0-1.34-2.23z"/></svg><h2>Full Print Sublimation Jersey</h2></div>
+          <div class="grid-layout">
+            <div class="form-group" style="grid-column:1/-1;"><label class="section-title">Sizes & Quantity <span class="pill-tag">Total: <span id="sub_totalQty">0</span></span></label><div class="size-grid" id="sub_sizeGridContainer"></div></div>
+            <div class="form-group"><label class="section-title">Order Details</label><label class="field-label">Design Type</label><select id="sub_design" class="select-field calc-trigger"><option value="0">Catalogue Design (Free)</option><option value="50">Custom Design (+RM50)</option></select><label class="field-label">Production</label><select id="sub_urgent" class="select-field calc-trigger"><option value="0">Standard (14-28 Days)</option><option value="5">Urgent Order (+RM5/pcs)</option></select><label class="field-label">Material Update</label><select id="sub_material" class="select-field calc-trigger"><option value="0">Microfiber Reverse Eyelet</option><option value="3">Diamond 155GSM (+RM3)</option><option value="3">RJPK 170GSM (+RM3)</option><option value="8">Lycra 280GSM (+RM8)</option></select></div>
+            <div class="form-group"><label class="section-title">Features & Add-Ons</label><div class="addon-row"><div><span class="addon-label">Collar Upgrade</span><span class="addon-price">+RM5/pcs</span></div><div class="general-stepper"><button onclick="stepVal('sub_add_collar',-1)">-</button><input type="number" id="sub_add_collar" class="calc-trigger" min="0" value="0"><button onclick="stepVal('sub_add_collar',1)">+</button></div></div><div class="addon-row"><div><span class="addon-label">Long Sleeves</span><span class="addon-price">+RM5/pcs</span></div><div class="general-stepper"><button onclick="stepVal('sub_add_long',-1)">-</button><input type="number" id="sub_add_long" class="calc-trigger" min="0" value="0"><button onclick="stepVal('sub_add_long',1)">+</button></div></div><div class="addon-row"><div><span class="addon-label">Raglan Sleeves</span><span class="addon-price">+RM5/pcs</span></div><div class="general-stepper"><button onclick="stepVal('sub_add_raglan',-1)">-</button><input type="number" id="sub_add_raglan" class="calc-trigger" min="0" value="0"><button onclick="stepVal('sub_add_raglan',1)">+</button></div></div><div class="addon-row"><div><span class="addon-label">Muslimah Cut</span><span class="addon-price">+RM15/pcs</span></div><div class="general-stepper"><button onclick="stepVal('sub_add_muslimah',-1)">-</button><input type="number" id="sub_add_muslimah" class="calc-trigger" min="0" value="0"><button onclick="stepVal('sub_add_muslimah',1)">+</button></div></div><div class="addon-row"><div><span class="addon-label">Oversize Cut</span><span class="addon-price">+RM15/pcs</span></div><div class="general-stepper"><button onclick="stepVal('sub_add_oversize',-1)">-</button><input type="number" id="sub_add_oversize" class="calc-trigger" min="0" value="0"><button onclick="stepVal('sub_add_oversize',1)">+</button></div></div><div class="addon-row"><div><span class="addon-label">Chest Pocket</span><span class="addon-price">+RM3/pcs</span></div><div class="general-stepper"><button onclick="stepVal('sub_add_chest',-1)">-</button><input type="number" id="sub_add_chest" class="calc-trigger" min="0" value="0"><button onclick="stepVal('sub_add_chest',1)">+</button></div></div><label class="section-title" style="margin-top:24px;">Personalization</label><div class="addon-row"><div><span class="addon-label">Personal Name Only</span><span class="addon-price">+RM4/pcs</span></div><div class="general-stepper"><button onclick="stepVal('sub_add_name',-1)">-</button><input type="number" id="sub_add_name" class="calc-trigger" min="0" value="0"><button onclick="stepVal('sub_add_name',1)">+</button></div></div><div class="addon-row"><div><span class="addon-label">Personal Number Only</span><span class="addon-price">+RM4/pcs</span></div><div class="general-stepper"><button onclick="stepVal('sub_add_num',-1)">-</button><input type="number" id="sub_add_num" class="calc-trigger" min="0" value="0"><button onclick="stepVal('sub_add_num',1)">+</button></div></div><div class="addon-row"><div><span class="addon-label">Name & Number Combo</span><span class="addon-price">+RM7/pcs</span></div><div class="general-stepper"><button onclick="stepVal('sub_add_namenum',-1)">-</button><input type="number" id="sub_add_namenum" class="calc-trigger" min="0" value="0"><button onclick="stepVal('sub_add_namenum',1)">+</button></div></div></div>
+          </div>
+        </div>
+
+        <div id="panel-silkscreen" class="panel"><div class="panel-banner"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.38 3.46L16 2a8.5 8.5 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.47a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.47a2 2 0 0 0-1.34-2.23z"/></svg><h2>T-Shirt (Silkscreen)</h2></div><div class="grid-layout"><div class="form-group" style="grid-column:1/-1;"><label class="section-title">Sizes & Quantity <span class="pill-tag">Total: <span id="silk_totalQty">0</span></span></label><div class="size-grid" id="silk_sizeGridContainer"></div></div><div class="form-group"><label class="section-title">Base Shirt</label><label class="field-label">Shirt Type</label><select id="silk_shirtType" class="select-field calc-trigger"><option value="13.50">Roundneck (RM13.50)</option><option value="18.50">Collar (RM18.50)</option><option value="23.00">Polo (RM23.00)</option></select><div class="addon-row" style="margin-top:12px; border-bottom:none;"><div><span class="addon-label">Long Sleeve Upgrade</span><span class="addon-price">+RM5/pcs</span></div><div class="general-stepper"><button onclick="stepVal('silk_ls_qty',-1)">-</button><input type="number" id="silk_ls_qty" class="calc-trigger" min="0" value="0"><button onclick="stepVal('silk_ls_qty',1)">+</button></div></div></div><div class="form-group"><label class="section-title">Silkscreen Printing</label><div style="display:flex; gap:12px; flex-wrap:wrap;"><div style="flex:1;"><label class="field-label">Front Colors</label><select id="silk_front_colors" class="select-field calc-trigger"><option value="-1">No Print</option><option value="0" selected>1 Color</option><option value="1">2 Colors</option><option value="2">3 Colors</option><option value="3">4 Colors</option><option value="4">5 Colors</option><option value="5">6 Colors</option><option value="6">7 Colors</option><option value="7">8 Colors</option></select></div><div style="flex:1;"><label class="field-label">Back Colors</label><select id="silk_back_colors" class="select-field calc-trigger"><option value="-1" selected>No Print</option><option value="0">1 Color</option><option value="1">2 Colors</option><option value="2">3 Colors</option><option value="3">4 Colors</option><option value="4">5 Colors</option><option value="5">6 Colors</option><option value="6">7 Colors</option><option value="7">8 Colors</option></select></div></div></div></div></div>
+
+        <div id="panel-dtf_shirt" class="panel"><div class="panel-banner"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.38 3.46L16 2a8.5 8.5 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.47a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.47a2 2 0 0 0-1.34-2.23z"/></svg><h2>T-Shirt (DTF Print)</h2></div><div class="grid-layout"><div class="form-group" style="grid-column:1/-1;"><label class="section-title">Sizes & Quantity <span class="pill-tag">Total: <span id="dtf_totalQty">0</span></span></label><div class="size-grid" id="dtf_sizeGridContainer"></div></div><div class="form-group"><label class="section-title">Base Shirt</label><label class="field-label">Shirt Type</label><select id="dtf_shirtType" class="select-field calc-trigger"><option value="13.50">Roundneck (RM13.50)</option><option value="18.50">Collar (RM18.50)</option><option value="23.00">Polo (RM23.00)</option></select><div class="addon-row" style="margin-top:12px; border-bottom:none;"><div><span class="addon-label">Long Sleeve Upgrade</span><span class="addon-price">+RM5/pcs</span></div><div class="general-stepper"><button onclick="stepVal('dtf_ls_qty',-1)">-</button><input type="number" id="dtf_ls_qty" class="calc-trigger" min="0" value="0"><button onclick="stepVal('dtf_ls_qty',1)">+</button></div></div></div><div class="form-group"><label class="section-title">DTF Print Size</label><div style="display:flex; gap:12px; flex-wrap:wrap;"><div style="flex:1;"><label class="field-label">Front Size</label><select id="dtf_front_size" class="select-field calc-trigger"><option value="0">No Print</option><option value="4">Smaller Than A4 (~RM4)</option><option value="8" selected>A4 (RM8)</option><option value="10">A3 (RM10)</option><option value="12">Bigger Than A3 (RM12)</option></select></div><div style="flex:1;"><label class="field-label">Back Size</label><select id="dtf_back_size" class="select-field calc-trigger"><option value="0" selected>No Print</option><option value="4">Smaller Than A4 (~RM4)</option><option value="8">A4 (RM8)</option><option value="10">A3 (RM10)</option><option value="12">Bigger Than A3 (RM12)</option></select></div></div><div class="addon-row" style="margin-top:16px; border-bottom:none;"><div><span class="addon-label">Sleeve Prints (Per arm)</span><span class="addon-price">+RM3/arm</span></div><div class="general-stepper"><button onclick="stepVal('dtf_sleeve_qty',-1)">-</button><input type="number" id="dtf_sleeve_qty" class="calc-trigger" min="0" value="0"><button onclick="stepVal('dtf_sleeve_qty',1)">+</button></div></div></div></div></div>
+
+        <div id="panel-lanyard" class="panel"><div class="panel-banner"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 2h4M12 2v4M8 6h8a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2zM9 10h6M9 14h4"/></svg><h2>Lanyard (Sublimation)</h2></div><div class="form-group"><label class="section-title">Lanyard Details</label><div class="grid-layout"><div><label class="field-label">Quantity (Min 10)</label><div class="general-stepper"><button onclick="stepVal('lan_qty',-1)">-</button><input type="number" id="lan_qty" class="calc-trigger" min="10" value="10"><button onclick="stepVal('lan_qty',1)">+</button></div></div><div><label class="field-label">Size Option</label><select id="lan_size" class="select-field calc-trigger"><option>20MM</option><option>25MM</option></select></div><div><label class="field-label">Buckle Option</label><select id="lan_buckle" class="select-field calc-trigger"><option>With Buckle</option><option>No Buckle</option></select></div></div></div></div>
+
+        <div id="panel-apron" class="panel"><div class="panel-banner"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 2h8v4M6 6h12l1.5 16H4.5L6 6zM9 12h6v5H9z"/></svg><h2>Custom Apron</h2></div><div class="form-group"><label class="section-title">Apron Details</label><div class="grid-layout"><div><label class="field-label">Quantity</label><div class="general-stepper"><button onclick="stepVal('apr_qty',-1)">-</button><input type="number" id="apr_qty" class="calc-trigger" min="1" value="10"><button onclick="stepVal('apr_qty',1)">+</button></div></div><div><label class="field-label">Apron Type</label><select id="apr_type" class="select-field calc-trigger"><option value="basic">Basic (100% Polyester)</option><option value="exclusive">Exclusive (Polyester+Cotton)</option></select></div></div></div></div>
+
+        <div id="panel-cap" class="panel"><div class="panel-banner"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 16h14"/><path d="M6 16a6 6 0 0 1 12 0"/><path d="M18 16c2 0 3 1 4 2"/><circle cx="12" cy="9" r="1"/></svg><h2>Custom Cap</h2></div><div class="form-group"><label class="section-title">Cap Details</label><div class="grid-layout"><div><label class="field-label">Quantity (Min 10)</label><div class="general-stepper"><button onclick="stepVal('cap_qty',-1)">-</button><input type="number" id="cap_qty" class="calc-trigger" min="10" value="10"><button onclick="stepVal('cap_qty',1)">+</button></div></div><div><label class="field-label">Printing Type</label><select id="cap_type" class="select-field calc-trigger"><option value="dtf">DTF Print</option><option value="embroidery">Embroidery</option></select></div></div></div></div>
+
+        <div id="panel-bunting" class="panel"><div class="panel-banner"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="7" y="4" width="10" height="12" rx="1"/><path d="M12 16v6M9 22h6M12 4V2"/></svg><h2>Bunting (Vertical)</h2></div><div class="form-group"><label class="section-title">Bunting Details</label><div class="grid-layout"><div><label class="field-label">Quantity</label><div class="general-stepper"><button onclick="stepVal('bun_qty',-1)">-</button><input type="number" id="bun_qty" class="calc-trigger" min="1" value="1"><button onclick="stepVal('bun_qty',1)">+</button></div></div><div><label class="field-label">Size (W x H) in Feet</label><select id="bun_size" class="select-field calc-trigger"><option value="custom">🛠️ Custom Size...</option><option value="32">Standard: 2 x 6 FT (RM32.00)</option><option disabled>--- 1 FT Width ---</option><option value="23">1 x 1 FT (RM23.00)</option><option value="24">1 x 2 FT (RM24.00)</option><option value="25">1 x 3 FT (RM25.00)</option><option disabled>--- 2 FT Width ---</option><option value="23">2 x 2 FT (RM23.00)</option><option value="26">2 x 3 FT (RM26.00)</option><option value="28">2 x 4 FT (RM28.00)</option><option value="30">2 x 5 FT (RM30.00)</option><option value="32">2 x 6 FT (RM32.00)</option><option value="36">2 x 7 FT (RM36.00)</option><option value="38">2 x 8 FT (RM38.00)</option><option disabled>--- 3 FT Width ---</option><option value="23">3 x 3 FT (RM23.00)</option><option value="26">3 x 4 FT (RM26.00)</option><option value="30">3 x 5 FT (RM30.00)</option><option value="36">3 x 6 FT (RM36.00)</option><option value="42">3 x 7 FT (RM42.00)</option><option value="48">3 x 8 FT (RM48.00)</option><option value="54">3 x 9 FT (RM54.00)</option><option value="60">3 x 10 FT (RM60.00)</option></select><div id="bun_custom_box" class="custom-size-box"><div style="display:flex; gap:12px;"><input type="number" id="bun_w" class="input-field calc-trigger" placeholder="Width (ft)"><input type="number" id="bun_h" class="input-field calc-trigger" placeholder="Height (ft)"></div></div></div></div></div></div>
+
+        <div id="panel-banner" class="panel"><div class="panel-banner"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="6" width="16" height="8" rx="1"/><path d="M4 4v16M20 4v16"/></svg><h2>Banner (Horizontal)</h2></div><div class="form-group"><label class="section-title">Banner Details</label><div class="grid-layout"><div><label class="field-label">Quantity</label><div class="general-stepper"><button onclick="stepVal('banner_qty',-1)">-</button><input type="number" id="banner_qty" class="calc-trigger" min="1" value="1"><button onclick="stepVal('banner_qty',1)">+</button></div></div><div><label class="field-label">Size (H x W) in Feet</label><select id="banner_size" class="select-field calc-trigger"><option value="custom">🛠️ Custom Size...</option><option value="39">Standard: 3' x 6' (RM39.00)</option><option disabled>--- 1 FT Series ---</option><option value="23">1' x 2' (RM23.00)</option><option value="24">1' x 3' (RM24.00)</option><option value="25">1' x 4' (RM25.00)</option><option value="26">1' x 5' (RM26.00)</option><option value="27">1' x 6' (RM27.00)</option><option value="28">1' x 8' (RM28.00)</option><option disabled>--- 2 FT Series ---</option><option value="23">2' x 2' (RM23.00)</option><option value="26">2' x 3' (RM26.00)</option><option value="28">2' x 4' (RM28.00)</option><option value="33">2' x 6' (RM33.00)</option><option value="38">2' x 8' (RM38.00)</option><option value="43">2' x 10' (RM43.00)</option><option disabled>--- 3 FT Series ---</option><option value="39">3' x 6' (RM39.00)</option><option value="51">3' x 8' (RM51.00)</option><option value="63">3' x 10' (RM63.00)</option><option value="75">3' x 12' (RM75.00)</option><option value="99">3' x 16' (RM99.00)</option><option value="123">3' x 20' (RM123.00)</option><option disabled>--- 4 FT Series ---</option><option value="51">4' x 6' (RM51.00)</option><option value="67">4' x 8' (RM67.00)</option><option value="83">4' x 10' (RM83.00)</option><option value="99">4' x 12' (RM99.00)</option><option value="131">4' x 16' (RM131.00)</option><option value="163">4' x 20' (RM163.00)</option><option disabled>--- 6 FT Series ---</option><option value="75">6' x 6' (RM75.00)</option><option value="99">6' x 8' (RM99.00)</option><option value="123">6' x 10' (RM123.00)</option><option value="147">6' x 12' (RM147.00)</option><option value="195">6' x 16' (RM195.00)</option><option value="243">6' x 20' (RM243.00)</option></select><div id="banner_custom_box" class="custom-size-box"><div style="display:flex; gap:12px;"><input type="number" id="banner_w" class="input-field calc-trigger" placeholder="Width (ft)"><input type="number" id="banner_h" class="input-field calc-trigger" placeholder="Height (ft)"></div></div></div></div></div></div>
+      </div> <!-- End left-panel -->
+
+      <div class="right-panel">
+        <div class="right-box" style="text-align: center;">
+          <div class="price-breakdown"><div>Base Cost <strong id="out_base">RM 0.00</strong></div><div>Surcharges <strong id="out_surcharge">RM 0.00</strong></div></div>
+          <div class="total-price">Estimated Grand Total <span id="out_total">RM 0.00</span></div>
+          <div class="breakdown-toggle" onclick="document.getElementById('breakdown-list').classList.toggle('show')">Show Detailed Breakdown ▼</div>
+          <div id="breakdown-list" class="breakdown-list"></div>
+        </div>
+        <div class="right-box wa-box">
+          <label class="section-title" style="margin-bottom:8px;">Receiver WhatsApp</label>
+          <div style="display:flex; gap:8px; margin-top:16px;"><select id="wa_country_code" class="select-field" style="width:110px;"><option value="60" selected>+60</option><option value="65">+65</option><option value="62">+62</option><option value="66">+66</option><option value="673">+673</option><option value="1">+1</option><option value="44">+44</option><option value="61">+61</option></select><input type="tel" id="wa_target_number" class="input-field" placeholder="123456789"></div>
+          <button class="wa-btn" onclick="sendWhatsApp()"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 00-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>Send Quote</button>
+          <button class="preview-btn" onclick="previewQuoteImage()"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>Preview Quote Image</button>
+          <button class="download-btn" onclick="downloadQuoteImage()"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Download Quote Image</button>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="plain-footer">
+    © 2026 Grafynx — “Inks Your Ideas” | Setia Alam | AFIQ 019 908 3295
+  </footer>
+
+  <div id="receipt-capture">
+    <h2>Grafynx Quotation</h2>
+    <p style="color: #86868B; margin-bottom: 16px; font-size:12px;" id="receipt-date"></p>
+    <p style="font-weight: bold; margin-bottom: 8px; font-size:14px;" id="receipt-product"></p>
+    <div id="receipt-list"></div>
+    <div class="r-total" id="receipt-total"></div>
+  </div>
+
+  <!-- Preview Modal -->
+  <div id="previewModal" class="preview-modal">
+    <div class="preview-content">
+      <button class="preview-close" onclick="closePreviewModal()">✕</button>
+      <img id="previewImage" class="preview-image" alt="Quote preview">
+      <div>
+        <button class="preview-download-btn" onclick="downloadFromPreview()">Download Image</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // --- Toast Notifications ---
+    function showToast(msg) {
+      const container = document.getElementById('toast-container');
+      const toast = document.createElement('div');
+      toast.className = 'toast';
+      toast.innerHTML = `⚠️ <span>${msg}</span>`;
+      container.appendChild(toast);
+      setTimeout(() => toast.remove(), 3500);
+    }
+
+    let currentCategory = 'sublimation';
+    const categoryNames = {
+      'sublimation': 'Full Print Sublimation Jersey',
+      'silkscreen': 'T-Shirt (Silkscreen Printing)',
+      'dtf_shirt': 'T-Shirt (DTF Printing)',
+      'lanyard': 'Lanyard (Sublimation)',
+      'apron': 'Apron (DTF/Silkscreen)',
+      'cap': 'Cap (DTF/Embroidery)',
+      'bunting': 'Bunting (Tarpaulin 380gsm)',
+      'banner': 'Banner (Tarpaulin 380gsm)'
+    };
+
+    function switchCategory(cat) {
+      currentCategory = cat;
+      document.querySelectorAll('.category-card').forEach(c => c.classList.remove('active'));
+      document.querySelector(`.category-card[data-category="${cat}"]`).classList.add('active');
+      document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+      document.getElementById('panel-' + cat).classList.add('active');
+      calculate();
+    }
+
+    const shirtSizeConfig = [
+      { id: 'xs', label: 'XS', sur: 0 }, { id: 's', label: 'S', sur: 0 }, { id: 'm', label: 'M', sur: 0 },
+      { id: 'l', label: 'L', sur: 0 }, { id: 'xl', label: 'XL', sur: 0 }, { id: '2xl', label: '2XL', sur: 0 },
+      { id: '3xl', label: '3XL', sur: 3 }, { id: '5xl', label: '5XL', sur: 6 }, { id: '7xl', label: '7XL', sur: 9 }
+    ];
+
+    const ssMatrix = [
+      [7.82,8.84,9.86,10.88,11.90,12.92,13.94,15.30],[5.55,6.57,7.59,8.61,9.63,10.65,11.67,13.03],
+      [3.74,4.76,5.78,6.80,7.82,8.84,9.86,11.22],[2.72,3.74,4.76,5.78,6.80,7.82,8.84,10.20],
+      [1.99,3.01,4.03,5.05,6.07,7.09,8.11,9.47],[1.78,2.80,3.82,4.84,5.86,6.88,7.90,9.26],
+      [1.59,2.61,3.63,4.65,5.67,6.69,7.71,9.07],[1.29,2.31,3.33,4.35,5.37,6.39,7.41,8.77],
+      [1.20,2.22,3.24,4.26,5.28,6.30,7.32,8.68],[1.10,2.12,3.14,4.16,5.18,6.20,7.22,8.58]
+    ];
+
+    function getSSTier(qty) {
+      if(qty<11) return 0; if(qty<21) return 1; if(qty<31) return 2; if(qty<51) return 3;
+      if(qty<81) return 4; if(qty<101) return 5; if(qty<201) return 6; if(qty<301) return 7;
+      if(qty<501) return 8; return 9;
+    }
+
+    function buildSizeGrid(prefix) {
+      let html = '';
+      shirtSizeConfig.forEach(s => {
+        let badge = s.sur > 0 ? `+RM${s.sur}` : '';
+        html += `<div class="size-item"><label>${s.label}</label><div class="surcharge-badge">${badge}</div>
+                 <div class="stepper-wrapper">
+                    <button type="button" class="stepper-btn" onclick="stepVal('${prefix}_qty_${s.id}', -1)">-</button>
+                    <input type="number" id="${prefix}_qty_${s.id}" class="size-input calc-trigger" min="0" value="0">
+                    <button type="button" class="stepper-btn" onclick="stepVal('${prefix}_qty_${s.id}', 1)">+</button>
+                 </div></div>`;
+      });
+      document.getElementById(`${prefix}_sizeGridContainer`).innerHTML = html;
+    }
+    
+    buildSizeGrid('sub'); buildSizeGrid('silk'); buildSizeGrid('dtf');
+
+    function stepVal(id, delta) {
+      let el = document.getElementById(id);
+      let min = parseInt(el.min) || 0;
+      let val = parseInt(el.value) || 0;
+      val += delta;
+      if(val < min) val = min;
+      el.value = val;
+      calculate();
+    }
+
+    function saveState() {
+      const inputs = document.querySelectorAll('.calc-trigger');
+      const state = { activeCategory: currentCategory };
+      inputs.forEach(i => { if(i.type === 'checkbox') state[i.id] = i.checked; else state[i.id] = i.value; });
+      localStorage.setItem('calcMasterState', JSON.stringify(state));
+    }
+
+    function loadState() {
+      const saved = localStorage.getItem('calcMasterState');
+      if(saved) {
+        const state = JSON.parse(saved);
+        for(let id in state) {
+          if(id === 'activeCategory') { switchCategory(state[id]); continue; }
+          let el = document.getElementById(id);
+          if(el) { if(el.type === 'checkbox') el.checked = state[id]; else el.value = state[id]; }
+        }
+        const bunSize = document.getElementById('bun_size');
+        const bannerSize = document.getElementById('banner_size');
+        if(bunSize) document.getElementById('bun_custom_box').style.display = bunSize.value === 'custom' ? 'block' : 'none';
+        if(bannerSize) document.getElementById('banner_custom_box').style.display = bannerSize.value === 'custom' ? 'block' : 'none';
+        calculate();
+      }
+    }
+
+    function resetForm() {
+      if(confirm("Are you sure you want to clear all inputs?")) {
+        localStorage.removeItem('calcMasterState');
+        document.querySelectorAll('.calc-trigger').forEach(el => {
+          if(el.type === 'checkbox') el.checked = false;
+          else if(el.tagName === 'SELECT') { if(el.id === 'wa_country_code') el.value = '60'; else el.selectedIndex = 0; }
+          else if(el.type === 'number' || el.type === 'tel') el.value = el.min || '';
+        });
+        document.getElementById('bun_custom_box').style.display = 'none';
+        document.getElementById('banner_custom_box').style.display = 'none';
+        switchCategory('sublimation');
+        calculate();
+      }
+    }
+
+    let currentBase = 0, currentSur = 0, currentTotal = 0, animFrame = null;
+    function animateValue(obj, start, end, duration) {
+      if(animFrame) cancelAnimationFrame(animFrame);
+      let startTimestamp = null;
+      const step = (timestamp) => {
+        if(!startTimestamp) startTimestamp = timestamp;
+        const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+        obj.innerHTML = "RM " + (progress * (end - start) + start).toFixed(2);
+        if(progress < 1) animFrame = requestAnimationFrame(step);
+        else { obj.innerHTML = "RM " + end.toFixed(2); animFrame = null; }
+      };
+      animFrame = requestAnimationFrame(step);
+    }
+
+    document.getElementById('bun_size').addEventListener('change', function() { document.getElementById('bun_custom_box').style.display = this.value === 'custom' ? 'block' : 'none'; });
+    document.getElementById('banner_size').addEventListener('change', function() { document.getElementById('banner_custom_box').style.display = this.value === 'custom' ? 'block' : 'none'; });
+
+    let currentBreakdownList = [];
+
+    function calcSublimation() {
+      let qty=0, sizeSur=0, bDown=[], sizeBreakdown=[];
+      shirtSizeConfig.forEach(s => { let q = parseInt(document.getElementById(`sub_qty_${s.id}`).value)||0; qty+=q; sizeSur+=q*s.sur; if(q>0) sizeBreakdown.push(`${s.label}:${q}`); });
+      document.getElementById('sub_totalQty').innerText = qty;
+      let unitBase = qty<=10?45: qty<=30?35: qty<=50?33: qty<=100?30: qty<=200?28: qty<=300?25: qty<=500?23: qty<=1000?20:18;
+      let bCost = qty*unitBase;
+      if(qty>0) { bDown.push(`👕 <b>Sizes:</b> ${sizeBreakdown.join(', ')}`); bDown.push(`💰 <b>Base Cost:</b> ${qty} x RM${unitBase} = RM${bCost}`); if(sizeSur>0) bDown.push(`📏 <b>Extra Size Surcharge:</b> RM${sizeSur}`); }
+      let subAddonsList = [{id:'sub_add_collar',price:5,name:'Collar Upgrade'},{id:'sub_add_long',price:5,name:'Long Sleeves'},{id:'sub_add_raglan',price:5,name:'Raglan Sleeves'},{id:'sub_add_muslimah',price:15,name:'Muslimah Cut'},{id:'sub_add_oversize',price:15,name:'Oversize Cut'},{id:'sub_add_chest',price:3,name:'Chest Pocket'},{id:'sub_add_name',price:4,name:'Personal Name'},{id:'sub_add_num',price:4,name:'Personal Number'},{id:'sub_add_namenum',price:7,name:'Name & Number'}];
+      let perPieceAddonsTotal=0;
+      let mat=parseFloat(document.getElementById('sub_material').value); if(mat>0) { perPieceAddonsTotal+=qty*mat; bDown.push(`🧵 <b>Material Upgrade:</b> ${qty} x RM${mat} = RM${qty*mat}`); }
+      let urg=parseFloat(document.getElementById('sub_urgent').value); if(urg>0) { perPieceAddonsTotal+=qty*urg; bDown.push(`⏱️ <b>Urgent Order:</b> ${qty} x RM${urg} = RM${qty*urg}`); }
+      subAddonsList.forEach(a => { let q = parseInt(document.getElementById(a.id).value)||0; if(q>0) { let cost=q*a.price; perPieceAddonsTotal+=cost; bDown.push(`✨ <b>${a.name}:</b> ${q} x RM${a.price} = RM${cost}`); } });
+      let designFee=parseFloat(document.getElementById('sub_design').value); if(designFee>0) bDown.push(`🎨 <b>Custom Design Fee:</b> RM${designFee}`);
+      let sCost = perPieceAddonsTotal + sizeSur + designFee;
+      return { base: bCost, sur: sCost, total: bCost + sCost, breakdown: bDown };
+    }
+
+    function calcSilkscreen() {
+      let qty=0, sizeSur=0, bDown=[];
+      shirtSizeConfig.forEach(s => { let q = parseInt(document.getElementById(`silk_qty_${s.id}`).value)||0; qty+=q; sizeSur+=q*s.sur; });
+      document.getElementById('silk_totalQty').innerText = qty;
+      if(qty>0 && qty<10) { showToast("Silkscreen requires minimum 10 pieces!"); return {base:0, sur:0, total:0, breakdown:["⚠️ Minimum 10 pieces required."]}; }
+      let sBase = parseFloat(document.getElementById('silk_shirtType').value);
+      let bCost = qty * sBase; if(qty>0) bDown.push(`👕 <b>Base Shirt:</b> ${qty} x RM${sBase} = RM${bCost}`);
+      let fColors = parseInt(document.getElementById('silk_front_colors').value);
+      let bColors = parseInt(document.getElementById('silk_back_colors').value);
+      let pCost=0, tier=getSSTier(qty);
+      if(qty>0 && fColors>=0) { let fc=ssMatrix[tier][fColors]; pCost+=qty*fc; bDown.push(`🎨 <b>Front Print (${fColors+1}C):</b> ${qty} x RM${fc} = RM${(qty*fc).toFixed(2)}`); }
+      if(qty>0 && bColors>=0) { let bc=ssMatrix[tier][bColors]; pCost+=qty*bc; bDown.push(`🎨 <b>Back Print (${bColors+1}C):</b> ${qty} x RM${bc} = RM${(qty*bc).toFixed(2)}`); }
+      let lsQty=parseInt(document.getElementById('silk_ls_qty').value)||0, lsCost=lsQty*5; if(lsQty>0) bDown.push(`🧵 <b>Long Sleeve Upgrade:</b> ${lsQty} x RM5 = RM${lsCost}`);
+      if(sizeSur>0) bDown.push(`📏 <b>Size Surcharge:</b> RM${sizeSur}`);
+      let sCost = pCost + lsCost + sizeSur;
+      return { base: bCost, sur: sCost, total: bCost + sCost, breakdown: bDown };
+    }
+
+    function calcDTF() {
+      let qty=0, sizeSur=0, bDown=[];
+      shirtSizeConfig.forEach(s => { let q = parseInt(document.getElementById(`dtf_qty_${s.id}`).value)||0; qty+=q; sizeSur+=q*s.sur; });
+      document.getElementById('dtf_totalQty').innerText = qty;
+      if(qty===0) return {base:0, sur:0, total:0, breakdown:[]};
+      let sBase = parseFloat(document.getElementById('dtf_shirtType').value);
+      let bCost = qty * sBase; bDown.push(`👕 <b>Base Shirt:</b> ${qty} x RM${sBase} = RM${bCost}`);
+      let fSize = parseFloat(document.getElementById('dtf_front_size').value);
+      let bSize = parseFloat(document.getElementById('dtf_back_size').value);
+      let pSizeCost = (qty*fSize)+(qty*bSize);
+      if(fSize>0) bDown.push(`🖨️ <b>Front Print:</b> ${qty} x RM${fSize} = RM${(qty*fSize).toFixed(2)}`);
+      if(bSize>0) bDown.push(`🖨️ <b>Back Print:</b> ${qty} x RM${bSize} = RM${(qty*bSize).toFixed(2)}`);
+      let slvQty = parseInt(document.getElementById('dtf_sleeve_qty').value)||0, slvCost=slvQty*3; if(slvQty>0) bDown.push(`💪 <b>Sleeve Print:</b> ${slvQty} arms x RM3 = RM${slvCost}`);
+      let lsQty = parseInt(document.getElementById('dtf_ls_qty').value)||0, lsCost=lsQty*5; if(lsQty>0) bDown.push(`🧵 <b>Long Sleeve Upgrade:</b> ${lsQty} x RM5 = RM${lsCost}`);
+      if(sizeSur>0) bDown.push(`📏 <b>Size Surcharge:</b> RM${sizeSur}`);
+      let sCost = pSizeCost + slvCost + lsCost + sizeSur;
+      return { base: bCost, sur: sCost, total: bCost + sCost, breakdown: bDown };
+    }
+
+    function calcSimple(type) {
+      let prefix = type==='bunting'?'bun':(type==='banner'?'banner':type.substring(0,3));
+      let qty = parseInt(document.getElementById(prefix+'_qty').value)||0, bDown=[];
+      if((type==='lanyard'||type==='cap') && qty>0 && qty<10) { showToast(`Minimum 10 pieces required for ${type}.`); return {base:0, sur:0, total:0, breakdown:["⚠️ Minimum 10 pieces required."]}; }
+      if(qty===0) return {base:0, sur:0, total:0, breakdown:[]};
+      let unit=0;
+      if(type==='lanyard') { if(qty>=20000) unit=3.5; else if(qty>=10000) unit=4; else if(qty>=1000) unit=5.5; else if(qty>=900) unit=5.7; else if(qty>=800) unit=6; else if(qty>=700) unit=6.5; else if(qty>=600) unit=7; else if(qty>=500) unit=7.5; else if(qty>=400) unit=8; else if(qty>=300) unit=8.5; else if(qty>=200) unit=9; else if(qty>=100) unit=10; else if(qty>=80) unit=12; else if(qty>=50) unit=13; else if(qty>=40) unit=14; else if(qty>=30) unit=15; else if(qty>=20) unit=16; else unit=19; }
+      else if(type==='apron') { let aType=document.getElementById('apr_type').value; if(aType==='basic') { if(qty<10) unit=20; else if(qty<20) unit=19; else if(qty<30) unit=17; else if(qty<=50) unit=15; else unit=13.5; } else { if(qty<10) unit=30; else if(qty<20) unit=25; else if(qty<30) unit=23; else if(qty<=50) unit=20; else unit=18.5; } }
+      else if(type==='cap') { let cType=document.getElementById('cap_type').value; if(cType==='dtf') { if(qty===10) unit=15; else if(qty<=20) unit=14.5; else if(qty<=30) unit=14; else if(qty<=50) unit=13.5; else if(qty<=100) unit=13; else unit=12; } else { if(qty===10) unit=22.5; else if(qty<=20) unit=19.6; else if(qty<=30) unit=17.8; else if(qty<=50) unit=16.9; else if(qty<=100) unit=15.7; else unit=14.9; } }
+      else if(type==='bunting'||type==='banner') { let sizeVal=document.getElementById(prefix+'_size').value; if(sizeVal==='custom') { let w=parseFloat(document.getElementById(prefix+'_w').value)||0, h=parseFloat(document.getElementById(prefix+'_h').value)||0, area=w*h; unit=area?Math.max(23,(area*2)+3):0; bDown.push(`📐 <b>Custom Size (${w}' x ${h}'):</b> ${area} sqft`); } else { unit=parseFloat(sizeVal); } }
+      if(unit>0) bDown.push(`📦 <b>${type.toUpperCase()}:</b> ${qty} pcs x RM${unit} = RM${qty*unit}`);
+      return { base: qty*unit, sur:0, total: qty*unit, breakdown: bDown };
+    }
+
+    function calculate() {
+      let res;
+      if(currentCategory==='sublimation') res = calcSublimation();
+      else if(currentCategory==='silkscreen') res = calcSilkscreen();
+      else if(currentCategory==='dtf_shirt') res = calcDTF();
+      else res = calcSimple(currentCategory);
+      animateValue(document.getElementById('out_base'), currentBase, res.base, 300);
+      animateValue(document.getElementById('out_surcharge'), currentSur, res.sur, 300);
+      animateValue(document.getElementById('out_total'), currentTotal, res.total, 400);
+      currentBase=res.base; currentSur=res.sur; currentTotal=res.total;
+      let bdHtml = res.breakdown.length ? "<ul><li>" + res.breakdown.join("</li><li>") + "</li></ul>" : "<i>No items selected.</i>";
+      document.getElementById('breakdown-list').innerHTML = bdHtml;
+      currentBreakdownList = res.breakdown;
+      saveState();
+    }
+
+    function sendWhatsApp() {
+      if(currentTotal===0) { showToast("Calculate a total greater than RM 0 before sending."); return; }
+      let countryCode = document.getElementById('wa_country_code').value;
+      let rawNumber = document.getElementById('wa_target_number').value.replace(/\D/g,'');
+      if(rawNumber.startsWith('0')) rawNumber = rawNumber.substring(1);
+      if(!rawNumber) { showToast("Please enter a WhatsApp number."); document.getElementById('wa_target_number').focus(); return; }
+      if(rawNumber.length<7) { showToast("WhatsApp number too short."); document.getElementById('wa_target_number').focus(); return; }
+      let finalNumber = countryCode + rawNumber;
+      let catName = categoryNames[currentCategory];
+      let msg = `*Quote Details*\n\n*Product:* ${catName}\n\n*Order Breakdown:*\n`;
+      currentBreakdownList.forEach(item => { msg += `- ${item.replace(/<b>/g,'*').replace(/<\/b>/g,'*').replace(/<\/?[^>]+(>|$)/g,'')}\n`; });
+      msg += `\n*Estimated Total: RM ${currentTotal.toFixed(2)}*\n\nPlease confirm if the pricing and production time is available. Thank you!`;
+      window.open(`https://api.whatsapp.com/send?phone=${finalNumber}&text=${encodeURIComponent(msg)}`, '_blank');
+    }
+
+    function prepareReceipt() {
+      let d = new Date();
+      document.getElementById('receipt-date').innerText = d.toLocaleString();
+      document.getElementById('receipt-product').innerText = categoryNames[currentCategory];
+      let listHtml = "<ul>";
+      currentBreakdownList.forEach(item => { listHtml += `<li>${item}</li>`; });
+      listHtml += "</ul>";
+      document.getElementById('receipt-list').innerHTML = listHtml;
+      document.getElementById('receipt-total').innerHTML = `TOTAL: RM ${currentTotal.toFixed(2)}`;
+    }
+
+    function downloadQuoteImage() {
+      if(currentTotal===0) { showToast("Calculate an order before downloading."); return; }
+      prepareReceipt();
+      const target = document.getElementById('receipt-capture');
+      html2canvas(target, { backgroundColor: '#ffffff', scale: 2 }).then(canvas => {
+        let link = document.createElement('a');
+        link.download = `Grafynx_Quote_${Date.now()}.png`;
+        link.href = canvas.toDataURL("image/png");
+        link.click();
+        showToast("Quote image downloaded successfully!");
+      });
+    }
+
+    let currentPreviewCanvas = null;
+    function previewQuoteImage() {
+      if(currentTotal===0) { showToast("Calculate an order first."); return; }
+      prepareReceipt();
+      const target = document.getElementById('receipt-capture');
+      html2canvas(target, { backgroundColor: '#ffffff', scale: 2 }).then(canvas => {
+        currentPreviewCanvas = canvas;
+        const previewImg = document.getElementById('previewImage');
+        previewImg.src = canvas.toDataURL();
+        document.getElementById('previewModal').classList.add('active');
+        document.body.style.overflow = 'hidden';
+      });
+    }
+
+    function closePreviewModal() {
+      document.getElementById('previewModal').classList.remove('active');
+      document.body.style.overflow = '';
+    }
+
+    function downloadFromPreview() {
+      if(currentPreviewCanvas) {
+        let link = document.createElement('a');
+        link.download = `Grafynx_Quote_${Date.now()}.png`;
+        link.href = currentPreviewCanvas.toDataURL();
+        link.click();
+        showToast("Image downloaded from preview.");
+      } else {
+        showToast("No preview available. Please calculate first.");
+      }
+    }
+
+    document.addEventListener('input', function(e) { if(e.target.classList.contains('calc-trigger')) calculate(); });
+    document.addEventListener('change', function(e) { if(e.target.classList.contains('calc-trigger') || e.target.type === 'checkbox') calculate(); });
+    loadState();
+    calculate();
+  </script>
+</body>
+</html>
