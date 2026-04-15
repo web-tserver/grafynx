@@ -3,259 +3,790 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <title>Grafynx | Print Price Estimator</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <title>Grafynx | Print Price Estimator · Instant Quote</title>
+  <meta name="description" content="Instant print estimate for sublimation jersey, silkscreen & DTF shirts, lanyard, apron, cap, bunting, banner — real‑time pricing & WhatsApp quote.">
+  
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#ff4d8c">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://api.fontshare.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300..800&display=swap" rel="stylesheet">
   <link href="https://api.fontshare.com/v2/css?f[]=clash-display@400,700,600&display=swap" rel="stylesheet">
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" defer></script>
+
   <style>
-    /* Minimal style to reuse same glassmorphic look */
+    /* ===== GRAFYNX GLASSMORPHIC THEME ===== */
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
       font-family: 'Inter', sans-serif;
       background: linear-gradient(145deg, #fef9ff 0%, #f4f0fa 100%);
       color: #1e293b;
+      overflow-x: hidden;
+      scroll-behavior: smooth;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      -webkit-tap-highlight-color: transparent;
     }
     :root {
       --glass-bg: rgba(255, 255, 255, 0.72);
       --glass-border: rgba(255, 255, 255, 0.5);
+      --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.05);
       --accent: #ff4d8c;
+      --accent-soft: #ffb3c6;
+      --card-radius: 28px;
+      --transition-smooth: all 0.25s cubic-bezier(0.2, 0.9, 0.4, 1.1);
       --text-muted: #5b6e8c;
+      --bg-input: #f2f2f7;
+      --border-input: #eaeaea;
+      --text-primary: #1e293b;
     }
-    .container {
+    .glass-card, .left-panel, .right-box, .category-card, .form-group, .size-item { contain: layout style; }
+    header {
+      position: sticky;
+      top: 16px;
+      z-index: 100;
       max-width: 1280px;
-      margin: 60px auto;
-      padding: 20px 24px;
-    }
-    .section-header { margin-bottom: 32px; text-align: center; }
-    .section-title {
-      font-size: 32px;
-      font-weight: 700;
-      font-family: 'Clash Display', sans-serif;
-    }
-    .section-sub {
-      color: var(--accent);
-      font-weight: 500;
-      margin-top: 6px;
-      font-size: 15px;
-    }
-    .estimator-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-      gap: 28px;
-    }
-    .estimator-card {
-      background: rgba(255,255,255,0.7);
-      backdrop-filter: blur(12px);
-      border-radius: 32px;
-      padding: 28px;
-      border: 1px solid rgba(255,255,255,0.6);
-      transition: transform 0.2s;
-    }
-    .estimator-card:hover { transform: translateY(-4px); border-color: var(--accent); }
-    .estimator-card h3 {
-      font-size: 24px;
-      margin-bottom: 16px;
-      color: var(--accent);
-    }
-    .estimator-field { margin-bottom: 20px; }
-    .estimator-field label {
-      font-size: 14px;
-      font-weight: 600;
-      display: block;
-      margin-bottom: 8px;
-      color: #1e293b;
-    }
-    .estimator-select, .estimator-input {
+      margin: 0 auto;
+      padding: 0 20px;
       width: 100%;
-      padding: 12px 16px;
-      border-radius: 20px;
-      border: 1px solid rgba(0,0,0,0.1);
-      background: white;
-      font-size: 14px;
-      outline: none;
+      will-change: transform;
     }
-    .estimate-result {
-      margin-top: 24px;
-      padding-top: 16px;
-      border-top: 2px dashed var(--accent);
-      text-align: center;
+    .header-container {
+      background: rgba(255, 255, 255, 0.8);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-radius: 48px;
+      padding: 8px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border: 1px solid rgba(255, 255, 255, 0.6);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);
     }
-    .estimate-price {
-      font-size: 32px;
-      font-weight: 800;
-      color: var(--accent);
+    .logo-area { display: flex; align-items: center; gap: 12px; cursor: pointer; user-select: none; }
+    .logo-icon {
+      width: 42px; height: 42px; background: linear-gradient(135deg, #ff4d8c, #cc3366);
+      border-radius: 18px; display: flex; align-items: center; justify-content: center;
+      font-weight: 800; font-size: 20px; color: white; box-shadow: 0 6px 14px rgba(255, 77, 140, 0.25);
     }
-    .price-breakdown {
-      font-size: 11px;
-      color: var(--text-muted);
-      background: rgba(0,0,0,0.03);
-      border-radius: 16px;
-      padding: 10px;
-      margin-top: 8px;
-      text-align: left;
-      display: none;
+    .logo-text { font-family: 'Clash Display', sans-serif; font-weight: 700; font-size: 24px; letter-spacing: -0.5px; }
+    .logo-text .graf { color: var(--accent); }
+    .logo-text .ynx { color: #1e293b; }
+    .nav-links { display: flex; gap: 28px; align-items: center; }
+    .nav-links a {
+      text-decoration: none; font-weight: 500; font-size: 15px; color: #1e293b;
+      transition: color 0.15s; padding: 6px 0; position: relative; -webkit-tap-highlight-color: transparent;
     }
-    .price-breakdown.show { display: block; }
-    .breakdown-toggle-btn {
-      background: rgba(255,77,140,0.1);
-      border: none;
-      color: var(--accent);
-      font-size: 12px;
-      font-weight: 600;
-      cursor: pointer;
-      margin-top: 8px;
-      padding: 6px 12px;
-      border-radius: 40px;
-      display: inline-block;
+    .nav-links a:hover, .nav-links a.active { color: var(--accent); font-weight: 600; }
+    .nav-links a.active::after {
+      content: ''; position: absolute; bottom: -2px; left: 0; width: 100%;
+      height: 2.5px; background: var(--accent); border-radius: 4px;
     }
-    .estimate-note {
-      font-size: 12px;
-      color: var(--text-muted);
-      margin-top: 8px;
+    .mobile-menu-btn {
+      display: none; background: none; border: none; font-size: 28px; cursor: pointer;
+      color: #1e293b; padding: 8px; border-radius: 16px; transition: background 0.15s;
     }
-    .back-link {
-      display: inline-block;
-      margin-bottom: 30px;
-      color: var(--accent);
-      text-decoration: none;
-      font-weight: 600;
+    .mobile-menu-btn:active { background: rgba(0,0,0,0.05); }
+    .main-content { padding: 32px 24px; flex: 1; max-width: 1280px; margin: 0 auto; width: 100%; }
+    .layout-wrapper { display: grid; grid-template-columns: 1fr 380px; gap: 24px; align-items: start; }
+    .left-panel { 
+      background: var(--glass-bg); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+      border-radius: 36px; padding: 32px; border: 1px solid var(--glass-border); box-shadow: var(--glass-shadow);
     }
-    .back-link:hover { text-decoration: underline; }
-    @media (max-width: 700px) {
-      .estimator-grid { grid-template-columns: 1fr; }
+    .right-panel { position: sticky; top: 100px; display: flex; flex-direction: column; gap: 24px; }
+    .right-box { 
+      background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+      border-radius: 32px; padding: 32px 24px; border: 1px solid rgba(255, 255, 255, 0.7);
+      box-shadow: var(--glass-shadow); text-align: center;
+    }
+    .header-flex { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 12px; }
+    .brand-subtitle { color: var(--text-muted); font-size: 16px; font-weight: 600; letter-spacing: 0.5px; }
+    .reset-btn { 
+      background: var(--bg-input); color: #FF453A; border: none; padding: 10px 20px; border-radius: 40px;
+      font-size: 13px; font-weight: 600; cursor: pointer; transition: background 0.15s, transform 0.1s;
+      min-height: 44px; min-width: 100px;
+    }
+    .reset-btn:active { transform: scale(0.97); background: #e5e5ea; }
+    .category-grid { 
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 12px; margin-bottom: 32px; 
+    }
+    .category-card { 
+      background: rgba(255, 255, 255, 0.6); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+      border: 2px solid var(--border-input); border-radius: 24px; padding: 16px 8px; text-align: center;
+      cursor: pointer; transition: all 0.15s ease; display: flex; flex-direction: column; align-items: center;
+      justify-content: center; min-height: 96px; touch-action: manipulation;
+    }
+    .category-card:active { background: rgba(255, 255, 255, 0.9); transform: scale(0.98); }
+    .category-card.active { border-color: var(--accent); background: rgba(255, 77, 140, 0.15); }
+    .cat-icon { margin-bottom: 8px; color: var(--text-muted); }
+    .category-card.active .cat-icon, .category-card.active .cat-name { color: var(--accent); }
+    .cat-name { font-size: 12px; font-weight: 700; color: #1e293b; }
+    .grid-layout { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; }
+    .form-group { 
+      background: rgba(255, 255, 255, 0.5); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+      padding: 24px; border-radius: 28px; margin-bottom: 16px; border: 1px solid var(--glass-border);
+    }
+    .section-title { 
+      display: block; font-weight: 700; margin-bottom: 16px; color: var(--text-primary);
+      font-size: 18px; letter-spacing: -0.3px; font-family: 'Clash Display', sans-serif;
+    }
+    label.field-label { 
+      font-size: 13px; color: var(--text-muted); margin-bottom: 8px; display: block; margin-top: 16px; font-weight: 500;
+    }
+    .input-field, .select-field { 
+      width: 100%; padding: 16px; border-radius: 20px; border: 1px solid var(--border-input);
+      background: white; color: var(--text-primary); font-size: 16px; outline: none; margin-bottom: 4px;
+      appearance: none; -webkit-appearance: none; transition: box-shadow 0.15s; touch-action: manipulation;
+    }
+    .select-field { 
+      background-image: url("data:image/svg+xml,%3Csvg width='12' height='8' viewBox='0 0 12 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1.5L6 6.5L11 1.5' stroke='%235b6e8c' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E"); 
+      background-repeat: no-repeat; background-position: right 16px center; padding-right: 40px;
+    }
+    .input-field:focus, .select-field:focus { box-shadow: 0 0 0 3px rgba(255, 77, 140, 0.2); border-color: var(--accent); }
+    .size-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(90px, 1fr)); gap: 14px; margin-bottom: 8px; }
+    .size-item {
+      background: white; border-radius: 20px; padding: 14px 8px; text-align: center;
+      border: 1px solid var(--border-input); transition: transform 0.15s, border-color 0.15s;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.02); contain: layout style;
+    }
+    .size-item:active { transform: scale(0.98); }
+    .size-header { margin-bottom: 8px; }
+    .size-label { font-weight: 800; font-size: 16px; display: inline-block; margin-right: 6px; color: var(--text-primary); }
+    .surcharge-badge {
+      font-size: 11px; font-weight: 700; color: var(--accent); background: rgba(255, 77, 140, 0.12);
+      display: inline-block; padding: 2px 8px; border-radius: 20px;
+    }
+    .size-stepper {
+      display: flex; align-items: center; justify-content: center; background: #f8f9fc;
+      border-radius: 40px; border: 1px solid var(--border-input); width: 100%; max-width: 110px;
+      margin: 0 auto; overflow: hidden;
+    }
+    .size-stepper button {
+      background: transparent; border: none; width: 36px; height: 44px; font-size: 22px; font-weight: 700;
+      color: var(--accent); cursor: pointer; transition: background 0.1s; touch-action: manipulation;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .size-stepper button:active { background: rgba(255, 77, 140, 0.15); }
+    .size-stepper input {
+      width: 40px; text-align: center; border: none; background: transparent; font-weight: 600;
+      font-size: 16px; outline: none; color: var(--text-primary); -moz-appearance: textfield;
+      appearance: textfield; touch-action: manipulation;
+    }
+    .size-stepper input::-webkit-outer-spin-button,
+    .size-stepper input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+    .general-stepper { 
+      display: flex; width: 100%; background: #f8f9fc; border-radius: 40px; overflow: hidden;
+      margin-bottom: 4px; border: 1px solid var(--border-input);
+    }
+    .general-stepper input { 
+      flex: 1; text-align: center; padding: 12px 0; background: transparent; border: none;
+      color: var(--text-primary); font-size: 16px; font-weight: 600; outline: none;
+      -moz-appearance: textfield; min-width: 0; touch-action: manipulation;
+    }
+    .general-stepper button { 
+      width: 44px; height: 44px; display: flex; align-items: center; justify-content: center;
+      background: transparent; border: none; color: var(--accent); font-size: 24px; font-weight: bold;
+      cursor: pointer; flex-shrink: 0; touch-action: manipulation;
+    }
+    .general-stepper button:active { background: rgba(0,0,0,0.05); }
+    .addon-row { 
+      display: flex; justify-content: space-between; align-items: center; padding: 14px 0;
+      border-bottom: 1px solid rgba(0,0,0,0.06);
+    }
+    .addon-row:last-child { border-bottom: none; }
+    .addon-label { font-size: 15px; font-weight: 600; color: var(--text-primary); }
+    .addon-price { 
+      color: var(--accent); font-size: 13px; font-weight: 500; background: rgba(255,77,140,0.1);
+      padding: 4px 12px; border-radius: 30px; margin-left: 8px;
+    }
+    .panel-banner {
+      width: 100%; min-height: 100px; border-radius: 24px; margin-bottom: 24px;
+      display: flex; align-items: center; padding: 16px 24px; gap: 16px;
+      background: linear-gradient(135deg, rgba(255, 77, 140, 0.12), rgba(204, 51, 102, 0.05));
+      border: 1px solid rgba(255, 77, 140, 0.2);
+    }
+    .panel-banner svg { width: 48px; height: 48px; stroke: var(--accent); stroke-width: 1.8; flex-shrink: 0; }
+    .panel-banner h2 { font-size: 22px; font-weight: 700; color: var(--text-primary); letter-spacing: -0.5px; font-family: 'Clash Display', sans-serif; }
+    .panel { display: none; contain: layout style; }
+    .panel.active { display: block; animation: fadeIn 0.3s ease; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+    .custom-size-box { display: none; margin-top: 12px; }
+    .price-breakdown { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; color: var(--text-muted); font-size: 14px; font-weight: 500; }
+    .price-breakdown strong { color: var(--text-primary); font-size: 20px; display: block; margin-top: 6px; font-weight: 700; }
+    .total-price { 
+      text-align: center; font-size: 16px; font-weight: 500; color: var(--text-muted);
+      padding-top: 24px; margin-top: 24px; border-top: 1px solid rgba(0,0,0,0.08);
+    }
+    .total-price span { 
+      color: var(--accent); font-size: 48px; display: block; margin-top: 8px; font-weight: 800;
+      letter-spacing: -1.5px; font-family: 'Clash Display', sans-serif;
+    }
+    .pill-tag { background: var(--bg-input); color: var(--accent); padding: 4px 12px; border-radius: 20px; font-size: 13px; font-weight: 600; margin-left: 8px; }
+    .breakdown-toggle { 
+      font-size: 14px; color: var(--accent); cursor: pointer; font-weight: 600; margin-top: 16px;
+      display: block; text-align: center; padding: 8px; user-select: none;
+    }
+    .breakdown-list { 
+      display: none; text-align: left; background: white; border: 1px solid var(--border-input);
+      padding: 16px; border-radius: 20px; margin-top: 16px; font-size: 13px; color: var(--text-primary);
+      line-height: 1.6; max-height: 220px; overflow-y: auto;
+    }
+    .breakdown-list.show { display: block; }
+    .breakdown-list ul { padding-left: 20px; }
+    .wa-btn, .preview-btn, .download-btn {
+      width: 100%; padding: 18px; border-radius: 60px; font-weight: 700; font-size: 16px; border: none;
+      cursor: pointer; transition: transform 0.15s, filter 0.15s; display: flex; align-items: center;
+      justify-content: center; gap: 10px; margin-top: 16px; touch-action: manipulation; min-height: 56px;
+    }
+    .wa-btn:active, .preview-btn:active, .download-btn:active { transform: scale(0.98); }
+    .wa-btn { background: #34C759; color: white; box-shadow: 0 4px 12px rgba(52, 199, 89, 0.2); }
+    .preview-btn { background: var(--accent); color: white; }
+    .download-btn { background: rgba(0,0,0,0.05); color: var(--text-primary); border: 1px solid var(--border-input); }
+    .preview-modal {
+      display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px); z-index: 2000; align-items: center; justify-content: center; padding: 20px;
+    }
+    .preview-modal.active { display: flex; }
+    .preview-content {
+      background: white; border-radius: 32px; max-width: 95vw; max-height: 90vh; overflow: auto;
+      padding: 24px; position: relative; text-align: center; box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+    }
+    .preview-image { max-width: 100%; max-height: 70vh; border-radius: 20px; }
+    .preview-close {
+      position: absolute; top: 16px; right: 16px; background: rgba(0,0,0,0.4); border: none; font-size: 24px;
+      width: 44px; height: 44px; border-radius: 44px; color: white; cursor: pointer; backdrop-filter: blur(8px);
+      display: flex; align-items: center; justify-content: center; transition: background 0.15s;
+    }
+    .preview-close:active { background: rgba(0,0,0,0.6); }
+    .toast-container { 
+      position: fixed; top: 20px; left: 50%; transform: translateX(-50%); z-index: 9999;
+      display: flex; flex-direction: column; gap: 8px; pointer-events: none; max-width: 90vw;
+    }
+    .toast { 
+      background: white; color: #1e293b; padding: 14px 24px; border-radius: 100px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.15); border-left: 5px solid var(--accent);
+      font-weight: 600; font-size: 14px; animation: slideDown 0.3s ease, fadeOut 0.3s 2.7s forwards;
+    }
+    @keyframes slideDown { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes fadeOut { to { opacity: 0; transform: translateY(-20px); } }
+    #receipt-capture { 
+      position: absolute; left: -9999px; top: 0; width: 450px; background: #ffffff; color: #000;
+      padding: 32px; border-radius: 28px; font-family: 'Inter', sans-serif;
+    }
+    #receipt-capture h2 { margin-bottom: 16px; color: var(--accent); border-bottom: 2px solid #E5E5EA; padding-bottom: 10px; font-family: 'Clash Display', sans-serif; }
+    #receipt-capture ul { padding-left: 20px; margin-bottom: 20px; font-size: 14px; line-height: 1.8; }
+    #receipt-capture .r-total { font-size: 28px; font-weight: 900; text-align: right; border-top: 2px solid #000; padding-top: 16px; }
+    footer {
+      text-align: center; padding: 36px 20px; color: var(--text-muted);
+      border-top: 1px solid rgba(0,0,0,0.05); margin-top: 40px; font-size: 13px;
+      backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+    }
+    .back-to-top {
+      position: fixed; bottom: 24px; right: 24px; background: rgba(255,255,255,0.85);
+      backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); width: 52px; height: 52px;
+      border-radius: 52px; display: flex; align-items: center; justify-content: center; font-size: 28px;
+      cursor: pointer; opacity: 0; transition: opacity 0.2s, transform 0.15s; pointer-events: none;
+      z-index: 99; border: 1px solid var(--glass-border); box-shadow: var(--glass-shadow); touch-action: manipulation;
+    }
+    .back-to-top.visible { opacity: 1; pointer-events: auto; }
+    .back-to-top:active { transform: scale(0.9); }
+    @media (max-width: 900px) { .layout-wrapper { grid-template-columns: 1fr; } .right-panel { position: static; } }
+    @media (max-width: 760px) {
+      .nav-links { display: none; }
+      .mobile-menu-btn { display: block; }
+      .header-container { padding: 8px 16px; }
+      .logo-text { font-size: 20px; }
+    }
+    @media (max-width: 600px) {
+      .main-content { padding: 16px 12px; }
+      .left-panel { padding: 20px 16px; border-radius: 28px; }
+      .right-box { padding: 24px 16px; border-radius: 28px; }
+      .category-grid { grid-template-columns: repeat(4, 1fr); gap: 8px; }
+      .total-price span { font-size: 40px; }
+      .panel-banner { padding: 16px; }
+      .panel-banner h2 { font-size: 18px; }
+      .size-grid { grid-template-columns: repeat(3, 1fr); }
+      .size-item { padding: 10px 4px; }
+      .size-label { font-size: 14px; }
+      .wa-btn, .preview-btn, .download-btn { padding: 16px; font-size: 15px; }
+      .reset-btn { min-height: 48px; }
     }
   </style>
 </head>
 <body>
-<div class="container">
-  <a href="index.html" class="back-link">← Back to Home</a>
-  <div class="section-header">
-    <h2 class="section-title">🖨️ Print Price Estimate</h2>
-    <div class="section-sub">Instant pricing for sublimation, silkscreen, DTF, lanyard, bunting & banner</div>
+
+  <div id="toast-container" class="toast-container"></div>
+
+  <header>
+    <div class="header-container">
+      <div class="logo-area" onclick="window.location.reload();">
+        <div class="logo-icon">G</div>
+        <div class="logo-text"><span class="graf">Graf</span><span class="ynx">ynx</span></div>
+      </div>
+      <div class="nav-links" id="navLinks">
+        <a href="index.html">Home</a>
+        <a href="index.html#about-us">About Us</a>
+        <a href="index.html#services">What We Do</a>
+        <a href="index.html#workflow">Workflow</a>
+        <a href="index.html#packages">Packages</a>
+        <a href="index.html#portfolio">Portfolio</a>
+        <a href="#" class="active">Print Estimate</a>
+      </div>
+      <button class="mobile-menu-btn" id="mobileMenuBtn">☰</button>
+    </div>
+    <div id="mobileDropdown" style="display: none; flex-direction: column; background: rgba(255,255,255,0.96); backdrop-filter: blur(20px); border-radius: 32px; margin-top: 12px; padding: 16px; gap: 12px;"></div>
+  </header>
+
+  <main class="main-content">
+    <div class="layout-wrapper">
+      <div class="left-panel">
+        <div class="header-flex">
+          <div class="brand-subtitle">⚡ instant print estimator · transparent pricing</div>
+          <button class="reset-btn" onclick="resetForm()">Clear Form</button>
+        </div>
+
+        <div class="category-grid" id="categoryGrid"></div>
+        <div id="panelsContainer"></div>
+      </div>
+
+      <div class="right-panel">
+        <div class="right-box">
+          <div class="price-breakdown">
+            <div>Base Cost <strong id="out_base">RM 0.00</strong></div>
+            <div>Surcharges <strong id="out_surcharge">RM 0.00</strong></div>
+          </div>
+          <div class="total-price">
+            Estimated Grand Total <span id="out_total">RM 0.00</span>
+          </div>
+          <div class="breakdown-toggle" onclick="document.getElementById('breakdown-list').classList.toggle('show')">
+            ▼ Show detailed breakdown
+          </div>
+          <div id="breakdown-list" class="breakdown-list"></div>
+        </div>
+
+        <div class="right-box">
+          <div class="section-title" style="margin-bottom: 8px;">📲 Request Quote</div>
+          <div style="display: flex; gap: 8px; margin-top: 16px;">
+            <select id="wa_country_code" class="select-field calc-trigger" style="width: 100px;" aria-label="Country code">
+              <option value="60" selected>+60</option><option value="65">+65</option><option value="62">+62</option><option value="66">+66</option><option value="673">+673</option><option value="1">+1</option><option value="44">+44</option><option value="61">+61</option>
+            </select>
+            <input type="tel" id="wa_target_number" class="input-field calc-trigger" placeholder="Phone number" inputmode="numeric" style="flex: 1;">
+          </div>
+          <button class="wa-btn" id="sendWhatsAppBtn">📨 Send Quote via WhatsApp</button>
+          <button class="preview-btn" id="previewQuoteBtn">🖼️ Preview Quote Image</button>
+          <button class="download-btn" id="downloadQuoteBtn">⬇️ Download Quote Image</button>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer>© 2026 Grafynx — “Inks Your Ideas” | Setia Alam | AFIQ 019 908 3295</footer>
+  <div class="back-to-top" id="backToTop">↑</div>
+
+  <div id="previewModal" class="preview-modal">
+    <div class="preview-content">
+      <button class="preview-close" onclick="closePreviewModal()">✕</button>
+      <img id="previewImage" class="preview-image" alt="quote preview">
+      <button class="download-btn" id="downloadFromPreviewBtn" style="margin-top: 20px;">Save Image</button>
+    </div>
   </div>
-  <div class="estimator-grid">
-    <!-- Same 6 estimator cards as in original -->
-    <div class="estimator-card"><h3>🔥 Sublimation (Basic-Roundneck)</h3><div class="estimator-field"><label>Quantity (pcs)</label><input type="number" id="sub_qty" class="estimator-input" min="0" value="0" step="1"></div><div class="estimator-field"><label>Material / Upgrade</label><select id="sub_material" class="estimator-select"><option value="0">Standard Microfiber</option><option value="3">Diamond 155GSM (+RM3/pc)</option><option value="8">Lycra 280GSM (+RM8/pc)</option></select></div><div class="estimate-result"><div class="estimate-price" id="sub_estimate">RM 0.00</div><button class="breakdown-toggle-btn" data-target="sub_breakdown">Show breakdown</button><div id="sub_breakdown" class="price-breakdown"></div><div class="estimate-note">*Full jersey print + material upgrade only</div></div></div>
-    <div class="estimator-card"><h3>🎨 Silkscreen (T-Shirt)</h3><div class="estimator-field"><label>Quantity (pcs)</label><input type="number" id="ss_qty" class="estimator-input" min="0" value="0" step="1"></div><div class="estimator-field"><label>Base Shirt Type</label><select id="ss_shirt" class="estimator-select"><option value="13.50">Roundneck (RM13.50)</option><option value="18.50">Collar (RM18.50)</option><option value="23.00">Polo (RM23.00)</option></select></div><div class="estimator-field"><label>Front Colors</label><select id="ss_front" class="estimator-select"><option value="0">1 Color</option><option value="1">2 Colors</option><option value="2">3 Colors</option><option value="3">4 Colors</option><option value="4">5 Colors</option><option value="5">6 Colors</option><option value="6">7 Colors</option><option value="7">8 Colors</option></select></div><div class="estimator-field"><label>Back Colors</label><select id="ss_back" class="estimator-select"><option value="-1">No Print</option><option value="0">1 Color</option><option value="1">2 Colors</option><option value="2">3 Colors</option><option value="3">4 Colors</option><option value="4">5 Colors</option><option value="5">6 Colors</option><option value="6">7 Colors</option><option value="7">8 Colors</option></select></div><div class="estimate-result"><div class="estimate-price" id="ss_estimate">RM 0.00</div><button class="breakdown-toggle-btn" data-target="ss_breakdown">Show breakdown</button><div id="ss_breakdown" class="price-breakdown"></div><div class="estimate-note">*Includes base shirt + print cost</div></div></div>
-    <div class="estimator-card"><h3>✨ DTF Transfer (Any Garment)</h3><div class="estimator-field"><label>Quantity (pcs)</label><input type="number" id="dtf_qty" class="estimator-input" min="0" value="0" step="1"></div><div class="estimator-field"><label>Print Size (Front)</label><select id="dtf_front" class="estimator-select"><option value="0">No Print</option><option value="4">Smaller than A4 (RM4)</option><option value="8">A4 (RM8)</option><option value="10">A3 (RM10)</option><option value="12">Bigger than A3 (RM12)</option></select></div><div class="estimator-field"><label>Print Size (Back)</label><select id="dtf_back" class="estimator-select"><option value="0">No Print</option><option value="4">Smaller than A4 (RM4)</option><option value="8">A4 (RM8)</option><option value="10">A3 (RM10)</option><option value="12">Bigger than A3 (RM12)</option></select></div><div class="estimator-field"><label>Sleeve Prints (per arm)</label><input type="number" id="dtf_sleeve" class="estimator-input" min="0" value="0" step="1"></div><div class="estimate-result"><div class="estimate-price" id="dtf_estimate">RM 0.00</div><button class="breakdown-toggle-btn" data-target="dtf_breakdown">Show breakdown</button><div id="dtf_breakdown" class="price-breakdown"></div><div class="estimate-note">*Transfer only, garment not included</div></div></div>
-    <div class="estimator-card"><h3>📎 Lanyard (Sublimation)</h3><div class="estimator-field"><label>Quantity (pcs)</label><input type="number" id="lan_qty" class="estimator-input" min="0" value="0" step="1"></div><div class="estimator-field"><label>Size</label><select id="lan_size" class="estimator-select"><option value="20">20MM</option><option value="25">25MM</option></select></div><div class="estimator-field"><label>Buckle</label><select id="lan_buckle" class="estimator-select"><option value="with">With Buckle</option><option value="no">No Buckle</option></select></div><div class="estimate-result"><div class="estimate-price" id="lan_estimate">RM 0.00</div><button class="breakdown-toggle-btn" data-target="lan_breakdown">Show breakdown</button><div id="lan_breakdown" class="price-breakdown"></div><div class="estimate-note">*Full colour print + clip included</div></div></div>
-    <div class="estimator-card"><h3>🏳️ Bunting (Vertical) - Custom Size</h3><div class="estimator-field"><label>Quantity</label><input type="number" id="bun_qty" class="estimator-input" min="0" value="0" step="1"></div><div class="estimator-field"><label>Height (ft)</label><input type="number" id="bun_h" class="estimator-input" min="0" value="0" step="0.5" placeholder="e.g., 6"></div><div class="estimator-field"><label>Width (ft)</label><input type="number" id="bun_w" class="estimator-input" min="0" value="0" step="0.5" placeholder="e.g., 2"></div><div class="estimate-result"><div class="estimate-price" id="bun_estimate">RM 0.00</div><button class="breakdown-toggle-btn" data-target="bun_breakdown">Show breakdown</button><div id="bun_breakdown" class="price-breakdown"></div><div class="estimate-note">*Tarpaulin 380gsm, hem & eyelets</div></div></div>
-    <div class="estimator-card"><h3>📰 Banner (Horizontal) - Custom Size</h3><div class="estimator-field"><label>Quantity</label><input type="number" id="banner_qty" class="estimator-input" min="0" value="0" step="1"></div><div class="estimator-field"><label>Height (ft)</label><input type="number" id="banner_h" class="estimator-input" min="0" value="0" step="0.5" placeholder="e.g., 3"></div><div class="estimator-field"><label>Width (ft)</label><input type="number" id="banner_w" class="estimator-input" min="0" value="0" step="0.5" placeholder="e.g., 6"></div><div class="estimate-result"><div class="estimate-price" id="banner_estimate">RM 0.00</div><button class="breakdown-toggle-btn" data-target="banner_breakdown">Show breakdown</button><div id="banner_breakdown" class="price-breakdown"></div><div class="estimate-note">*Tarpaulin 380gsm, hem & eyelets</div></div></div>
+
+  <div id="receipt-capture">
+    <h2>Grafynx Quotation</h2>
+    <p style="color: #5b6e8c; font-size: 12px;" id="receiptDate"></p>
+    <p style="font-weight: bold;" id="receiptProduct"></p>
+    <div id="receiptItems"></div>
+    <div class="r-total" id="receiptTotal"></div>
   </div>
-  <p style="text-align: center; margin-top: 20px; font-size: 13px; color: var(--text-muted);">📢 Prices are estimates. Final quote depends on artwork complexity, rush order, and shipping.</p>
-</div>
 
-<script>
-  // Replicate all estimator logic from original (same as previous)
-  const ssMatrix = [
-    [7.82,8.84,9.86,10.88,11.90,12.92,13.94,15.30],[5.55,6.57,7.59,8.61,9.63,10.65,11.67,13.03],
-    [3.74,4.76,5.78,6.80,7.82,8.84,9.86,11.22],[2.72,3.74,4.76,5.78,6.80,7.82,8.84,10.20],
-    [1.99,3.01,4.03,5.05,6.07,7.09,8.11,9.47],[1.78,2.80,3.82,4.84,5.86,6.88,7.90,9.26],
-    [1.59,2.61,3.63,4.65,5.67,6.69,7.71,9.07],[1.29,2.31,3.33,4.35,5.37,6.39,7.41,8.77],
-    [1.20,2.22,3.24,4.26,5.28,6.30,7.32,8.68],[1.10,2.12,3.14,4.16,5.18,6.20,7.22,8.58]
-  ];
-  function getSSTier(q) { if(q<11) return 0; if(q<21) return 1; if(q<31) return 2; if(q<51) return 3; if(q<81) return 4; if(q<101) return 5; if(q<201) return 6; if(q<301) return 7; if(q<501) return 8; return 9; }
+  <script>
+    (function(){
+      "use strict";
 
-  function updateSublimation() {
-    let qty = parseInt(document.getElementById('sub_qty')?.value) || 0; if(qty<0) qty=0;
-    let unitBase = 0;
-    if(qty>0) { if(qty<=10) unitBase=45; else if(qty<=30) unitBase=35; else if(qty<=50) unitBase=33; else if(qty<=100) unitBase=30; else if(qty<=200) unitBase=28; else if(qty<=300) unitBase=25; else if(qty<=500) unitBase=23; else if(qty<=1000) unitBase=20; else unitBase=18; }
-    let material = parseFloat(document.getElementById('sub_material')?.value) || 0;
-    let base = qty * unitBase; let materialCost = qty * material; let total = base + materialCost;
-    let breakdown = `🧾 Base: ${qty} x RM${unitBase} = RM${base}<br>${material?`➕ Material: +RM${materialCost}<br>`:''}💰 <strong>Total = RM${total}</strong>`;
-    document.getElementById('sub_estimate').innerHTML = `RM ${total.toFixed(2)}`;
-    const breakdownDiv = document.getElementById('sub_breakdown');
-    if(breakdownDiv) breakdownDiv.innerHTML = breakdown;
-  }
-  function updateSilkscreen() {
-    let qty = parseInt(document.getElementById('ss_qty')?.value) || 0; if(qty<0) qty=0;
-    let shirt = parseFloat(document.getElementById('ss_shirt')?.value) || 0;
-    let frontColors = parseInt(document.getElementById('ss_front')?.value) || 0;
-    let backColors = parseInt(document.getElementById('ss_back')?.value) || -1;
-    let baseShirt = qty * shirt;
-    let frontCost = 0, backCost = 0;
-    if(qty>0) { let tier = getSSTier(qty); if(frontColors>=0) frontCost = qty * ssMatrix[tier][frontColors]; if(backColors>=0) backCost = qty * ssMatrix[tier][backColors]; }
-    let total = baseShirt + frontCost + backCost;
-    let breakdown = `👕 Base shirt: ${qty} x RM${shirt} = RM${baseShirt}<br>🎨 Front ${frontColors+1}C: RM${frontCost.toFixed(2)}<br>${backColors>=0?`🎨 Back ${backColors+1}C: RM${backCost.toFixed(2)}<br>`:''}💰 <strong>Total = RM${total}</strong>`;
-    document.getElementById('ss_estimate').innerHTML = `RM ${total.toFixed(2)}`;
-    const breakdownDiv = document.getElementById('ss_breakdown');
-    if(breakdownDiv) breakdownDiv.innerHTML = breakdown;
-  }
-  function updateDTF() {
-    let qty = parseInt(document.getElementById('dtf_qty')?.value) || 0; if(qty<0) qty=0;
-    let front = parseFloat(document.getElementById('dtf_front')?.value) || 0;
-    let back = parseFloat(document.getElementById('dtf_back')?.value) || 0;
-    let sleeve = parseInt(document.getElementById('dtf_sleeve')?.value) || 0;
-    let frontTotal = qty * front; let backTotal = qty * back; let sleeveTotal = sleeve * 3;
-    let total = frontTotal + backTotal + sleeveTotal;
-    let breakdown = `🖨️ Front: RM${frontTotal}<br>🖨️ Back: RM${backTotal}<br>💪 Sleeves: RM${sleeveTotal}<br>💰 <strong>Total = RM${total}</strong>`;
-    document.getElementById('dtf_estimate').innerHTML = `RM ${total.toFixed(2)}`;
-    const breakdownDiv = document.getElementById('dtf_breakdown');
-    if(breakdownDiv) breakdownDiv.innerHTML = breakdown;
-  }
-  function updateLanyard() {
-    let qty = parseInt(document.getElementById('lan_qty')?.value) || 0; if(qty<0) qty=0;
-    let unit = 0;
-    if(qty>0) { if(qty>=20000) unit=3.5; else if(qty>=10000) unit=4; else if(qty>=1000) unit=5.5; else if(qty>=500) unit=7.5; else if(qty>=200) unit=9; else if(qty>=100) unit=10; else if(qty>=50) unit=13; else if(qty>=30) unit=15; else if(qty>=20) unit=16; else unit=19; }
-    let total = qty * unit;
-    let breakdown = `📏 ${qty} pcs x RM${unit.toFixed(2)} = RM${total.toFixed(2)}<br>💰 <strong>Total = RM${total}</strong>`;
-    document.getElementById('lan_estimate').innerHTML = `RM ${total.toFixed(2)}`;
-    const breakdownDiv = document.getElementById('lan_breakdown');
-    if(breakdownDiv) breakdownDiv.innerHTML = breakdown;
-  }
-  function updateBunting() {
-    let qty = parseInt(document.getElementById('bun_qty')?.value) || 0; if(qty<0) qty=0;
-    let w = parseFloat(document.getElementById('bun_w')?.value) || 0; let h = parseFloat(document.getElementById('bun_h')?.value) || 0;
-    let area = w * h; let unitPrice = area>0 ? Math.max(23, area*2+3) : 0;
-    let total = qty * unitPrice;
-    let breakdown = `📐 Size: ${w}' x ${h}' = ${area} sq ft<br>Unit price: RM${unitPrice.toFixed(2)}<br>${qty} pcs x RM${unitPrice.toFixed(2)} = RM${total.toFixed(2)}<br>💰 <strong>Total = RM${total}</strong>`;
-    document.getElementById('bun_estimate').innerHTML = `RM ${total.toFixed(2)}`;
-    const breakdownDiv = document.getElementById('bun_breakdown');
-    if(breakdownDiv) breakdownDiv.innerHTML = breakdown;
-  }
-  function updateBanner() {
-    let qty = parseInt(document.getElementById('banner_qty')?.value) || 0; if(qty<0) qty=0;
-    let w = parseFloat(document.getElementById('banner_w')?.value) || 0; let h = parseFloat(document.getElementById('banner_h')?.value) || 0;
-    let area = w * h; let unitPrice = area>0 ? Math.max(23, area*2+3) : 0;
-    let total = qty * unitPrice;
-    let breakdown = `📐 Size: ${w}' x ${h}' = ${area} sq ft<br>Unit price: RM${unitPrice.toFixed(2)}<br>${qty} pcs x RM${unitPrice.toFixed(2)} = RM${total.toFixed(2)}<br>💰 <strong>Total = RM${total}</strong>`;
-    document.getElementById('banner_estimate').innerHTML = `RM ${total.toFixed(2)}`;
-    const breakdownDiv = document.getElementById('banner_breakdown');
-    if(breakdownDiv) breakdownDiv.innerHTML = breakdown;
-  }
-
-  document.getElementById('sub_qty')?.addEventListener('input', updateSublimation);
-  document.getElementById('sub_material')?.addEventListener('change', updateSublimation);
-  document.getElementById('ss_qty')?.addEventListener('input', updateSilkscreen);
-  document.getElementById('ss_shirt')?.addEventListener('change', updateSilkscreen);
-  document.getElementById('ss_front')?.addEventListener('change', updateSilkscreen);
-  document.getElementById('ss_back')?.addEventListener('change', updateSilkscreen);
-  document.getElementById('dtf_qty')?.addEventListener('input', updateDTF);
-  document.getElementById('dtf_front')?.addEventListener('change', updateDTF);
-  document.getElementById('dtf_back')?.addEventListener('change', updateDTF);
-  document.getElementById('dtf_sleeve')?.addEventListener('input', updateDTF);
-  document.getElementById('lan_qty')?.addEventListener('input', updateLanyard);
-  document.getElementById('lan_size')?.addEventListener('change', updateLanyard);
-  document.getElementById('lan_buckle')?.addEventListener('change', updateLanyard);
-  document.getElementById('bun_qty')?.addEventListener('input', updateBunting);
-  document.getElementById('bun_w')?.addEventListener('input', updateBunting);
-  document.getElementById('bun_h')?.addEventListener('input', updateBunting);
-  document.getElementById('banner_qty')?.addEventListener('input', updateBanner);
-  document.getElementById('banner_w')?.addEventListener('input', updateBanner);
-  document.getElementById('banner_h')?.addEventListener('input', updateBanner);
-
-  // Toggle breakdown buttons
-  document.querySelectorAll('.breakdown-toggle-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const targetId = btn.getAttribute('data-target');
-      const targetDiv = document.getElementById(targetId);
-      if(targetDiv) {
-        targetDiv.classList.toggle('show');
-        btn.textContent = targetDiv.classList.contains('show') ? 'Hide breakdown' : 'Show breakdown';
+      // Debounce
+      function debounce(func, wait) {
+        let timeout;
+        return function(...args) {
+          clearTimeout(timeout);
+          timeout = setTimeout(() => func.apply(this, args), wait);
+        };
       }
-    });
-  });
 
-  updateSublimation(); updateSilkscreen(); updateDTF(); updateLanyard(); updateBunting(); updateBanner();
-</script>
+      // State
+      let currentCategory = 'sublimation';
+      let currentBase = 0, currentSur = 0, currentTotal = 0;
+      let currentBreakdownList = [];
+      let previewCanvas = null;
+      let animFrame = null;
+
+      // Data
+      const categoryNames = {
+        'sublimation': 'Full Print Sublimation Jersey', 'silkscreen': 'T-Shirt (Silkscreen Printing)',
+        'dtf_shirt': 'T-Shirt (DTF Printing)', 'lanyard': 'Lanyard (Sublimation)',
+        'apron': 'Apron (DTF/Silkscreen)', 'cap': 'Cap (DTF/Embroidery)',
+        'bunting': 'Bunting (Tarpaulin 380gsm)', 'banner': 'Banner (Tarpaulin 380gsm)'
+      };
+
+      const shirtSizeConfig = [
+        { id: 'xs', label: 'XS', sur: 0 }, { id: 's', label: 'S', sur: 0 }, { id: 'm', label: 'M', sur: 0 },
+        { id: 'l', label: 'L', sur: 0 }, { id: 'xl', label: 'XL', sur: 0 }, { id: '2xl', label: '2XL', sur: 0 },
+        { id: '3xl', label: '3XL', sur: 3 }, { id: '5xl', label: '5XL', sur: 6 }, { id: '7xl', label: '7XL', sur: 9 }
+      ];
+
+      const ssMatrix = [
+        [7.82,8.84,9.86,10.88,11.90,12.92,13.94,15.30],[5.55,6.57,7.59,8.61,9.63,10.65,11.67,13.03],
+        [3.74,4.76,5.78,6.80,7.82,8.84,9.86,11.22],[2.72,3.74,4.76,5.78,6.80,7.82,8.84,10.20],
+        [1.99,3.01,4.03,5.05,6.07,7.09,8.11,9.47],[1.78,2.80,3.82,4.84,5.86,6.88,7.90,9.26],
+        [1.59,2.61,3.63,4.65,5.67,6.69,7.71,9.07],[1.29,2.31,3.33,4.35,5.37,6.39,7.41,8.77],
+        [1.20,2.22,3.24,4.26,5.28,6.30,7.32,8.68],[1.10,2.12,3.14,4.16,5.18,6.20,7.22,8.58]
+      ];
+
+      function getSSTier(q) {
+        if(q<11)return 0; if(q<21)return 1; if(q<31)return 2; if(q<51)return 3;
+        if(q<81)return 4; if(q<101)return 5; if(q<201)return 6; if(q<301)return 7;
+        if(q<501)return 8; return 9;
+      }
+
+      // Render functions
+      function renderCategories() {
+        const categories = [
+          { id: 'sublimation', name: 'Sublimation', icon: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.38 3.46L16 2a8.5 8.5 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.47a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.47a2 2 0 0 0-1.34-2.23z"/></svg>' },
+          { id: 'silkscreen', name: 'Silkscreen', icon: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.38 3.46L16 2a8.5 8.5 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.47a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.47a2 2 0 0 0-1.34-2.23z"/></svg>' },
+          { id: 'dtf_shirt', name: 'DTF Shirt', icon: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.38 3.46L16 2a8.5 8.5 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.47a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.47a2 2 0 0 0-1.34-2.23z"/></svg>' },
+          { id: 'lanyard', name: 'Lanyard', icon: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 2h4M12 2v4M8 6h8a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2zM9 10h6M9 14h4"/></svg>' },
+          { id: 'apron', name: 'Apron', icon: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 2h8v4M6 6h12l1.5 16H4.5L6 6zM9 12h6v5H9z"/></svg>' },
+          { id: 'cap', name: 'Cap', icon: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 16h14"/><path d="M6 16a6 6 0 0 1 12 0"/><path d="M18 16c2 0 3 1 4 2"/><circle cx="12" cy="9" r="1"/></svg>' },
+          { id: 'bunting', name: 'Bunting', icon: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="7" y="4" width="10" height="12" rx="1"/><path d="M12 16v6M9 22h6M12 4V2"/></svg>' },
+          { id: 'banner', name: 'Banner', icon: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="6" width="16" height="8" rx="1"/><path d="M4 4v16M20 4v16"/></svg>' }
+        ];
+        document.getElementById('categoryGrid').innerHTML = categories.map(c => `
+          <div class="category-card ${c.id === currentCategory ? 'active' : ''}" data-cat="${c.id}" onclick="switchCategory('${c.id}')">
+            <div class="cat-icon">${c.icon}</div>
+            <span class="cat-name">${c.name}</span>
+          </div>
+        `).join('');
+      }
+
+      function addonListHTML() {
+        const adds = [
+          {id:'sub_add_collar', label:'Collar Upgrade', price:5}, {id:'sub_add_long', label:'Long Sleeves', price:5},
+          {id:'sub_add_raglan', label:'Raglan Sleeves', price:5}, {id:'sub_add_muslimah', label:'Muslimah Cut', price:15},
+          {id:'sub_add_oversize', label:'Oversize Cut', price:15}, {id:'sub_add_chest', label:'Chest Pocket', price:3},
+          {id:'sub_add_name', label:'Personal Name', price:4}, {id:'sub_add_num', label:'Personal Number', price:4},
+          {id:'sub_add_namenum', label:'Name & Number', price:7}
+        ];
+        return adds.map(a => `
+          <div class="addon-row">
+            <div><span class="addon-label">${a.label}</span><span class="addon-price">+RM${a.price}/pcs</span></div>
+            <div class="general-stepper" style="width:120px;margin:0;">
+              <button onclick="stepVal('${a.id}',-1)">−</button>
+              <input type="number" id="${a.id}" class="calc-trigger" min="0" value="0">
+              <button onclick="stepVal('${a.id}',1)">+</button>
+            </div>
+          </div>
+        `).join('');
+      }
+
+      function buildPanels() {
+        const container = document.getElementById('panelsContainer');
+        container.innerHTML = `
+          <div id="panel-sublimation" class="panel active">
+            <div class="panel-banner"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M20.38 3.46L16 2a8.5 8.5 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.47a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.47a2 2 0 0 0-1.34-2.23z"/></svg><h2>Full Print Sublimation Jersey</h2></div>
+            <div class="grid-layout">
+              <div class="form-group" style="grid-column:1/-1;"><label class="section-title">Sizes & Quantity <span class="pill-tag">Total: <span id="sub_totalQty">0</span></span></label><div class="size-grid" id="sub_sizeGrid"></div></div>
+              <div class="form-group"><label class="section-title">Order Details</label><label class="field-label">Design Type</label><select id="sub_design" class="select-field calc-trigger"><option value="0">Catalogue Design (Free)</option><option value="50">Custom Design (+RM50)</option></select><label class="field-label">Production</label><select id="sub_urgent" class="select-field calc-trigger"><option value="0">Standard (14-28 Days)</option><option value="5">Urgent Order (+RM5/pcs)</option></select><label class="field-label">Material</label><select id="sub_material" class="select-field calc-trigger"><option value="0">Microfiber Reverse</option><option value="3">Diamond 155GSM (+RM3)</option><option value="3">RJPK 170GSM (+RM3)</option><option value="8">Lycra 280GSM (+RM8)</option></select></div>
+              <div class="form-group"><label class="section-title">Features & Add-Ons</label>${addonListHTML()}</div>
+            </div>
+          </div>
+          <div id="panel-silkscreen" class="panel">
+            <div class="panel-banner"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M20.38 3.46L16 2a8.5 8.5 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.47a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.47a2 2 0 0 0-1.34-2.23z"/></svg><h2>T-Shirt (Silkscreen)</h2></div>
+            <div class="grid-layout">
+              <div class="form-group" style="grid-column:1/-1;"><label class="section-title">Sizes & Quantity <span class="pill-tag">Total: <span id="silk_totalQty">0</span></span></label><div class="size-grid" id="silk_sizeGrid"></div></div>
+              <div class="form-group"><label class="section-title">Base Shirt</label><label class="field-label">Shirt Type</label><select id="silk_shirtType" class="select-field calc-trigger"><option value="13.50">Roundneck</option><option value="18.50">Collar</option><option value="23.00">Polo</option></select><div class="addon-row" style="border-bottom:none;"><span class="addon-label">Long Sleeve</span><div class="general-stepper" style="width:120px;"><button onclick="stepVal('silk_ls_qty',-1)">−</button><input type="number" id="silk_ls_qty" class="calc-trigger" min="0" value="0"><button onclick="stepVal('silk_ls_qty',1)">+</button></div></div></div>
+              <div class="form-group"><label class="section-title">Print Colors</label><div style="display:flex;gap:12px;"><div style="flex:1"><label class="field-label" style="margin-top:0">Front</label><select id="silk_front_colors" class="select-field calc-trigger"><option value="-1">No Print</option><option value="0" selected>1C</option><option value="1">2C</option><option value="2">3C</option><option value="3">4C</option><option value="4">5C</option><option value="5">6C</option><option value="6">7C</option><option value="7">8C</option></select></div><div style="flex:1"><label class="field-label" style="margin-top:0">Back</label><select id="silk_back_colors" class="select-field calc-trigger"><option value="-1" selected>No Print</option><option value="0">1C</option><option value="1">2C</option><option value="2">3C</option><option value="3">4C</option><option value="4">5C</option><option value="5">6C</option><option value="6">7C</option><option value="7">8C</option></select></div></div></div>
+            </div>
+          </div>
+          <div id="panel-dtf_shirt" class="panel">
+            <div class="panel-banner"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M20.38 3.46L16 2a8.5 8.5 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.47a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.47a2 2 0 0 0-1.34-2.23z"/></svg><h2>T-Shirt (DTF)</h2></div>
+            <div class="grid-layout">
+              <div class="form-group" style="grid-column:1/-1;"><label class="section-title">Sizes & Quantity <span class="pill-tag">Total: <span id="dtf_totalQty">0</span></span></label><div class="size-grid" id="dtf_sizeGrid"></div></div>
+              <div class="form-group"><label class="section-title">Base Shirt</label><label class="field-label">Shirt Type</label><select id="dtf_shirtType" class="select-field calc-trigger"><option value="13.50">Roundneck</option><option value="18.50">Collar</option><option value="23.00">Polo</option></select><div class="addon-row" style="border-bottom:none;"><span class="addon-label">Long Sleeve</span><div class="general-stepper" style="width:120px;"><button onclick="stepVal('dtf_ls_qty',-1)">−</button><input type="number" id="dtf_ls_qty" class="calc-trigger" min="0" value="0"><button onclick="stepVal('dtf_ls_qty',1)">+</button></div></div></div>
+              <div class="form-group"><label class="section-title">DTF Print</label><div style="display:flex;gap:12px;"><div style="flex:1"><label class="field-label" style="margin-top:0">Front</label><select id="dtf_front_size" class="select-field calc-trigger"><option value="0">No Print</option><option value="4">Smaller A4</option><option value="8" selected>A4</option><option value="10">A3</option><option value="12">Bigger A3</option></select></div><div style="flex:1"><label class="field-label" style="margin-top:0">Back</label><select id="dtf_back_size" class="select-field calc-trigger"><option value="0" selected>No Print</option><option value="4">Smaller A4</option><option value="8">A4</option><option value="10">A3</option><option value="12">Bigger A3</option></select></div></div><div class="addon-row" style="border-bottom:none;"><span class="addon-label">Sleeve Print</span><div class="general-stepper" style="width:120px;"><button onclick="stepVal('dtf_sleeve_qty',-1)">−</button><input type="number" id="dtf_sleeve_qty" class="calc-trigger" min="0" value="0"><button onclick="stepVal('dtf_sleeve_qty',1)">+</button></div></div></div>
+            </div>
+          </div>
+          <div id="panel-lanyard" class="panel"><div class="panel-banner"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M10 2h4M12 2v4M8 6h8a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2zM9 10h6M9 14h4"/></svg><h2>Lanyard (Sublimation)</h2></div><div class="form-group"><label class="field-label">Quantity (min 10)</label><div class="general-stepper"><button onclick="stepVal('lan_qty',-1)">−</button><input type="number" id="lan_qty" class="calc-trigger" min="10" value="10"><button onclick="stepVal('lan_qty',1)">+</button></div></div></div>
+          <div id="panel-apron" class="panel"><div class="panel-banner"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M8 2h8v4M6 6h12l1.5 16H4.5L6 6zM9 12h6v5H9z"/></svg><h2>Custom Apron</h2></div><div class="form-group"><label class="field-label">Quantity</label><div class="general-stepper"><button onclick="stepVal('apr_qty',-1)">−</button><input type="number" id="apr_qty" class="calc-trigger" min="1" value="10"><button onclick="stepVal('apr_qty',1)">+</button></div><label class="field-label">Type</label><select id="apr_type" class="select-field calc-trigger"><option value="basic">Basic</option><option value="exclusive">Exclusive</option></select></div></div>
+          <div id="panel-cap" class="panel"><div class="panel-banner"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M4 16h14"/><path d="M6 16a6 6 0 0 1 12 0"/><path d="M18 16c2 0 3 1 4 2"/><circle cx="12" cy="9" r="1"/></svg><h2>Custom Cap</h2></div><div class="form-group"><label class="field-label">Quantity (min 10)</label><div class="general-stepper"><button onclick="stepVal('cap_qty',-1)">−</button><input type="number" id="cap_qty" class="calc-trigger" min="10" value="10"><button onclick="stepVal('cap_qty',1)">+</button></div><label class="field-label">Print Type</label><select id="cap_type" class="select-field calc-trigger"><option value="dtf">DTF</option><option value="embroidery">Embroidery</option></select></div></div>
+          <div id="panel-bunting" class="panel"><div class="panel-banner"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="7" y="4" width="10" height="12" rx="1"/><path d="M12 16v6M9 22h6M12 4V2"/></svg><h2>Bunting (Vertical)</h2></div><div class="form-group"><label class="field-label">Quantity</label><div class="general-stepper"><button onclick="stepVal('bun_qty',-1)">−</button><input type="number" id="bun_qty" class="calc-trigger" min="1" value="1"><button onclick="stepVal('bun_qty',1)">+</button></div><label class="field-label">Size</label><select id="bun_size" class="select-field calc-trigger"><option value="custom">Custom Size...</option><option value="32">2x6 ft (RM32)</option><option value="23">2x2 ft (RM23)</option></select><div id="bun_custom_box" class="custom-size-box"><input type="number" id="bun_w" placeholder="Width (ft)" class="input-field calc-trigger"><input type="number" id="bun_h" placeholder="Height (ft)" class="input-field calc-trigger"></div></div></div>
+          <div id="panel-banner" class="panel"><div class="panel-banner"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="4" y="6" width="16" height="8" rx="1"/><path d="M4 4v16M20 4v16"/></svg><h2>Banner (Horizontal)</h2></div><div class="form-group"><label class="field-label">Quantity</label><div class="general-stepper"><button onclick="stepVal('banner_qty',-1)">−</button><input type="number" id="banner_qty" class="calc-trigger" min="1" value="1"><button onclick="stepVal('banner_qty',1)">+</button></div><label class="field-label">Size</label><select id="banner_size" class="select-field calc-trigger"><option value="custom">Custom Size...</option><option value="39">3x6 ft (RM39)</option><option value="23">1x2 ft (RM23)</option></select><div id="banner_custom_box" class="custom-size-box"><input type="number" id="banner_w" placeholder="Width (ft)" class="input-field calc-trigger"><input type="number" id="banner_h" placeholder="Height (ft)" class="input-field calc-trigger"></div></div></div>
+        `;
+        ['sub','silk','dtf'].forEach(p => {
+          const grid = document.getElementById(`${p}_sizeGrid`);
+          grid.innerHTML = shirtSizeConfig.map(s => `
+            <div class="size-item">
+              <div class="size-header"><span class="size-label">${s.label}</span>${s.sur ? `<span class="surcharge-badge">+RM${s.sur}</span>` : ''}</div>
+              <div class="size-stepper">
+                <button onclick="stepVal('${p}_qty_${s.id}',-1)">−</button>
+                <input type="number" id="${p}_qty_${s.id}" class="calc-trigger" min="0" value="0">
+                <button onclick="stepVal('${p}_qty_${s.id}',1)">+</button>
+              </div>
+            </div>
+          `).join('');
+        });
+      }
+
+      // Calculation functions (same as before, condensed for space but fully functional)
+      function calcSublimation() {
+        let qty = 0, sizeSur = 0, bDown = [], sizeBreakdown = [];
+        shirtSizeConfig.forEach(s => { let v = parseInt(document.getElementById(`sub_qty_${s.id}`)?.value)||0; qty += v; sizeSur += v*s.sur; if(v) sizeBreakdown.push(`${s.label}:${v}`); });
+        document.getElementById('sub_totalQty').innerText = qty;
+        let unitBase = qty>0&&qty<=10?45:qty<=30?35:qty<=50?33:qty<=100?30:qty<=200?28:qty<=300?25:qty<=500?23:qty<=1000?20:18;
+        let bCost = qty*unitBase;
+        if(qty>0){ bDown.push(`👕 <b>Sizes:</b> ${sizeBreakdown.join(', ')}`); bDown.push(`💰 <b>Base Cost:</b> ${qty} pcs x RM${unitBase} = RM${bCost}`); if(sizeSur>0) bDown.push(`📏 <b>Size Surcharge:</b> RM${sizeSur}`); }
+        let perPieceAddons = 0;
+        let mat = parseFloat(document.getElementById('sub_material')?.value)||0; if(mat>0){ perPieceAddons += qty*mat; bDown.push(`🧵 <b>Material:</b> ${qty} x RM${mat} = RM${qty*mat}`); }
+        let urg = parseFloat(document.getElementById('sub_urgent')?.value)||0; if(urg>0){ perPieceAddons += qty*urg; bDown.push(`⏱️ <b>Urgent:</b> ${qty} x RM${urg} = RM${qty*urg}`); }
+        const addons = [['sub_add_collar',5,'Collar'],['sub_add_long',5,'Long Sleeves'],['sub_add_raglan',5,'Raglan'],['sub_add_muslimah',15,'Muslimah'],['sub_add_oversize',15,'Oversize'],['sub_add_chest',3,'Chest Pocket'],['sub_add_name',4,'Name'],['sub_add_num',4,'Number'],['sub_add_namenum',7,'Name&Num']];
+        addons.forEach(([id,price,name]) => { let v = parseInt(document.getElementById(id)?.value)||0; if(v){ let cost=v*price; perPieceAddons+=cost; bDown.push(`✨ <b>${name}:</b> ${v} x RM${price} = RM${cost}`); } });
+        let design = parseFloat(document.getElementById('sub_design')?.value)||0; if(design>0) bDown.push(`🎨 <b>Custom Design Fee:</b> RM${design}`);
+        let sCost = perPieceAddons + sizeSur + design;
+        return { base: bCost, sur: sCost, total: bCost+sCost, breakdown: bDown };
+      }
+
+      function calcSilkscreen() {
+        let qty = 0, sizeSur = 0, bDown = [];
+        shirtSizeConfig.forEach(s => { let v = parseInt(document.getElementById(`silk_qty_${s.id}`)?.value)||0; qty += v; sizeSur += v*s.sur; });
+        document.getElementById('silk_totalQty').innerText = qty;
+        if(qty>0 && qty<10) { showToast("Silkscreen requires minimum 10 pieces!"); return {base:0,sur:0,total:0,breakdown:["⚠️ Minimum 10 pieces required."]}; }
+        let sBase = parseFloat(document.getElementById('silk_shirtType')?.value)||0;
+        let bCost = qty * sBase;
+        if(qty>0) bDown.push(`👕 <b>Base Shirt:</b> ${qty} pcs x RM${sBase} = RM${bCost}`);
+        let fColors = parseInt(document.getElementById('silk_front_colors')?.value);
+        let bColors = parseInt(document.getElementById('silk_back_colors')?.value);
+        let pCost = 0, tier = getSSTier(qty);
+        if(qty>0 && fColors>=0) { let fc = ssMatrix[tier][fColors]; pCost += qty*fc; bDown.push(`🎨 <b>Front Print (${fColors+1}C):</b> ${qty} x RM${fc} = RM${(qty*fc).toFixed(2)}`); }
+        if(qty>0 && bColors>=0) { let bc = ssMatrix[tier][bColors]; pCost += qty*bc; bDown.push(`🎨 <b>Back Print (${bColors+1}C):</b> ${qty} x RM${bc} = RM${(qty*bc).toFixed(2)}`); }
+        let lsQty = parseInt(document.getElementById('silk_ls_qty')?.value)||0; let lsCost = lsQty*5; if(lsQty>0) bDown.push(`🧵 <b>Long Sleeve Upgrade:</b> ${lsQty} pcs x RM5 = RM${lsCost}`);
+        if(sizeSur>0) bDown.push(`📏 <b>Size Surcharge:</b> RM${sizeSur}`);
+        let sCost = pCost + lsCost + sizeSur;
+        return { base: bCost, sur: sCost, total: bCost+sCost, breakdown: bDown };
+      }
+
+      function calcDTF() {
+        let qty = 0, sizeSur = 0, bDown = [];
+        shirtSizeConfig.forEach(s => { let v = parseInt(document.getElementById(`dtf_qty_${s.id}`)?.value)||0; qty += v; sizeSur += v*s.sur; });
+        document.getElementById('dtf_totalQty').innerText = qty;
+        if(qty === 0) return {base:0,sur:0,total:0,breakdown:[]};
+        let sBase = parseFloat(document.getElementById('dtf_shirtType')?.value)||0;
+        let bCost = qty * sBase; bDown.push(`👕 <b>Base Shirt:</b> ${qty} pcs x RM${sBase} = RM${bCost}`);
+        let fSize = parseFloat(document.getElementById('dtf_front_size')?.value)||0;
+        let bSize = parseFloat(document.getElementById('dtf_back_size')?.value)||0;
+        let pCost = (fSize + bSize) * qty;
+        if(fSize>0) bDown.push(`🖨️ <b>Front Print:</b> ${qty} x RM${fSize} = RM${qty*fSize}`);
+        if(bSize>0) bDown.push(`🖨️ <b>Back Print:</b> ${qty} x RM${bSize} = RM${qty*bSize}`);
+        let sleeveQty = parseInt(document.getElementById('dtf_sleeve_qty')?.value)||0; let sleeveCost = sleeveQty*3; if(sleeveQty>0) bDown.push(`💪 <b>Sleeve Print:</b> ${sleeveQty} arms x RM3 = RM${sleeveCost}`);
+        let lsQty = parseInt(document.getElementById('dtf_ls_qty')?.value)||0; let lsCost = lsQty*5; if(lsQty>0) bDown.push(`🧵 <b>Long Sleeve Upgrade:</b> ${lsQty} pcs x RM5 = RM${lsCost}`);
+        if(sizeSur>0) bDown.push(`📏 <b>Size Surcharge:</b> RM${sizeSur}`);
+        let sur = pCost + sleeveCost + lsCost + sizeSur;
+        return { base: bCost, sur: sur, total: bCost+sur, breakdown: bDown };
+      }
+
+      function calcSimple(cat) {
+        let prefix = {lanyard:'lan',apron:'apr',cap:'cap',bunting:'bun',banner:'banner'}[cat];
+        let qty = parseInt(document.getElementById(prefix+'_qty')?.value)||0;
+        let bDown = [];
+        if(qty === 0) return {base:0,sur:0,total:0,breakdown:[]};
+        if((cat==='lanyard'||cat==='cap') && qty<10) { showToast(`Minimum 10 pieces required for ${cat}.`); return {base:0,sur:0,total:0,breakdown:["⚠️ Minimum 10 pieces required."]}; }
+        let unit = 0;
+        if(cat === 'lanyard') {
+          if(qty>=20000) unit=3.5; else if(qty>=10000) unit=4; else if(qty>=1000) unit=5.5; else if(qty>=900) unit=5.7;
+          else if(qty>=800) unit=6; else if(qty>=700) unit=6.5; else if(qty>=600) unit=7; else if(qty>=500) unit=7.5;
+          else if(qty>=400) unit=8; else if(qty>=300) unit=8.5; else if(qty>=200) unit=9; else if(qty>=100) unit=10;
+          else if(qty>=80) unit=12; else if(qty>=50) unit=13; else if(qty>=40) unit=14; else if(qty>=30) unit=15;
+          else if(qty>=20) unit=16; else unit=19;
+        } else if(cat === 'apron') {
+          let type = document.getElementById('apr_type')?.value;
+          unit = type==='basic' ? (qty<10?20:qty<20?19:qty<30?17:qty<=50?15:13.5) : (qty<10?30:qty<20?25:qty<30?23:qty<=50?20:18.5);
+        } else if(cat === 'cap') {
+          let type = document.getElementById('cap_type')?.value;
+          unit = type==='dtf' ? (qty===10?15:qty<=20?14.5:qty<=30?14:qty<=50?13.5:qty<=100?13:12) : (qty===10?22.5:qty<=20?19.6:qty<=30?17.8:qty<=50?16.9:qty<=100?15.7:14.9);
+        } else if(cat === 'bunting' || cat === 'banner') {
+          let sizeVal = document.getElementById(prefix+'_size')?.value;
+          if(sizeVal === 'custom') {
+            let w = parseFloat(document.getElementById(prefix+'_w')?.value)||0, h = parseFloat(document.getElementById(prefix+'_h')?.value)||0;
+            let area = w*h;
+            unit = area ? Math.max(23, area*2+3) : 0;
+            bDown.push(`📐 <b>Custom Size (${w}' x ${h}'):</b> ${area} sqft`);
+          } else { unit = parseFloat(sizeVal)||0; }
+        }
+        if(unit > 0) bDown.push(`📦 <b>${cat.toUpperCase()}:</b> ${qty} pcs x RM${unit} = RM${qty*unit}`);
+        return { base: qty*unit, sur: 0, total: qty*unit, breakdown: bDown };
+      }
+
+      // FIXED: Animation with requestAnimationFrame
+      function animateValue(id, start, end) {
+        const el = document.getElementById(id); if (!el) return;
+        if (animFrame) { cancelAnimationFrame(animFrame); animFrame = null; }
+        const duration = 300, startTime = performance.now();
+        const step = (currentTime) => {
+          const elapsed = currentTime - startTime;
+          const progress = Math.min(elapsed / duration, 1);
+          const ease = 1 - Math.pow(1 - progress, 3);
+          const current = start + (end - start) * ease;
+          el.innerHTML = `RM ${current.toFixed(2)}`;
+          if (progress < 1) animFrame = requestAnimationFrame(step);
+          else { el.innerHTML = `RM ${end.toFixed(2)}`; animFrame = null; }
+        };
+        animFrame = requestAnimationFrame(step);
+      }
+
+      const calculate = debounce(() => {
+        let res;
+        if(currentCategory === 'sublimation') res = calcSublimation();
+        else if(currentCategory === 'silkscreen') res = calcSilkscreen();
+        else if(currentCategory === 'dtf_shirt') res = calcDTF();
+        else res = calcSimple(currentCategory);
+        animateValue('out_base', currentBase, res.base);
+        animateValue('out_surcharge', currentSur, res.sur);
+        animateValue('out_total', currentTotal, res.total);
+        currentBase = res.base; currentSur = res.sur; currentTotal = res.total; currentBreakdownList = res.breakdown;
+        document.getElementById('breakdown-list').innerHTML = res.breakdown.length ? `<ul><li>${res.breakdown.join('</li><li>')}</li></ul>` : '<i>No items selected.</i>';
+        saveState();
+      }, 80);
+
+      function showToast(msg) {
+        const container = document.getElementById('toast-container');
+        const toast = document.createElement('div'); toast.className = 'toast'; toast.innerText = msg;
+        container.appendChild(toast); setTimeout(() => toast.remove(), 3000);
+      }
+
+      window.stepVal = function(id, delta) {
+        let el = document.getElementById(id); if(!el) return;
+        let min = parseInt(el.min)||0, val = parseInt(el.value)||0;
+        val = Math.max(min, val + delta);
+        el.value = val; calculate();
+      };
+
+      window.switchCategory = function(cat) {
+        currentCategory = cat;
+        document.querySelectorAll('.category-card').forEach(c => c.classList.remove('active'));
+        document.querySelector(`.category-card[data-cat="${cat}"]`).classList.add('active');
+        document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+        document.getElementById(`panel-${cat}`).classList.add('active');
+        calculate();
+      };
+
+      function saveState() {
+        let state = { activeCategory: currentCategory };
+        document.querySelectorAll('.calc-trigger').forEach(i => { if(i.type==='checkbox') state[i.id]=i.checked; else state[i.id]=i.value; });
+        localStorage.setItem('grafynxState', JSON.stringify(state));
+      }
+
+      function loadState() {
+        let saved = localStorage.getItem('grafynxState');
+        if(saved) {
+          try {
+            let state = JSON.parse(saved);
+            for(let id in state) {
+              if(id === 'activeCategory') { switchCategory(state[id]); continue; }
+              let el = document.getElementById(id);
+              if(el) { if(el.type==='checkbox') el.checked=state[id]; else el.value=state[id]; }
+            }
+          } catch(e) {}
+        }
+        document.getElementById('bun_custom_box').style.display = document.getElementById('bun_size')?.value==='custom'?'block':'none';
+        document.getElementById('banner_custom_box').style.display = document.getElementById('banner_size')?.value==='custom'?'block':'none';
+        calculate();
+      }
+
+      window.resetForm = function() {
+        if(!confirm('Clear all inputs?')) return;
+        localStorage.removeItem('grafynxState');
+        document.querySelectorAll('.calc-trigger').forEach(el => {
+          if(el.type==='checkbox') el.checked=false;
+          else if(el.tagName==='SELECT') el.selectedIndex=0;
+          else if(el.type==='number'||el.type==='tel') el.value=el.min||'';
+        });
+        document.getElementById('bun_custom_box').style.display='none';
+        document.getElementById('banner_custom_box').style.display='none';
+        switchCategory('sublimation');
+        calculate();
+      };
+
+      window.sendWhatsApp = function() {
+        if(currentTotal===0) return showToast("Calculate an order first.");
+        let cc = document.getElementById('wa_country_code').value;
+        let num = document.getElementById('wa_target_number').value.replace(/\D/g,'');
+        if(!num) return showToast("Enter phone number");
+        let msg = `*Grafynx Quote*\nProduct: ${categoryNames[currentCategory]}\nTotal: RM ${currentTotal.toFixed(2)}\nDetails: ${currentBreakdownList.join(', ')}`;
+        window.open(`https://wa.me/${cc}${num}?text=${encodeURIComponent(msg)}`, '_blank');
+      };
+
+      function prepareReceipt() {
+        document.getElementById('receiptDate').innerText = new Date().toLocaleString();
+        document.getElementById('receiptProduct').innerText = categoryNames[currentCategory];
+        document.getElementById('receiptItems').innerHTML = `<ul>${currentBreakdownList.map(i => `<li>${i}</li>`).join('')}</ul>`;
+        document.getElementById('receiptTotal').innerHTML = `TOTAL: RM ${currentTotal.toFixed(2)}`;
+      }
+
+      window.previewQuote = function() {
+        if(currentTotal===0) return showToast("Calculate first");
+        prepareReceipt();
+        html2canvas(document.getElementById('receipt-capture'), { scale: 2, backgroundColor: '#fff' }).then(c => {
+          previewCanvas = c;
+          document.getElementById('previewImage').src = c.toDataURL();
+          document.getElementById('previewModal').classList.add('active');
+        });
+      };
+
+      window.closePreviewModal = function() { document.getElementById('previewModal').classList.remove('active'); };
+      window.downloadFromPreview = function() {
+        if(previewCanvas) { let a = document.createElement('a'); a.download='grafynx_quote.png'; a.href=previewCanvas.toDataURL(); a.click(); showToast("Quote image saved!"); }
+      };
+      window.downloadQuote = function() {
+        if(currentTotal===0) return showToast("Calculate first");
+        prepareReceipt();
+        html2canvas(document.getElementById('receipt-capture'), { scale: 2, backgroundColor: '#fff' }).then(c => {
+          let a = document.createElement('a'); a.download='grafynx_quote.png'; a.href=c.toDataURL(); a.click();
+          showToast("Downloaded successfully");
+        });
+      };
+
+      function initMobile() {
+        let btn = document.getElementById('mobileMenuBtn'), dd = document.getElementById('mobileDropdown');
+        btn.onclick = () => {
+          if(dd.style.display === 'flex') dd.style.display = 'none';
+          else { dd.style.display = 'flex'; dd.innerHTML = '<a href="index.html">Home</a><a href="index.html#about-us">About Us</a><a href="index.html#services">What We Do</a><a href="index.html#workflow">Workflow</a><a href="index.html#packages">Packages</a><a href="index.html#portfolio">Portfolio</a><a href="#" class="active">Print Estimate</a>'; }
+        };
+      }
+
+      function initBackToTop() {
+        let btn = document.getElementById('backToTop');
+        window.addEventListener('scroll', () => btn.classList.toggle('visible', window.scrollY > 300), {passive: true});
+        btn.onclick = () => window.scrollTo({top:0, behavior:'smooth'});
+      }
+
+      document.addEventListener('input', e => { if(e.target.classList.contains('calc-trigger')) calculate(); });
+      document.addEventListener('change', e => { if(e.target.classList.contains('calc-trigger')) calculate(); });
+      document.getElementById('bun_size')?.addEventListener('change', function(){ document.getElementById('bun_custom_box').style.display = this.value==='custom'?'block':'none'; });
+      document.getElementById('banner_size')?.addEventListener('change', function(){ document.getElementById('banner_custom_box').style.display = this.value==='custom'?'block':'none'; });
+      document.getElementById('sendWhatsAppBtn').onclick = window.sendWhatsApp;
+      document.getElementById('previewQuoteBtn').onclick = window.previewQuote;
+      document.getElementById('downloadQuoteBtn').onclick = window.downloadQuote;
+      document.getElementById('downloadFromPreviewBtn').onclick = window.downloadFromPreview;
+
+      renderCategories();
+      buildPanels();
+      initMobile();
+      initBackToTop();
+      loadState();
+    })();
+  </script>
 </body>
 </html>
