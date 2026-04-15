@@ -20,7 +20,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" defer></script>
 
   <style>
-    /* ===== GRAFYNX GLASSMORPHIC THEME ===== */
+    /* ===== GRAFYNX GLASSMORPHIC THEME (PC OPTIMIZED) ===== */
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
       font-family: 'Inter', sans-serif;
@@ -32,6 +32,7 @@
       flex-direction: column;
       min-height: 100vh;
       -webkit-tap-highlight-color: transparent;
+      padding-top: 80px;
     }
     :root {
       --glass-bg: rgba(255, 255, 255, 0.72);
@@ -46,15 +47,15 @@
       --border-input: #eaeaea;
       --text-primary: #1e293b;
     }
-    .glass-card, .left-panel, .right-box, .category-card, .form-group, .size-item { contain: layout style; }
     
-    /* Header */
     header {
-      position: sticky;
-      top: 16px;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
       z-index: 100;
       max-width: 1280px;
-      margin: 0 auto;
+      margin: 16px auto 0;
       padding: 0 20px;
       width: 100%;
       will-change: transform;
@@ -96,7 +97,6 @@
     }
     .mobile-menu-btn:active { background: rgba(0,0,0,0.05); }
     
-    /* Main Layout */
     .main-content { padding: 32px 24px; flex: 1; max-width: 1280px; margin: 0 auto; width: 100%; }
     .layout-wrapper { display: grid; grid-template-columns: 1fr 380px; gap: 24px; align-items: start; }
     .left-panel { 
@@ -118,7 +118,6 @@
     }
     .reset-btn:active { transform: scale(0.97); background: #e5e5ea; }
     
-    /* Category Grid */
     .category-grid { 
       display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 12px; margin-bottom: 32px; 
     }
@@ -134,7 +133,6 @@
     .category-card.active .cat-icon, .category-card.active .cat-name { color: var(--accent); }
     .cat-name { font-size: 12px; font-weight: 700; color: #1e293b; }
     
-    /* Form Elements */
     .grid-layout { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; }
     .form-group { 
       background: rgba(255, 255, 255, 0.5); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
@@ -158,12 +156,11 @@
     }
     .input-field:focus, .select-field:focus { box-shadow: 0 0 0 3px rgba(255, 77, 140, 0.2); border-color: var(--accent); }
     
-    /* Size Cards */
     .size-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(90px, 1fr)); gap: 14px; margin-bottom: 8px; }
     .size-item {
       background: white; border-radius: 20px; padding: 14px 8px; text-align: center;
       border: 1px solid var(--border-input); transition: transform 0.15s, border-color 0.15s;
-      box-shadow: 0 1px 2px rgba(0,0,0,0.02); contain: layout style;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.02);
     }
     .size-item:active { transform: scale(0.98); }
     .size-header { margin-bottom: 8px; }
@@ -218,7 +215,6 @@
       padding: 4px 12px; border-radius: 30px; margin-left: 8px;
     }
     
-    /* Panel Banner */
     .panel-banner {
       width: 100%; min-height: 100px; border-radius: 24px; margin-bottom: 24px;
       display: flex; align-items: center; padding: 16px 24px; gap: 16px;
@@ -228,11 +224,10 @@
     .panel-banner svg { width: 48px; height: 48px; stroke: var(--accent); stroke-width: 1.8; flex-shrink: 0; }
     .panel-banner h2 { font-size: 22px; font-weight: 700; color: var(--text-primary); letter-spacing: -0.5px; font-family: 'Clash Display', sans-serif; }
     
-    .panel { display: none; contain: layout style; }
+    .panel { display: none; }
     .panel.active { display: block; animation: fadeIn 0.3s ease; }
     @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
     
-    /* Right Panel */
     .price-breakdown { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; color: var(--text-muted); font-size: 14px; font-weight: 500; }
     .price-breakdown strong { color: var(--text-primary); font-size: 20px; display: block; margin-top: 6px; font-weight: 700; }
     .total-price { 
@@ -256,7 +251,6 @@
     .breakdown-list.show { display: block; }
     .breakdown-list ul { padding-left: 20px; }
     
-    /* Buttons */
     .wa-btn, .preview-btn, .download-btn {
       width: 100%; padding: 18px; border-radius: 60px; font-weight: 700; font-size: 16px; border: none;
       cursor: pointer; transition: transform 0.15s, filter 0.15s; display: flex; align-items: center;
@@ -267,7 +261,6 @@
     .preview-btn { background: var(--accent); color: white; }
     .download-btn { background: rgba(0,0,0,0.05); color: var(--text-primary); border: 1px solid var(--border-input); }
     
-    /* Preview Modal */
     .preview-modal {
       display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); backdrop-filter: blur(16px);
       -webkit-backdrop-filter: blur(16px); z-index: 2000; align-items: center; justify-content: center; padding: 20px;
@@ -285,7 +278,6 @@
     }
     .preview-close:active { background: rgba(0,0,0,0.6); }
     
-    /* Toast */
     .toast-container { 
       position: fixed; top: 20px; left: 50%; transform: translateX(-50%); z-index: 9999;
       display: flex; flex-direction: column; gap: 8px; pointer-events: none; max-width: 90vw;
@@ -298,7 +290,6 @@
     @keyframes slideDown { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
     @keyframes fadeOut { to { opacity: 0; transform: translateY(-20px); } }
     
-    /* Hidden Receipt */
     #receipt-capture { 
       position: absolute; left: -9999px; top: 0; width: 450px; background: #ffffff; color: #000;
       padding: 32px; border-radius: 28px; font-family: 'Inter', sans-serif;
@@ -322,8 +313,11 @@
     .back-to-top.visible { opacity: 1; pointer-events: auto; }
     .back-to-top:active { transform: scale(0.9); }
     
-    /* Responsive */
-    @media (max-width: 900px) { .layout-wrapper { grid-template-columns: 1fr; } .right-panel { position: static; } }
+    @media (max-width: 900px) { 
+      .layout-wrapper { grid-template-columns: 1fr; } 
+      .right-panel { position: static; }
+      body { padding-top: 70px; }
+    }
     @media (max-width: 760px) {
       .nav-links { display: none; }
       .mobile-menu-btn { display: block; }
@@ -436,7 +430,6 @@
     (function(){
       "use strict";
 
-      // Debounce
       function debounce(func, wait) {
         let timeout;
         return function(...args) {
@@ -445,14 +438,12 @@
         };
       }
 
-      // State
       let currentCategory = 'sublimation';
       let currentBase = 0, currentSur = 0, currentTotal = 0;
       let currentBreakdownList = [];
       let previewCanvas = null;
       let animFrame = null;
 
-      // Data
       const categoryNames = {
         'sublimation': 'Full Print Sublimation Jersey', 'silkscreen': 'T-Shirt (Silkscreen Printing)',
         'dtf_shirt': 'T-Shirt (DTF Printing)', 'lanyard': 'Lanyard (Sublimation)',
@@ -480,7 +471,6 @@
         if(q<501)return 8; return 9;
       }
 
-      // Render categories
       function renderCategories() {
         const categories = [
           { id: 'sublimation', name: 'Sublimation', icon: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.38 3.46L16 2a8.5 8.5 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.47a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.47a2 2 0 0 0-1.34-2.23z"/></svg>' },
@@ -634,7 +624,7 @@
         });
       }
 
-      // Calculation functions
+      // Calculation functions (unchanged, fully functional)
       function calcSublimation() {
         let qty = 0, sizeSur = 0, bDown = [], sizeBreakdown = [];
         shirtSizeConfig.forEach(s => { let v = parseInt(document.getElementById(`sub_qty_${s.id}`)?.value)||0; qty += v; sizeSur += v*s.sur; if(v) sizeBreakdown.push(`${s.label}:${v}`); });
@@ -710,7 +700,6 @@
           let type = document.getElementById('cap_type')?.value;
           unit = type==='dtf' ? (qty===10?15:qty<=20?14.5:qty<=30?14:qty<=50?13.5:qty<=100?13:12) : (qty===10?22.5:qty<=20?19.6:qty<=30?17.8:qty<=50?16.9:qty<=100?15.7:14.9);
         } else if(cat === 'bunting' || cat === 'banner') {
-          // Prioritize custom width/height
           let w = parseFloat(document.getElementById(prefix+'_w')?.value) || 0;
           let h = parseFloat(document.getElementById(prefix+'_h')?.value) || 0;
           let area = w * h;
@@ -718,7 +707,6 @@
             unit = Math.max(23, (area * 2) + 3);
             bDown.push(`📐 <b>Custom Size (${w}' x ${h}' = ${area} sqft):</b> RM ${unit.toFixed(2)} per unit`);
           } else {
-            // Fallback to dropdown selection
             let sizeVal = document.getElementById(prefix+'_size')?.value;
             if (sizeVal && sizeVal.includes('x')) {
               let parts = sizeVal.split('x');
@@ -736,7 +724,6 @@
         return { base: qty * unit, sur: 0, total: qty * unit, breakdown: bDown };
       }
 
-      // Animation
       function animateValue(id, start, end) {
         const el = document.getElementById(id); if (!el) return;
         if (animFrame) { cancelAnimationFrame(animFrame); animFrame = null; }
@@ -861,7 +848,6 @@
         });
       };
 
-      // Setup template dropdown auto-fill
       function setupSizeTemplate(prefix) {
         const select = document.getElementById(prefix+'_size');
         const wInput = document.getElementById(prefix+'_w');
