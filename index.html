@@ -5,11 +5,26 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>Grafynx | Design Studio | Printing Services</title>
   <meta name="description" content="Grafynx – Corporate Identity, Advertising Design, Logo, Branding, Social Media, UI/UX, and printing services.">
+  
+  <!-- Open Graph / Social Media Meta Tags -->
+  <meta property="og:title" content="Grafynx | Design Studio & Printing Services">
+  <meta property="og:description" content="Corporate Identity, Advertising, Logo, Branding, Social Media, UI/UX, and professional printing services.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://grafynx.com">
+  <meta property="og:image" content="https://grafynx.com/og-image.jpg">
+  <meta property="og:image:alt" content="Grafynx visual identity design preview">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Grafynx | Design Studio">
+  <meta name="twitter:description" content="Strategy-driven design and printing services.">
+  <meta name="twitter:image" content="https://grafynx.com/og-image.jpg">
+
   <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800&display=swap" rel="stylesheet">
   <link href="https://api.fontshare.com/v2/css?f[]=clash-display@400,700,600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
   <style>
-    /* === All styles from the original (excluding estimator-specific) === */
+    /* === All styles (same as before, including glass mobile menu) === */
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
       font-family: 'Inter', sans-serif;
@@ -88,12 +103,53 @@
       width: 100%; height: 2.5px; background: var(--accent); border-radius: 4px;
     }
     .mobile-menu-btn { display: none; background: none; border: none; font-size: 28px; cursor: pointer; }
+    
+    /* Glass Mobile Dropdown */
+    #mobileDropdown {
+      display: none;
+      flex-direction: column;
+      background: rgba(255, 255, 255, 0.75);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-radius: 28px;
+      margin-top: 12px;
+      padding: 20px 16px;
+      gap: 4px;
+      border: 1px solid rgba(255, 255, 255, 0.6);
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+    }
+    #mobileDropdown a {
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 17px;
+      color: #1e293b;
+      padding: 14px 20px;
+      border-radius: 60px;
+      transition: all 0.2s;
+      display: block;
+      background: transparent;
+    }
+    #mobileDropdown a:hover {
+      background: rgba(255, 77, 140, 0.15);
+      color: var(--accent);
+      font-weight: 600;
+    }
+    #mobileDropdown a.active-mobile {
+      background: var(--accent);
+      color: white !important;
+      font-weight: 600;
+    }
+
     @media (max-width: 760px) {
       .nav-links { display: none; }
       .mobile-menu-btn { display: block; }
       .header-container { padding: 8px 16px; }
       .logo-text { font-size: 20px; }
     }
+    @media (min-width: 761px) {
+      #mobileDropdown { display: none !important; }
+    }
+
     .hero {
       max-width: 1280px;
       margin: 60px auto 30px;
@@ -373,7 +429,7 @@
     }
     .workflow-step h4 { font-size: 20px; margin-bottom: 8px; }
     .workflow-step p { font-size: 13px; color: var(--text-muted); }
-    /* Packages Section (original white background) */
+    /* Packages Section */
     .packages-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
@@ -584,9 +640,9 @@
       <a href="#portfolio">Portfolio</a>
       <a href="print-estimate.html">Print Estimate</a>
     </div>
-    <button class="mobile-menu-btn" id="mobileMenuBtn">☰</button>
+    <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Menu">☰</button>
   </div>
-  <div id="mobileDropdown" style="display: none; flex-direction: column; background: rgba(255,255,255,0.95); backdrop-filter: blur(20px); border-radius: 32px; margin-top: 12px; padding: 16px; gap: 12px;"></div>
+  <div id="mobileDropdown"></div>
 </header>
 
 <!-- HOME SECTION -->
@@ -612,7 +668,7 @@
   </div>
 </div>
 
-<!-- WHAT WE DO (Printing Service card now has no details and direct WhatsApp button) -->
+<!-- WHAT WE DO -->
 <section id="services">
   <div class="section-header">
     <h2 class="section-title">What We Do</h2>
@@ -697,7 +753,7 @@
   <p style="text-align: center; margin-top: 20px; font-size: 13px; color: var(--text-muted);">📢 All prices are estimates. Final quote depends on project complexity, number of revisions, and timeline.</p>
 </section>
 
-<!-- PORTFOLIO with reordered albums -->
+<!-- PORTFOLIO with "All" album and renamed "Print" -->
 <section id="portfolio" class="portfolio-section">
   <div class="section-header"><h2 class="section-title">Portfolio</h2><div class="section-sub">swipe through our work — subcategory albums</div></div>
   <div class="album-tabs" id="albumTabs"></div>
@@ -722,7 +778,7 @@
 <script>
   const WHATSAPP_NUMBER = "60199083295";
 
-  // Full service data for "What We Do" modal – Printing Service has no details, uses direct WhatsApp button
+  // Full service data for "What We Do" modal
   const servicesFull = [
     { name: "Corporate Identity", icon: "🏢", items: [ { label: "Business Card", price: "RM70" }, { label: "ID Card", price: "RM100" }, { label: "Company Profile", price: "RM700" }, { label: "Lanyard", price: "RM70" }, { label: "T-Shirt", price: "RM50+" }, { label: "Corporate Shirt", price: "RM100" }, { label: "Sublimation Jersey", price: "RM100" } ], note: "Print-Ready Files, CMYK Setup, Bleed and Margin Ready. All designs include mockup preview.", preview: "Business cards, ID cards, company profile, lanyards, apparel" },
     { name: "Advertising Design", icon: "📢", items: [ { label: "Bunting", price: "RM60" }, { label: "Banner", price: "RM80" }, { label: "Backdrop", price: "RM100" }, { label: "Signboard", price: "RM300+" }, { label: "Flags", price: "RM70" }, { label: "Flyer", price: "RM30-50" }, { label: "Poster", price: "RM30-50" }, { label: "Menu", price: "RM100+" }, { label: "Stickers", price: "RM30-50" } ], note: "Print-Ready Files, CMYK Setup, Bleed and Margin Ready. All designs include mockup preview.", preview: "Bunting, banners, backdrops, signboards, flyers, posters, menus, stickers" },
@@ -730,7 +786,6 @@
     { name: "Brand Identity", icon: "🎨", items: [ { label: "Complete Identity", price: "from RM700" }, { label: "Color Palette", price: "included" }, { label: "Typography", price: "included" }, { label: "Brand Guide", price: "included" } ], note: "Colors, typography, brand guide", preview: "Full brand identity from RM700, color palette, typography, guidelines" },
     { name: "Social Media Design", icon: "📱", items: [ { label: "Custom Post Design", price: "RM30/post" }, { label: "Monthly Package (24 posts)", price: "RM600" }, { label: "3 Revisions per post", price: "included" } ], note: "Posts, ads creatives, carousels", preview: "Single post RM30 or monthly package RM600 (24 posts)" },
     { name: "Website / UI Design", icon: "🖥️", items: [ { label: "Website / UI Design", price: "from RM400" } ], note: "Clean, conversion-focused interfaces", preview: "Modern website & UI design starting from RM400" },
-    // PRINTING SERVICE: no items, direct WhatsApp button
     { name: "Printing Service", icon: "🖨️", items: [], note: "Get custom designs for all your printing needs – sublimation, DTF, silkscreen, banners, bunting, lanyards, aprons, caps, and more. Contact us for a quote.", preview: "Custom design for sublimation, DTF, silkscreen, banner, bunting, lanyard, apron, cap, and more." }
   ];
 
@@ -738,7 +793,6 @@
     const container = document.getElementById('serviceGrid');
     if(!container) return;
     container.innerHTML = servicesFull.map(service => {
-      // Special handling for Printing Service: no "View Details" button, instead a direct WhatsApp button
       if (service.name === "Printing Service") {
         return `
           <div class="service-card" data-service-name="${service.name}" style="cursor: default;">
@@ -750,7 +804,7 @@
         `;
       }
       return `
-        <div class="service-card" data-service-name="${service.name}">
+        <div class="service-card" data-service-name="${service.name}" role="button" tabindex="0" aria-label="View details for ${service.name}">
           <div class="service-icon">${service.icon}</div>
           <h3>${service.name}</h3>
           <div class="service-preview">${service.preview.substring(0, 80)}${service.preview.length > 80 ? '…' : ''}</div>
@@ -759,10 +813,9 @@
       `;
     }).join('');
 
-    // Attach modal triggers for non-printing cards
     document.querySelectorAll('.service-card').forEach(card => {
       const serviceName = card.getAttribute('data-service-name');
-      if (serviceName === "Printing Service") return; // skip, already has direct button
+      if (serviceName === "Printing Service") return;
       const service = servicesFull.find(s => s.name === serviceName);
       if(service) {
         card.addEventListener('click', (e) => {
@@ -772,6 +825,12 @@
         card.querySelector('.view-details-btn')?.addEventListener('click', (e) => {
           e.stopPropagation();
           openServiceModal(service);
+        });
+        card.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            openServiceModal(service);
+          }
         });
       }
     });
@@ -826,20 +885,32 @@
     });
   }
 
-  // Portfolio Albums (reordered)
-  const albums = {
+  // ---------- PORTFOLIO WITH "ALL" ALBUM (last) AND "PACKAGING" → "PRINT" ----------
+  const baseAlbums = {
     "Social Media": ["image10.png", "image11.png", "image12.png"],
     "Branding": ["image1.png", "image2.png", "image3.png"],
-    "Packaging": ["image4.png", "image5.png", "image6.png"],
+    "Print": ["image4.png", "image5.png", "image6.png"],   // renamed from Packaging
     "UI/UX": ["image7.png", "image8.png", "image9.png"]
   };
+  
+  // Create "All" album by concatenating all images
+  const allImages = Object.values(baseAlbums).flat();
+  const albums = {
+    ...baseAlbums,
+    "All": allImages
+  };
+
+  // Desired tab order: Social Media, Branding, Print, UI/UX, All (last)
+  const albumOrder = ["Social Media", "Branding", "Print", "UI/UX", "All"];
+  
   let activeAlbum = "Social Media";
   let swiperInstance = null;
 
   function buildAlbumTabs() {
     const tabsContainer = document.getElementById('albumTabs');
     tabsContainer.innerHTML = '';
-    Object.keys(albums).forEach(albumName => {
+    albumOrder.forEach(albumName => {
+      if (!albums[albumName]) return;
       const btn = document.createElement('button');
       btn.className = `album-btn ${albumName === activeAlbum ? 'active' : ''}`;
       btn.textContent = albumName;
@@ -856,7 +927,11 @@
   function updateSwiperSlides() {
     const images = albums[activeAlbum] || [];
     const wrapper = document.getElementById('swiperWrapper');
-    wrapper.innerHTML = images.map(src => `<div class="swiper-slide"><img src="${src}" alt="${activeAlbum} work" onerror="this.src='https://placehold.co/600x800/f0abfc/ffffff?text=Image+Not+Found'"></div>`).join('');
+    wrapper.innerHTML = images.map((src, index) => {
+      const albumName = activeAlbum;
+      const altText = `${albumName} design example ${index + 1} by Grafynx – ${albumName === 'Social Media' ? 'Instagram post creative' : albumName === 'Branding' ? 'brand identity visual' : albumName === 'Print' ? 'print material mockup' : albumName === 'UI/UX' ? 'UI/UX interface' : 'design work'}`;
+      return `<div class="swiper-slide"><img src="${src}" alt="${altText}" loading="lazy" onerror="this.src='https://placehold.co/600x800/f0abfc/ffffff?text=Image+Not+Found'"></div>`;
+    }).join('');
     if (swiperInstance) {
       swiperInstance.update();
       swiperInstance.slideTo(0);
@@ -872,25 +947,81 @@
     }
   }
 
-  // Back to top, mobile menu, etc.
+  // Back to top
   const backBtn = document.getElementById('backToTop');
   window.addEventListener('scroll', () => backBtn.classList.toggle('visible', window.scrollY > 400));
   backBtn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+
+  // ---------- MOBILE MENU (GLASS STYLE) ----------
   const mobileBtn = document.getElementById('mobileMenuBtn');
   const mobileDropdown = document.getElementById('mobileDropdown');
-  if(mobileBtn) {
-    mobileBtn.addEventListener('click', () => {
-      mobileDropdown.style.display = mobileDropdown.style.display === 'flex' ? 'none' : 'flex';
-      mobileDropdown.innerHTML = '<a href="#home">Home</a><a href="#about-us">About Us</a><a href="#services">What We Do</a><a href="#workflow">Workflow</a><a href="#packages">Packages</a><a href="#portfolio">Portfolio</a><a href="print-estimate.html">Print Estimate</a>';
-      mobileDropdown.querySelectorAll('a').forEach(a => a.addEventListener('click', () => mobileDropdown.style.display = 'none'));
+
+  function getCurrentSection() {
+    const sections = ['home', 'about-us', 'services', 'workflow', 'packages', 'portfolio'];
+    const scrollPos = window.scrollY + 120;
+    for (let id of sections) {
+      const el = document.getElementById(id);
+      if (el && el.offsetTop <= scrollPos && el.offsetTop + el.offsetHeight > scrollPos) {
+        return id;
+      }
+    }
+    return 'home';
+  }
+
+  function buildMobileMenu() {
+    const navLinks = document.querySelectorAll('.nav-links a');
+    let html = '';
+    navLinks.forEach(link => {
+      const href = link.getAttribute('href');
+      const text = link.textContent;
+      html += `<a href="${href}">${text}</a>`;
+    });
+    mobileDropdown.innerHTML = html;
+    
+    const mobileLinks = mobileDropdown.querySelectorAll('a');
+    function updateMobileActive() {
+      const current = getCurrentSection();
+      mobileLinks.forEach(link => {
+        link.classList.remove('active-mobile');
+        const sectionId = link.getAttribute('href')?.substring(1);
+        if (sectionId === current) {
+          link.classList.add('active-mobile');
+        }
+      });
+    }
+    window.addEventListener('scroll', updateMobileActive);
+    window.addEventListener('load', updateMobileActive);
+    
+    mobileLinks.forEach(a => {
+      a.addEventListener('click', (e) => {
+        mobileDropdown.style.display = 'none';
+      });
     });
   }
+
+  if(mobileBtn) {
+    mobileBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const isHidden = mobileDropdown.style.display === 'none' || mobileDropdown.style.display === '';
+      mobileDropdown.style.display = isHidden ? 'flex' : 'none';
+    });
+    
+    document.addEventListener('click', (e) => {
+      if (!mobileDropdown.contains(e.target) && !mobileBtn.contains(e.target)) {
+        mobileDropdown.style.display = 'none';
+      }
+    });
+    
+    buildMobileMenu();
+  }
+
+  // ---------- OTHER UI ----------
   document.getElementById('exploreBtn')?.addEventListener('click', () => document.getElementById('services').scrollIntoView({ behavior: 'smooth' }));
   document.getElementById('contactBtn')?.addEventListener('click', () => window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent('Hi Grafynx! I want to build my brand identity.')}`, '_blank'));
 
-  // Active nav highlight for scroll (excluding external link)
+  // Active nav highlight for desktop
   const sections = ['home', 'about-us', 'services', 'workflow', 'packages', 'portfolio'];
-  const navLinks = document.querySelectorAll('.nav-links a:not([href*=".html"])');
+  const desktopNavLinks = document.querySelectorAll('.nav-links a:not([href*=".html"])');
   function updateActiveNav() {
     let current = '';
     const scrollPos = window.scrollY + 150;
@@ -898,20 +1029,20 @@
       const el = document.getElementById(id);
       if(el && el.offsetTop <= scrollPos && el.offsetTop + el.offsetHeight > scrollPos) current = id;
     });
-    navLinks.forEach(link => {
+    desktopNavLinks.forEach(link => {
       link.classList.remove('active');
       if(link.getAttribute('href')?.substring(1) === current) link.classList.add('active');
     });
   }
   window.addEventListener('scroll', updateActiveNav);
   window.addEventListener('load', updateActiveNav);
-  navLinks.forEach(link => link.addEventListener('click', (e) => {
+  desktopNavLinks.forEach(link => link.addEventListener('click', (e) => {
     e.preventDefault();
     const targetId = link.getAttribute('href').substring(1);
     document.getElementById(targetId)?.scrollIntoView({ behavior: 'smooth' });
   }));
 
-  // Modal close event listeners (X button and backdrop click)
+  // Modal close
   const modal = document.getElementById('serviceModal');
   const closeModalBtn = document.getElementById('closeModalBtn');
   closeModalBtn.addEventListener('click', closeModal);
@@ -919,6 +1050,7 @@
     if (e.target === modal) closeModal();
   });
 
+  // Initialize
   buildAlbumTabs();
   updateSwiperSlides();
   renderCompactServices();
