@@ -24,7 +24,7 @@
   <link href="https://api.fontshare.com/v2/css?f[]=clash-display@400,700,600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
   <style>
-    /* === All styles (same as before, including glass mobile menu) === */
+    /* === All styles (same as before) === */
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
       font-family: 'Inter', sans-serif;
@@ -753,7 +753,7 @@
   <p style="text-align: center; margin-top: 20px; font-size: 13px; color: var(--text-muted);">📢 All prices are estimates. Final quote depends on project complexity, number of revisions, and timeline.</p>
 </section>
 
-<!-- PORTFOLIO with "All" album and renamed "Print" -->
+<!-- PORTFOLIO with 6 images per album and new naming convention -->
 <section id="portfolio" class="portfolio-section">
   <div class="section-header"><h2 class="section-title">Portfolio</h2><div class="section-sub">swipe through our work — subcategory albums</div></div>
   <div class="album-tabs" id="albumTabs"></div>
@@ -885,22 +885,22 @@
     });
   }
 
-  // ---------- PORTFOLIO WITH "ALL" ALBUM (last) AND "PACKAGING" → "PRINT" ----------
+  // ---------- PORTFOLIO WITH 6 IMAGES PER ALBUM (new naming) ----------
   const baseAlbums = {
-    "Social Media": ["image10.png", "image11.png", "image12.png"],
-    "Branding": ["image1.png", "image2.png", "image3.png"],
-    "Print": ["image4.png", "image5.png", "image6.png"],   // renamed from Packaging
-    "UI/UX": ["image7.png", "image8.png", "image9.png"]
+    "Social Media": ["social1.png", "social2.png", "social3.png", "social4.png", "social5.png", "social6.png"],
+    "Branding": ["branding1.png", "branding2.png", "branding3.png", "branding4.png", "branding5.png", "branding6.png"],
+    "Print": ["print1.png", "print2.png", "print3.png", "print4.png", "print5.png", "print6.png"],
+    "UI/UX": ["uiux1.png", "uiux2.png", "uiux3.png", "uiux4.png", "uiux5.png", "uiux6.png"]
   };
   
-  // Create "All" album by concatenating all images
+  // "All" combines all images
   const allImages = Object.values(baseAlbums).flat();
   const albums = {
     ...baseAlbums,
     "All": allImages
   };
 
-  // Desired tab order: Social Media, Branding, Print, UI/UX, All (last)
+  // Tab order: Social Media, Branding, Print, UI/UX, All (last)
   const albumOrder = ["Social Media", "Branding", "Print", "UI/UX", "All"];
   
   let activeAlbum = "Social Media";
@@ -929,7 +929,10 @@
     const wrapper = document.getElementById('swiperWrapper');
     wrapper.innerHTML = images.map((src, index) => {
       const albumName = activeAlbum;
-      const altText = `${albumName} design example ${index + 1} by Grafynx – ${albumName === 'Social Media' ? 'Instagram post creative' : albumName === 'Branding' ? 'brand identity visual' : albumName === 'Print' ? 'print material mockup' : albumName === 'UI/UX' ? 'UI/UX interface' : 'design work'}`;
+      // Extract base name for alt text
+      let category = albumName;
+      if (albumName === "All") category = "portfolio";
+      const altText = `${category} design example ${index + 1} by Grafynx`;
       return `<div class="swiper-slide"><img src="${src}" alt="${altText}" loading="lazy" onerror="this.src='https://placehold.co/600x800/f0abfc/ffffff?text=Image+Not+Found'"></div>`;
     }).join('');
     if (swiperInstance) {
