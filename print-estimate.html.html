@@ -5,18 +5,18 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>Grafynx | Print Price Estimator</title>
   
-  <!-- Fonts -->
+  <!-- Fonts (same as homepage) -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800&display=swap" rel="stylesheet">
   <link href="https://api.fontshare.com/v2/css?f[]=clash-display@400,700,600&display=swap" rel="stylesheet">
   
   <style>
-    /* ===== GRAFYNX GLASSMORPHIC HEADER & BASE STYLES ===== */
+    /* ===== GRAFYNX GLASSMORPHIC HEADER & BASE STYLES (copied from homepage) ===== */
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
       font-family: 'Inter', sans-serif;
       background: linear-gradient(145deg, #fef9ff 0%, #f4f0fa 100%);
       color: #1e293b;
-      padding-top: 100px;
+      padding-top: 100px; /* space for fixed header */
     }
     :root {
       --glass-bg: rgba(255, 255, 255, 0.72);
@@ -69,6 +69,9 @@
       align-items: center;
       justify-content: center;
       overflow: hidden;
+      background-image: url('logo.png');
+      background-size: cover;
+      background-position: center;
     }
     .logo-icon img {
       width: 100%;
@@ -83,36 +86,31 @@
     }
     .logo-text .graf { color: var(--accent); }
     .logo-text .ynx { color: #1e293b; }
-    .nav-links {
-      display: flex;
-      gap: 28px;
-      align-items: center;
-    }
+
+    /* Desktop Navigation – Glass Pill Style */
+    .nav-links { display: flex; gap: 8px; align-items: center; }
     .nav-links a {
-      text-decoration: none;
-      font-weight: 500;
-      font-size: 15px;
-      color: #1e293b;
-      transition: color 0.15s;
-      padding: 6px 0;
-      position: relative;
-      -webkit-tap-highlight-color: transparent;
+      text-decoration: none; font-weight: 500; font-size: 15px;
+      color: #1e293b; transition: all 0.2s; padding: 10px 18px;
+      border-radius: 60px; position: relative;
+      background: transparent;
+      backdrop-filter: none;
     }
-    .nav-links a:hover,
-    .nav-links a.active {
+    .nav-links a:hover {
+      background: rgba(255, 77, 140, 0.12);
       color: var(--accent);
       font-weight: 600;
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
     }
-    .nav-links a.active::after {
-      content: '';
-      position: absolute;
-      bottom: -2px;
-      left: 0;
-      width: 100%;
-      height: 2.5px;
+    .nav-links a.active {
       background: var(--accent);
-      border-radius: 4px;
+      color: white !important;
+      font-weight: 600;
+      box-shadow: 0 4px 12px rgba(255,77,140,0.25);
     }
+    .nav-links a.active::after { display: none; }
+
     .mobile-menu-btn {
       display: none;
       background: none;
@@ -126,7 +124,54 @@
     }
     .mobile-menu-btn:active { background: rgba(0,0,0,0.05); }
 
-    /* --- Main content container --- */
+    /* Glass Mobile Dropdown */
+    #mobileDropdown {
+      display: none;
+      flex-direction: column;
+      background: rgba(255, 255, 255, 0.75);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-radius: 28px;
+      margin-top: 12px;
+      padding: 20px 16px;
+      gap: 4px;
+      border: 1px solid rgba(255, 255, 255, 0.6);
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+    }
+    #mobileDropdown a {
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 17px;
+      color: #1e293b;
+      padding: 14px 20px;
+      border-radius: 60px;
+      transition: all 0.2s;
+      display: block;
+      background: transparent;
+    }
+    #mobileDropdown a:hover {
+      background: rgba(255, 77, 140, 0.15);
+      color: var(--accent);
+      font-weight: 600;
+    }
+    #mobileDropdown a.active-mobile {
+      background: var(--accent);
+      color: white !important;
+      font-weight: 600;
+    }
+
+    @media (max-width: 760px) {
+      .nav-links { display: none; }
+      .mobile-menu-btn { display: block; }
+      .header-container { padding: 8px 16px; }
+      .logo-text { font-size: 20px; }
+      body { padding-top: 90px; }
+    }
+    @media (min-width: 761px) {
+      #mobileDropdown { display: none !important; }
+    }
+
+    /* --- Main content container (your existing estimator) --- */
     .container {
       max-width: 1280px;
       margin: 0 auto;
@@ -230,33 +275,6 @@
     /* Remove old back-link */
     .back-link { display: none; }
 
-    /* Mobile dropdown */
-    #mobileDropdown {
-      display: none;
-      flex-direction: column;
-      background: rgba(255,255,255,0.96);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      border-radius: 32px;
-      margin-top: 12px;
-      padding: 16px;
-      gap: 12px;
-    }
-    #mobileDropdown a {
-      text-decoration: none;
-      color: #1e293b;
-      font-weight: 500;
-      padding: 8px 0;
-    }
-    #mobileDropdown a.active { color: var(--accent); font-weight: 600; }
-
-    @media (max-width: 760px) {
-      .nav-links { display: none; }
-      .mobile-menu-btn { display: block; }
-      .header-container { padding: 8px 16px; }
-      .logo-text { font-size: 20px; }
-      body { padding-top: 90px; }
-    }
     @media (max-width: 700px) {
       .estimator-grid { grid-template-columns: 1fr; }
     }
@@ -264,13 +282,11 @@
 </head>
 <body>
 
-  <!-- GRAFYNX HEADER -->
+  <!-- GRAFYNX HEADER (exact copy from homepage) -->
   <header>
     <div class="header-container">
       <div class="logo-area" onclick="window.location.href='index.html'">
-        <div class="logo-icon">
-          <img src="logo.png" alt="Grafynx Logo">
-        </div>
+        <div class="logo-icon"></div>
         <div class="logo-text">
           <span class="graf">Graf</span><span class="ynx">ynx</span>
         </div>
@@ -282,14 +298,14 @@
         <a href="index.html#workflow">Workflow</a>
         <a href="index.html#packages">Packages</a>
         <a href="index.html#portfolio">Portfolio</a>
-        <a href="#" class="active">Print Estimate</a>
+        <a href="print-estimate.html" class="active">Print Estimate</a>
       </div>
-      <button class="mobile-menu-btn" id="mobileMenuBtn">☰</button>
+      <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Menu">☰</button>
     </div>
     <div id="mobileDropdown"></div>
   </header>
 
-  <!-- MAIN ESTIMATOR CONTENT -->
+  <!-- MAIN ESTIMATOR CONTENT (unchanged) -->
   <div class="container">
     <div class="section-header">
       <h2 class="section-title">Print Price Estimate</h2>
@@ -382,29 +398,53 @@
   </div>
 
   <script>
-    // --- Mobile Menu Toggle ---
+    // --- Mobile Menu Toggle (copied from homepage) ---
     (function() {
       const btn = document.getElementById('mobileMenuBtn');
       const dd = document.getElementById('mobileDropdown');
-      btn.addEventListener('click', () => {
-        if (dd.style.display === 'flex') {
+      
+      function buildMobileMenu() {
+        const navLinks = document.querySelectorAll('.nav-links a');
+        let html = '';
+        navLinks.forEach(link => {
+          const href = link.getAttribute('href');
+          const text = link.textContent;
+          html += `<a href="${href}">${text}</a>`;
+        });
+        dd.innerHTML = html;
+        
+        // Mark Print Estimate as active in mobile menu
+        const mobileLinks = dd.querySelectorAll('a');
+        mobileLinks.forEach(link => {
+          if (link.getAttribute('href') === 'print-estimate.html') {
+            link.classList.add('active-mobile');
+          }
+        });
+      }
+      
+      buildMobileMenu();
+      
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const isHidden = dd.style.display === 'none' || dd.style.display === '';
+        dd.style.display = isHidden ? 'flex' : 'none';
+      });
+      
+      document.addEventListener('click', (e) => {
+        if (!dd.contains(e.target) && !btn.contains(e.target)) {
           dd.style.display = 'none';
-        } else {
-          dd.style.display = 'flex';
-          dd.innerHTML = `
-            <a href="index.html">Home</a>
-            <a href="index.html#about-us">About Us</a>
-            <a href="index.html#services">What We Do</a>
-            <a href="index.html#workflow">Workflow</a>
-            <a href="index.html#packages">Packages</a>
-            <a href="index.html#portfolio">Portfolio</a>
-            <a href="#" class="active">Print Estimate</a>
-          `;
+        }
+      });
+      
+      // Close mobile menu when a link is clicked
+      dd.addEventListener('click', (e) => {
+        if (e.target.tagName === 'A') {
+          dd.style.display = 'none';
         }
       });
     })();
 
-    // --- Estimator Logic (updated for DTF shirt) ---
+    // --- Estimator Logic (unchanged) ---
     const ssMatrix = [
       [7.82,8.84,9.86,10.88,11.90,12.92,13.94,15.30],[5.55,6.57,7.59,8.61,9.63,10.65,11.67,13.03],
       [3.74,4.76,5.78,6.80,7.82,8.84,9.86,11.22],[2.72,3.74,4.76,5.78,6.80,7.82,8.84,10.20],
