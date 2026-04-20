@@ -20,7 +20,12 @@
   <meta name="twitter:description" content="Strategy-driven design and printing services.">
   <meta name="twitter:image" content="https://grafynx.com/og-image.jpg">
 
-  <!-- Google Analytics -->
+  <!-- Preconnect for faster font loading -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://api.fontshare.com">
+
+  <!-- Google Analytics (replace G-XXXXXXXXXX with your ID) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
@@ -30,7 +35,8 @@
   </script>
 
   <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800&display=swap" rel="stylesheet">
-  <link href="https://api.fontshare.com/v2/css?f[]=clash-display@400,700,600&display=swap" rel="stylesheet">
+  <!-- Updated Fontshare with display=swap and all weights -->
+  <link href="https://api.fontshare.com/v2/css?f[]=clash-display@400,500,600,700,800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
   <style>
     /* === Base & Glass Styles === */
@@ -52,31 +58,46 @@
       --transition-smooth: all 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1);
       --text-muted: #5b6e8c;
     }
-    .glass-card {
-      background: var(--glass-bg);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      border: 1px solid var(--glass-border);
-      box-shadow: var(--glass-shadow);
-      border-radius: var(--card-radius);
+
+    /* GPU acceleration for glass elements (performance) */
+    .glass-card,
+    .header-container,
+    .service-card,
+    .package-card,
+    .workflow-section,
+    .about-card,
+    .album-btn,
+    #mobileDropdown,
+    .modal-container,
+    .portfolio-swiper .swiper-slide,
+    .portfolio-grid-item {
+      will-change: transform, backdrop-filter;
+      transform: translateZ(0);
     }
 
-    /* ===== Scroll Animations ===== */
+    /* Focus visible for accessibility */
+    *:focus-visible {
+      outline: 3px solid var(--accent);
+      outline-offset: 2px;
+      border-radius: 8px;
+    }
+
+    /* ===== Scroll Animations (with translate3d for smoother GPU) ===== */
     .animate-on-scroll {
       opacity: 0;
-      transform: translateY(30px);
-      transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+      transform: translate3d(0, 30px, 0);
+      transition: opacity 0.6s cubic-bezier(0.2,0.9,0.4,1), transform 0.6s cubic-bezier(0.2,0.9,0.4,1);
     }
     .animate-on-scroll.visible {
       opacity: 1;
-      transform: translateY(0);
+      transform: translate3d(0, 0, 0);
     }
     .service-grid .service-card,
     .packages-grid .package-card,
     .workflow-step,
     .about-card {
       opacity: 0;
-      transform: translateY(30px);
+      transform: translate3d(0, 30px, 0);
       transition: opacity 0.5s ease-out, transform 0.5s ease-out;
     }
     .service-grid .service-card.visible,
@@ -84,7 +105,7 @@
     .workflow-step.visible,
     .about-card.visible {
       opacity: 1;
-      transform: translateY(0);
+      transform: translate3d(0, 0, 0);
     }
 
     header {
@@ -634,7 +655,7 @@
       overflow: hidden;
     }
     .portfolio-swiper .swiper-slide {
-      background: rgba(255,255,255,0.4);
+      background: #f0d0e0; /* CLS prevention */
       backdrop-filter: blur(8px);
       border-radius: 28px;
       overflow: hidden;
@@ -656,7 +677,7 @@
       padding: 20px 0;
     }
     .portfolio-grid-item {
-      background: rgba(255,255,255,0.4);
+      background: #f0d0e0; /* CLS prevention */
       backdrop-filter: blur(8px);
       border-radius: 20px;
       overflow: hidden;
@@ -675,6 +696,7 @@
       position: relative;
       width: 100%;
       height: 100%;
+      background-color: #f0d0e0;
       background-size: cover;
       background-position: center;
       background-repeat: no-repeat;
@@ -1135,7 +1157,6 @@
       closeModal();
       event.preventDefault();
     }
-    // Also close custom lightbox on back button
     const lightbox = document.getElementById('customLightbox');
     if (lightbox.classList.contains('active')) {
       closeCustomLightbox();
@@ -1187,7 +1208,6 @@
     }
   }
 
-  // Close events
   lightboxCloseBtn.addEventListener('click', closeCustomLightbox);
   customLightbox.addEventListener('click', (e) => {
     if (e.target === customLightbox) closeCustomLightbox();
@@ -1227,6 +1247,7 @@
     img.src = src;
     img.alt = alt;
     img.loading = 'lazy';
+    img.decoding = 'async';
     div.appendChild(img);
     return div;
   }
@@ -1236,6 +1257,14 @@
       e.stopPropagation();
       openCustomLightbox(src, alt);
     });
+    // Preload on hover for instant lightbox
+    element.addEventListener('mouseenter', () => {
+      const link = document.createElement('link');
+      link.rel = 'preload';
+      link.as = 'image';
+      link.href = src;
+      document.head.appendChild(link);
+    }, { once: true });
   }
 
   // ---------- PORTFOLIO DATA ----------
@@ -1343,7 +1372,6 @@
               if (img) {
                 const src = img.src;
                 const alt = img.alt;
-                // Remove old listener by cloning or re-attaching
                 slide.replaceWith(slide.cloneNode(true));
                 const newSlide = document.querySelectorAll('.portfolio-swiper .swiper-slide')[idx];
                 if (newSlide) {
@@ -1375,8 +1403,15 @@
     initBlurLoading();
   }
 
-  // Initialize with swiper
-  renderSwiper(albums["Social Media"]);
+  // Lazy initialize Swiper for better performance
+  function initSwiperWhenReady() {
+    if ('requestIdleCallback' in window) {
+      requestIdleCallback(() => renderSwiper(albums["Social Media"]));
+    } else {
+      setTimeout(() => renderSwiper(albums["Social Media"]), 100);
+    }
+  }
+  initSwiperWhenReady();
 
   // Back to top
   const backBtn = document.getElementById('backToTop');
