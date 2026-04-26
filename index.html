@@ -145,7 +145,7 @@
       contain-intrinsic-size: 500px;
     }
 
-    /* ===== Scroll Animations (GPU friendly) ===== */
+    /* ===== Scroll Animations ===== */
     .animate-on-scroll {
       opacity: 0;
       transform: translate3d(0, 30px, 0);
@@ -247,16 +247,22 @@
     }
     .nav-links a.active::after { display: none; }
 
-    /* Theme toggle button with interactive animation */
+    /* Header right section (theme toggle + mobile menu) */
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* Theme toggle button */
     .theme-toggle {
       background: transparent;
       border: none;
-      font-size: 22px;
+      font-size: 20px;
       cursor: pointer;
       padding: 8px;
       border-radius: 50%;
       transition: transform 0.25s ease, background 0.2s ease;
-      margin-left: 6px;
       color: var(--text-primary);
       width: 40px;
       height: 40px;
@@ -272,7 +278,6 @@
     .theme-toggle:active {
       transform: scale(0.9);
     }
-    /* Rotate animation on theme switch */
     .theme-toggle.rotate {
       animation: toggleSpin 0.5s ease-in-out;
     }
@@ -325,7 +330,6 @@
       .mobile-menu-btn { display: block; }
       .header-container { padding: 8px 16px; }
       .logo-text { font-size: 20px; }
-      .theme-toggle { margin-left: auto; margin-right: 8px; }
     }
     @media (min-width: 761px) {
       #mobileDropdown { display: none !important; }
@@ -425,7 +429,7 @@
       padding: 28px 20px;
       border: 1px solid var(--glass-border);
       box-shadow: var(--glass-shadow);
-      transition: var(--transition-smooth, all 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1));
+      transition: all 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1);
       text-align: center;
       cursor: pointer;
     }
@@ -1001,9 +1005,11 @@
       <a href="#packages">Packages</a>
       <a href="#portfolio">Portfolio</a>
       <a href="print-estimate.html">Print Estimate</a>
-      <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">🌙</button>
     </div>
-    <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Menu">☰</button>
+    <div class="header-right">
+      <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">🌙</button>
+      <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Menu">☰</button>
+    </div>
   </div>
   <div id="mobileDropdown"></div>
 </header>
@@ -1132,9 +1138,9 @@
 </section>
 
 <div style="max-width:1280px; margin: 40px auto; text-align:center; padding:0 24px;">
-  <button id="contactBtn" class="cta-button" style="background:#1e293b; box-shadow:none;">Let’s build your brand. 🚀</button>
+  <button id="contactBtn" class="cta-button" style="background:#1e293b; box-shadow:none;">Let's build your brand. 🚀</button>
 </div>
-<footer>© 2026 Grafynx — “Inks Your Ideas” | Setia Alam | AFIQ 019 908 3295</footer>
+<footer>© 2026 Grafynx — "Inks Your Ideas" | Setia Alam | AFIQ 019 908 3295</footer>
 <div class="back-to-top" id="backToTop">↑</div>
 
 <!-- SERVICE MODAL -->
@@ -1588,19 +1594,16 @@
   const themeToggle = document.getElementById('themeToggle');
   const html = document.documentElement;
   const savedTheme = localStorage.getItem('theme');
-  // Default to light, no saved theme means light
   if (savedTheme === 'dark') {
     html.classList.remove('light');
     html.classList.add('dark');
-    themeToggle.textContent = '☀️'; // sun for dark mode (to switch to light)
+    themeToggle.textContent = '☀️';
   } else {
-    // light mode default
-    themeToggle.textContent = '🌙'; // moon for light mode (to switch to dark)
+    themeToggle.textContent = '🌙';
   }
 
   function enableTransitions() {
     html.classList.add('theme-transition');
-    // remove transition class after animation completes
     setTimeout(() => {
       html.classList.remove('theme-transition');
     }, 500);
@@ -1608,7 +1611,6 @@
 
   themeToggle.addEventListener('click', () => {
     enableTransitions();
-    // Add spin animation to the button
     themeToggle.classList.add('rotate');
     setTimeout(() => themeToggle.classList.remove('rotate'), 500);
 
