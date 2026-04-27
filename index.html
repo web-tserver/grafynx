@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, maximum-scale=1.0, minimum-scale=1.0">
-  <title>Media Toolbox – Auto Resize & Original Names</title>
+  <title>Media Toolbox – Mobile App Style</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
@@ -18,25 +18,32 @@
       --success: #10b981;
       --success-hover: #059669;
       --danger: #ef4444;
+      --danger-hover: #dc2626;
       --bg: #f0f2f5;
+      --card-bg: rgba(255,255,255,0.75);
+      --text: #1f2937;
+      --text-muted: #6b7280;
+      --border: rgba(0,0,0,0.08);
     }
 
     body {
       background: var(--bg);
       font-family: 'Inter', system-ui, -apple-system, sans-serif;
       -webkit-tap-highlight-color: transparent;
+      transition: background 0.3s;
+      color: var(--text);
     }
 
-    /* Scrollable tabs */
+    /* Mobile‑first layout */
     #tabContainer {
       display: flex;
       flex-wrap: nowrap;
       overflow-x: auto;
       -webkit-overflow-scrolling: touch;
       scrollbar-width: none;
-      -ms-overflow-style: none;
-      padding-bottom: 4px;
-      position: relative;
+      padding-bottom: 6px;
+      gap: 0.5rem;
+      margin-bottom: 0.5rem;
     }
     #tabContainer::-webkit-scrollbar { display: none; }
     .tab-btn {
@@ -44,59 +51,57 @@
       flex-shrink: 0;
       border-radius: 9999px;
       transition: all 0.2s;
-      color: #4b5563;
-      background: transparent;
+      color: var(--text-muted);
+      background: rgba(255,255,255,0.6);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(0,0,0,0.05);
       padding: 0.5rem 1rem;
-      font-size: 0.875rem;
+      font-size: 0.8rem;
       touch-action: manipulation;
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
     }
     .tab-active {
       background: var(--accent);
       color: white !important;
+      border-color: var(--accent);
       box-shadow: 0 4px 12px rgba(22,119,255,0.3);
     }
-    .tab-indicator-wrapper { position: relative; height: 3px; margin-top: -3px; }
-    #tabIndicator {
-      position: absolute;
-      height: 3px;
-      border-radius: 9999px;
-      background: var(--accent);
-      transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1), width 0.3s ease;
-      pointer-events: none;
-    }
+    .tab-indicator-wrapper { display: none; } /* removed moving indicator, simpler */
 
-    /* Cards */
+    /* Cards with glass effect */
     .tab-content > div:first-child {
-      background: rgba(255,255,255,0.94);
-      border-radius: 1.5rem;
-      box-shadow: 0 8px 32px rgba(0,0,0,0.06);
-      border: 1px solid rgba(0,0,0,0.04);
-      backdrop-filter: blur(12px);
+      background: var(--card-bg);
+      backdrop-filter: blur(24px);
+      border-radius: 1.75rem;
+      box-shadow: 0 12px 40px rgba(0,0,0,0.08), 0 0 0 1px var(--border);
       padding: 1.25rem;
     }
-    @media (min-width: 768px) { .tab-content > div:first-child { padding: 2rem 2.5rem; } }
+    @media (min-width: 768px) {
+      .tab-content > div:first-child { padding: 2rem 2.5rem; }
+    }
 
     /* Dropzone */
     .hyperos-dropzone {
-      background: white;
-      border: 2px dashed #d1d5db;
+      background: rgba(255,255,255,0.7);
+      backdrop-filter: blur(16px);
+      border: 2px dashed rgba(0,0,0,0.1);
       border-radius: 1.5rem;
       transition: border-color 0.2s, background 0.2s, transform 0.2s;
-      position: relative;
-      overflow: hidden;
       padding: 2rem 1rem;
       text-align: center;
     }
-    @media (min-width: 768px) { .hyperos-dropzone { padding: 3rem 2rem; } }
-    .hyperos-dropzone:hover { border-color: var(--accent); background: rgba(22,119,255,0.02); }
-    .drop-active { border-color: var(--accent); background: rgba(22,119,255,0.04); }
+    .hyperos-dropzone:hover { border-color: var(--accent); background: rgba(255,255,255,0.85); }
+    .drop-active { border-color: var(--accent); background: rgba(22,119,255,0.05); }
     @keyframes dropPop {
       0% { transform: scale(1.02); } 80% { transform: scale(0.98); } 100% { transform: scale(1); }
     }
     .drop-zone-bounce { animation: dropPop 0.4s ease; }
+
     .dropzone-blob {
       position: absolute; width: 140px; height: 140px;
-      background: radial-gradient(circle, rgba(22,119,255,0.08) 0%, transparent 70%);
+      background: radial-gradient(circle, rgba(22,119,255,0.1) 0%, transparent 70%);
       border-radius: 50%; top: -20px; right: -20px;
       animation: blobFloat 8s ease-in-out infinite alternate; pointer-events: none;
     }
@@ -120,9 +125,10 @@
     .hyperos-btn-success,
     .hyperos-btn-danger,
     .hyperos-btn-clear {
-      min-height: 44px; display: inline-flex; align-items: center; justify-content: center;
+      min-height: 42px; display: inline-flex; align-items: center; justify-content: center;
       font-weight: 500; border-radius: 9999px; transition: all 0.2s; border: none;
-      cursor: pointer; padding: 0.625rem 1.25rem; font-size: 0.875rem; touch-action: manipulation;
+      cursor: pointer; padding: 0.5rem 1.1rem; font-size: 0.85rem; touch-action: manipulation;
+      backdrop-filter: blur(8px);
     }
     .hyperos-btn-primary { background: var(--accent); color: white; }
     .hyperos-btn-primary:hover { background: var(--accent-hover); }
@@ -130,61 +136,107 @@
     .hyperos-btn-success:hover { background: var(--success-hover); }
     .hyperos-btn-danger { background: var(--danger); color: white; }
     .hyperos-btn-danger:hover { background: var(--danger-hover); }
-    .hyperos-btn-clear { background: #f3f4f6; color: #4b5563; border: 1px solid #d1d5db; }
-    .hyperos-btn-clear:hover { background: #e5e7eb; }
+    .hyperos-btn-clear { background: rgba(255,255,255,0.7); color: #4b5563; border: 1px solid rgba(0,0,0,0.08); }
+    .hyperos-btn-clear:hover { background: rgba(255,255,255,0.9); }
 
     .control-panel {
-      background: #f9fafb; border-radius: 1rem; padding: 0.75rem;
-      display: flex; flex-wrap: wrap; gap: 0.75rem; align-items: center;
+      background: rgba(255,255,255,0.5);
+      backdrop-filter: blur(16px);
+      border-radius: 1rem;
+      padding: 0.75rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+      align-items: center;
     }
     @media (max-width: 640px) { .control-panel { flex-direction: column; align-items: stretch; } }
 
-    /* Larger thumbnails */
+    /* Larger previews */
     .preview-item {
       display: flex; align-items: center; gap: 0.75rem;
-      background: white; border-radius: 0.75rem; padding: 0.75rem;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+      background: rgba(255,255,255,0.8); backdrop-filter: blur(12px);
+      border-radius: 1rem; padding: 0.75rem;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
     }
-    .preview-item img, .preview-item canvas { width: 64px; height: 86px; object-fit: cover; border-radius: 6px; border: 1px solid #e5e7eb; }
-    .preview-item i.fa-file-pdf { font-size: 2.5rem; width: 64px; text-align: center; }
-    .preview-item-image img { width: 64px; height: 64px; object-fit: cover; border-radius: 6px; border: 1px solid #e5e7eb; }
+    .preview-item img, .preview-item canvas { width: 80px; height: 110px; object-fit: cover; border-radius: 8px; border: 1px solid rgba(0,0,0,0.06); }
+    .preview-item i.fa-file-pdf { font-size: 2.8rem; width: 80px; text-align: center; }
+    .preview-item-image img { width: 80px; height: 80px; object-fit: cover; border-radius: 8px; border: 1px solid rgba(0,0,0,0.06); }
 
     .result-item {
       display: flex; align-items: center; gap: 0.75rem;
-      background: white; border-radius: 0.75rem; padding: 0.75rem;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+      background: rgba(255,255,255,0.8); backdrop-filter: blur(12px);
+      border-radius: 1rem; padding: 0.75rem;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
     }
-    .result-item img, .result-item canvas { width: 56px; height: 56px; object-fit: cover; border-radius: 6px; }
-    .result-item i { font-size: 2rem; width: 56px; text-align: center; }
+    .result-item img, .result-item canvas { width: 64px; height: 64px; object-fit: cover; border-radius: 8px; }
+    .result-item i { font-size: 2.2rem; width: 64px; text-align: center; }
+
+    /* Theme variants */
+    body.theme-pink {
+      --accent: #ec4899;
+      --accent-hover: #db2777;
+      --success: #f43f5e;
+      --success-hover: #e11d48;
+      --danger: #be123c;
+      --danger-hover: #9f1239;
+      --bg: #fdf2f8;
+    }
+    body.theme-bw {
+      --accent: #374151;
+      --accent-hover: #1f2937;
+      --success: #6b7280;
+      --success-hover: #4b5563;
+      --danger: #9ca3af;
+      --danger-hover: #6b7280;
+      --bg: #f9fafb;
+      --card-bg: rgba(255,255,255,0.9);
+    }
   </style>
 </head>
 <body class="flex flex-col min-h-screen">
 
-  <header class="w-full bg-white/90 backdrop-blur-xl shadow-sm border-b border-gray-200 py-2.5 px-4 md:px-8 flex items-center justify-between sticky top-0 z-50">
-    <div class="flex items-center space-x-2">
-      <i class="fas fa-toolbox text-blue-600 text-xl md:text-2xl"></i>
+  <header class="w-full sticky top-0 z-50 bg-white/80 backdrop-blur-xl border-b border-gray-200/50 py-2.5 px-3 md:px-6 flex items-center justify-between">
+    <div class="flex items-center gap-2">
+      <i class="fas fa-toolbox text-[color:var(--accent)] text-xl md:text-2xl"></i>
       <span class="text-lg md:text-xl font-bold text-gray-800 tracking-tight">Media Toolbox</span>
     </div>
-    <div class="text-xs md:text-sm text-gray-500">100% private</div>
+    <div class="flex items-center gap-2">
+      <div class="relative group">
+        <button class="w-9 h-9 rounded-full bg-gray-100/80 backdrop-blur-sm flex items-center justify-center text-gray-600 hover:bg-gray-200 transition">
+          <i class="fas fa-palette"></i>
+        </button>
+        <div class="absolute right-0 mt-2 w-40 bg-white/90 backdrop-blur-xl rounded-2xl shadow-lg border border-gray-100 p-2 hidden group-hover:flex flex-col gap-1 z-50">
+          <button class="theme-btn text-left px-3 py-2 rounded-xl text-sm hover:bg-blue-50 flex items-center gap-2" data-theme="default">
+            <span class="w-4 h-4 rounded-full bg-blue-500"></span> Default
+          </button>
+          <button class="theme-btn text-left px-3 py-2 rounded-xl text-sm hover:bg-pink-50 flex items-center gap-2" data-theme="pink">
+            <span class="w-4 h-4 rounded-full bg-pink-500"></span> Pink
+          </button>
+          <button class="theme-btn text-left px-3 py-2 rounded-xl text-sm hover:bg-gray-100 flex items-center gap-2" data-theme="bw">
+            <span class="w-4 h-4 rounded-full bg-gray-500"></span> Black & White
+          </button>
+        </div>
+      </div>
+      <span class="text-xs text-gray-500 hidden sm:inline">100% private</span>
+    </div>
   </header>
 
-  <main class="flex-1 w-full max-w-6xl mx-auto px-3 md:px-8 py-4 md:py-8">
+  <main class="flex-1 w-full max-w-4xl mx-auto px-3 md:px-6 py-4 md:py-8">
     <div class="text-center mb-6">
       <h1 class="text-3xl md:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600">
         All Media Tools
       </h1>
-      <p class="text-gray-600 text-sm md:text-base mt-1">Batch processing · Up to 10 files · Auto‑resize · Original names</p>
+      <p class="text-gray-500 text-sm md:text-base mt-1">Batch processing · Up to 10 files · Original filenames</p>
     </div>
 
-    <div id="tabContainer" class="gap-2 mb-6">
-      <button id="tabPdf" class="tab-btn tab-active"><i class="fas fa-file-pdf mr-1"></i> PDF Compressor</button>
-      <button id="tabImageCompress" class="tab-btn"><i class="fas fa-compress-alt mr-1"></i> Image Compressor</button>
-      <button id="tabImageConvert" class="tab-btn"><i class="fas fa-exchange-alt mr-1"></i> Image Converter</button>
-      <button id="tabMerge" class="tab-btn"><i class="fas fa-object-group mr-1"></i> Merge PDF</button>
-      <button id="tabSplit" class="tab-btn"><i class="fas fa-cut mr-1"></i> Split PDF</button>
-      <button id="tabImg2Pdf" class="tab-btn"><i class="fas fa-file-image mr-1"></i> Image to PDF</button>
+    <div id="tabContainer">
+      <button id="tabPdf" class="tab-btn tab-active"><i class="fas fa-file-pdf"></i> PDF Compressor</button>
+      <button id="tabImageCompress" class="tab-btn"><i class="fas fa-compress-alt"></i> Image Compressor</button>
+      <button id="tabImageConvert" class="tab-btn"><i class="fas fa-exchange-alt"></i> Image Converter</button>
+      <button id="tabMerge" class="tab-btn"><i class="fas fa-object-group"></i> Merge PDF</button>
+      <button id="tabSplit" class="tab-btn"><i class="fas fa-cut"></i> Split PDF</button>
+      <button id="tabImg2Pdf" class="tab-btn"><i class="fas fa-file-image"></i> Image to PDF</button>
     </div>
-    <div class="tab-indicator-wrapper"><div id="tabIndicator" style="left:0; width:0;"></div></div>
 
     <!-- ======================= 1) PDF COMPRESSOR ======================= -->
     <div id="pdfSection" class="tab-content">
@@ -197,24 +249,21 @@
           <input type="file" id="pdfInput" accept=".pdf" multiple class="hidden">
         </div>
         <div class="flex justify-between items-center mt-4">
-          <div class="text-sm font-medium text-gray-700"><span id="pdfFileCount">0</span> file(s)</div>
-          <button id="pdfClearAll" class="hyperos-btn-clear px-3 py-1.5 text-xs hidden"><i class="fas fa-trash-alt mr-1"></i> Clear all</button>
+          <span class="text-sm font-medium text-gray-600"><span id="pdfFileCount">0</span> file(s)</span>
+          <button id="pdfClearAll" class="hyperos-btn-clear px-3 py-1.5 text-xs hidden"><i class="fas fa-trash-alt mr-1"></i> Clear</button>
         </div>
         <div id="pdfFileList" class="mt-2 space-y-2 max-h-64 overflow-y-auto"></div>
         <div id="pdfSettings" class="mt-4 hidden control-panel">
-          <select id="pdfCompressionSelect" class="bg-white border rounded-lg px-3 py-2 text-sm">
+          <select id="pdfCompressionSelect" class="bg-white/80 backdrop-blur-sm border rounded-lg px-3 py-2 text-sm">
             <option value="light">📄 Light (keep text)</option><option value="balanced">⚖️ Balanced (85% JPEG)</option><option value="maximum">🔥 Maximum (50% JPEG)</option><option value="custom">🎛️ Custom</option>
           </select>
-          <div id="pdfCustomQuality" class="hidden items-center gap-2 bg-white px-3 py-1 rounded-lg">
+          <div id="pdfCustomQuality" class="hidden items-center gap-2 bg-white/80 px-3 py-1 rounded-lg">
             <span class="text-xs">JPEG:</span><input type="range" id="pdfJpegQuality" min="0.3" max="0.9" step="0.01" value="0.65" class="w-20">
             <span id="pdfQualityValue" class="text-xs">65%</span>
           </div>
           <button id="pdfCompressBtn" class="hyperos-btn-primary"><i class="fas fa-compress-alt"></i> Compress All</button>
         </div>
-        <div id="pdfProgressArea" class="mt-4 hidden">
-          <div class="flex justify-between text-xs"><span id="pdfProgressLabel">Processing...</span><span id="pdfProgressPercent">0%</span></div>
-          <div class="w-full bg-gray-200 rounded-full h-2"><div id="pdfProgressFill" class="progress-fill h-2 rounded-full" style="width:0%"></div></div>
-        </div>
+        <div id="pdfProgressArea" class="mt-4 hidden"><div class="flex justify-between text-xs"><span id="pdfProgressLabel">Processing...</span><span id="pdfProgressPercent">0%</span></div><div class="w-full bg-gray-200 rounded-full h-2"><div id="pdfProgressFill" class="progress-fill h-2 rounded-full" style="width:0%"></div></div></div>
         <div id="pdfResults" class="mt-6 hidden space-y-3"></div>
         <div class="mt-3 text-xs text-gray-400 text-center">⚠️ Aggressive modes flatten text. Best for scans.</div>
       </div>
@@ -231,31 +280,20 @@
           <input type="file" id="compInput" accept="image/jpeg,image/png,image/webp" multiple class="hidden">
         </div>
         <div class="flex justify-between items-center mt-4">
-          <div class="text-sm font-medium text-gray-700"><span id="compFileCount">0</span> file(s)</div>
-          <button id="compClearAll" class="hyperos-btn-clear px-3 py-1.5 text-xs hidden"><i class="fas fa-trash-alt mr-1"></i> Clear all</button>
+          <span class="text-sm font-medium text-gray-600"><span id="compFileCount">0</span> file(s)</span>
+          <button id="compClearAll" class="hyperos-btn-clear px-3 py-1.5 text-xs hidden"><i class="fas fa-trash-alt mr-1"></i> Clear</button>
         </div>
         <div id="compFileList" class="mt-2 space-y-2 max-h-64 overflow-y-auto"></div>
         <div id="compSettings" class="mt-4 hidden control-panel">
-          <div class="flex items-center gap-2 bg-white px-3 py-2 rounded-lg text-sm">
-            <span class="text-xs">Compress:</span><input type="range" id="compQuality" min="0.1" max="1.0" step="0.01" value="0.5" class="w-20">
-            <span id="compQualityVal" class="text-xs">50%</span>
+          <div class="flex items-center gap-2 bg-white/80 px-3 py-2 rounded-lg text-sm"><span class="text-xs">Compress:</span><input type="range" id="compQuality" min="0.1" max="1.0" step="0.01" value="0.5" class="w-20"><span id="compQualityVal" class="text-xs">50%</span></div>
+          <div class="flex items-center gap-2 bg-white/80 px-3 py-2 rounded-lg text-sm"><span class="text-xs">Scale:</span><select id="compScale" class="text-xs border rounded px-2 py-1"><option value="1">100%</option><option value="0.75" selected>75%</option><option value="0.5">50%</option><option value="0.25">25%</option></select><button id="compApplyScale" class="text-xs bg-blue-500 text-white px-2 py-1 rounded-full">Apply</button></div>
+          <div class="flex items-center gap-2 bg-white/80 px-3 py-2 rounded-lg text-sm flex-wrap">
+            <span class="text-xs">W:</span><input type="number" id="compWidth" placeholder="auto" class="w-14 text-xs border rounded px-1 py-0.5"><span class="text-xs">H:</span><input type="number" id="compHeight" placeholder="auto" class="w-14 text-xs border rounded px-1 py-0.5"><button id="compClearResize" class="text-xs text-red-500"><i class="fas fa-times-circle"></i></button>
           </div>
-          <div class="flex items-center gap-2 bg-white px-3 py-2 rounded-lg text-sm">
-            <span class="text-xs">Scale:</span><select id="compScale" class="text-xs border rounded px-2 py-1"><option value="1">100%</option><option value="0.75" selected>75%</option><option value="0.5">50%</option><option value="0.25">25%</option></select>
-            <button id="compApplyScale" class="text-xs bg-blue-500 text-white px-2 py-1 rounded-full">Apply</button>
-          </div>
-          <div class="flex items-center gap-2 bg-white px-3 py-2 rounded-lg text-sm flex-wrap">
-            <span class="text-xs">W:</span><input type="number" id="compWidth" placeholder="auto" class="w-14 text-xs border rounded px-1 py-0.5">
-            <span class="text-xs">H:</span><input type="number" id="compHeight" placeholder="auto" class="w-14 text-xs border rounded px-1 py-0.5">
-            <button id="compClearResize" class="text-xs text-red-500"><i class="fas fa-times-circle"></i></button>
-          </div>
-          <label class="flex items-center gap-1 bg-white px-3 py-2 rounded-lg text-xs"><input type="checkbox" id="compForceJpeg" checked> Force JPEG</label>
-          <button id="compProcessBtn" class="hyperos-btn-danger"><i class="fas fa-fire"></i> Compress All</button>
+          <label class="flex items-center gap-1 bg-white/80 px-3 py-2 rounded-lg text-xs"><input type="checkbox" id="compForceJpeg" checked> Force JPEG</label>
+          <button id="compProcessBtn" class="hyperos-btn-danger"><i class="fas fa-fire"></i> Aggressive Compress</button>
         </div>
-        <div id="compProgressArea" class="mt-4 hidden">
-          <div class="flex justify-between text-xs"><span id="compProgressLabel">Processing...</span><span id="compProgressPercent">0%</span></div>
-          <div class="w-full bg-gray-200 rounded-full h-2"><div id="compProgressFill" class="progress-fill h-2 rounded-full" style="width:0%"></div></div>
-        </div>
+        <div id="compProgressArea" class="mt-4 hidden"><div class="flex justify-between text-xs"><span id="compProgressLabel">Processing...</span><span id="compProgressPercent">0%</span></div><div class="w-full bg-gray-200 rounded-full h-2"><div id="compProgressFill" class="progress-fill h-2 rounded-full" style="width:0%"></div></div></div>
         <div id="compResults" class="mt-6 hidden space-y-3"></div>
       </div>
     </div>
@@ -271,27 +309,17 @@
           <input type="file" id="convInput" accept="image/jpeg,image/png,image/webp" multiple class="hidden">
         </div>
         <div class="flex justify-between items-center mt-4">
-          <div class="text-sm font-medium text-gray-700"><span id="convFileCount">0</span> file(s)</div>
-          <button id="convClearAll" class="hyperos-btn-clear px-3 py-1.5 text-xs hidden"><i class="fas fa-trash-alt mr-1"></i> Clear all</button>
+          <span class="text-sm font-medium text-gray-600"><span id="convFileCount">0</span> file(s)</span>
+          <button id="convClearAll" class="hyperos-btn-clear px-3 py-1.5 text-xs hidden"><i class="fas fa-trash-alt mr-1"></i> Clear</button>
         </div>
         <div id="convFileList" class="mt-2 space-y-2 max-h-64 overflow-y-auto"></div>
         <div id="convSettings" class="mt-4 hidden control-panel">
-          <select id="convFormat" class="bg-white border rounded-lg px-3 py-2 text-sm"><option value="jpeg">JPEG</option><option value="png">PNG</option><option value="webp">WEBP</option></select>
-          <div class="flex items-center gap-2 bg-white px-3 py-2 rounded-lg text-sm">
-            <span class="text-xs">Quality:</span><input type="range" id="convQuality" min="0.1" max="1.0" step="0.01" value="0.8" class="w-20">
-            <span id="convQualityVal" class="text-xs">80%</span>
-          </div>
-          <div class="flex items-center gap-2 bg-white px-3 py-2 rounded-lg text-sm flex-wrap">
-            <span class="text-xs">W:</span><input type="number" id="convWidth" placeholder="auto" class="w-14 text-xs border rounded px-1 py-0.5">
-            <span class="text-xs">H:</span><input type="number" id="convHeight" placeholder="auto" class="w-14 text-xs border rounded px-1 py-0.5">
-            <button id="convClearResize" class="text-xs text-red-500"><i class="fas fa-times-circle"></i></button>
-          </div>
+          <select id="convFormat" class="bg-white/80 border rounded-lg px-3 py-2 text-sm"><option value="jpeg">JPEG</option><option value="png">PNG</option><option value="webp">WEBP</option></select>
+          <div class="flex items-center gap-2 bg-white/80 px-3 py-2 rounded-lg text-sm"><span class="text-xs">Quality:</span><input type="range" id="convQuality" min="0.1" max="1.0" step="0.01" value="0.8" class="w-20"><span id="convQualityVal" class="text-xs">80%</span></div>
+          <div class="flex items-center gap-2 bg-white/80 px-3 py-2 rounded-lg text-sm flex-wrap"><span class="text-xs">W:</span><input type="number" id="convWidth" placeholder="auto" class="w-14 text-xs border rounded px-1 py-0.5"><span class="text-xs">H:</span><input type="number" id="convHeight" placeholder="auto" class="w-14 text-xs border rounded px-1 py-0.5"><button id="convClearResize" class="text-xs text-red-500"><i class="fas fa-times-circle"></i></button></div>
           <button id="convProcessBtn" class="hyperos-btn-primary"><i class="fas fa-exchange-alt"></i> Convert All</button>
         </div>
-        <div id="convProgressArea" class="mt-4 hidden">
-          <div class="flex justify-between text-xs"><span id="convProgressLabel">Processing...</span><span id="convProgressPercent">0%</span></div>
-          <div class="w-full bg-gray-200 rounded-full h-2"><div id="convProgressFill" class="progress-fill h-2 rounded-full" style="width:0%"></div></div>
-        </div>
+        <div id="convProgressArea" class="mt-4 hidden"><div class="flex justify-between text-xs"><span id="convProgressLabel">Processing...</span><span id="convProgressPercent">0%</span></div><div class="w-full bg-gray-200 rounded-full h-2"><div id="convProgressFill" class="progress-fill h-2 rounded-full" style="width:0%"></div></div></div>
         <div id="convResults" class="mt-6 hidden space-y-3"></div>
       </div>
     </div>
@@ -299,7 +327,7 @@
     <!-- ======================= 4) MERGE PDF ======================= -->
     <div id="mergeSection" class="tab-content hidden">
       <div>
-        <h3 class="text-xl font-bold text-gray-800 mb-4"><i class="fas fa-object-group text-blue-600 mr-2"></i>Merge PDFs</h3>
+        <h3 class="text-xl font-bold text-gray-800 mb-4"><i class="fas fa-object-group text-[color:var(--accent)] mr-2"></i>Merge PDFs</h3>
         <div id="mergeDropzone" class="hyperos-dropzone cursor-pointer relative">
           <div class="dropzone-blob"></div>
           <i class="fas fa-cloud-upload-alt text-4xl md:text-5xl text-gray-400 mb-2"></i>
@@ -308,8 +336,8 @@
           <input type="file" id="mergeInput" accept=".pdf" multiple class="hidden">
         </div>
         <div class="flex justify-between items-center mt-4">
-          <div class="text-sm font-medium text-gray-700"><span id="mergeFileCount">0</span> file(s)</div>
-          <button id="mergeClearAll" class="hyperos-btn-clear px-3 py-1.5 text-xs hidden"><i class="fas fa-trash-alt mr-1"></i> Clear all</button>
+          <span class="text-sm font-medium text-gray-600"><span id="mergeFileCount">0</span> file(s)</span>
+          <button id="mergeClearAll" class="hyperos-btn-clear px-3 py-1.5 text-xs hidden"><i class="fas fa-trash-alt mr-1"></i> Clear</button>
         </div>
         <div id="mergePreviewList" class="mt-2 space-y-2 max-h-64 overflow-y-auto"></div>
         <button id="mergeBtn" class="mt-4 hyperos-btn-primary w-full sm:w-auto disabled:opacity-50"><i class="fas fa-object-group"></i> Merge & Download</button>
@@ -319,7 +347,7 @@
     <!-- ======================= 5) SPLIT PDF ======================= -->
     <div id="splitSection" class="tab-content hidden">
       <div>
-        <h3 class="text-xl font-bold text-gray-800 mb-4"><i class="fas fa-cut text-blue-600 mr-2"></i>Split PDF</h3>
+        <h3 class="text-xl font-bold text-gray-800 mb-4"><i class="fas fa-cut text-[color:var(--accent)] mr-2"></i>Split PDF</h3>
         <div id="splitDropzone" class="hyperos-dropzone cursor-pointer relative">
           <div class="dropzone-blob"></div>
           <i class="fas fa-cloud-upload-alt text-4xl md:text-5xl text-gray-400 mb-2"></i>
@@ -327,7 +355,7 @@
           <input type="file" id="splitInput" accept=".pdf" class="hidden">
         </div>
         <div id="splitPreview" class="mt-4 hidden">
-          <div class="preview-item"><canvas id="splitThumbnail" width="72" height="100" class="border rounded bg-white shadow-sm"></canvas><div><p id="splitFileName" class="font-semibold text-sm"></p><p id="splitFileSize" class="text-xs text-gray-600"></p><p id="splitPageCount" class="text-xs text-gray-600"></p></div></div>
+          <div class="preview-item"><canvas id="splitThumbnail" width="80" height="110" class="border rounded bg-white shadow-sm"></canvas><div><p id="splitFileName" class="font-semibold text-sm"></p><p id="splitFileSize" class="text-xs text-gray-600"></p><p id="splitPageCount" class="text-xs text-gray-600"></p></div></div>
         </div>
         <div class="mt-4 flex flex-col sm:flex-row gap-3 items-stretch sm:items-end">
           <div class="flex-1"><label class="text-sm font-medium">Page range:</label><input type="text" id="splitRange" placeholder="1-5,8,10-12" class="border rounded-lg px-3 py-2 w-full text-sm mt-1"></div>
@@ -340,7 +368,7 @@
     <!-- ======================= 6) IMAGE TO PDF ======================= -->
     <div id="img2pdfSection" class="tab-content hidden">
       <div>
-        <h3 class="text-xl font-bold text-gray-800 mb-4"><i class="fas fa-file-image text-blue-600 mr-2"></i>Image(s) to PDF</h3>
+        <h3 class="text-xl font-bold text-gray-800 mb-4"><i class="fas fa-file-image text-[color:var(--accent)] mr-2"></i>Image(s) to PDF</h3>
         <div id="img2pdfDropzone" class="hyperos-dropzone cursor-pointer relative">
           <div class="dropzone-blob"></div>
           <i class="fas fa-cloud-upload-alt text-4xl md:text-5xl text-gray-400 mb-2"></i>
@@ -349,8 +377,8 @@
           <input type="file" id="img2pdfInput" accept="image/jpeg,image/png,image/webp" multiple class="hidden">
         </div>
         <div class="flex justify-between items-center mt-4">
-          <div class="text-sm font-medium text-gray-700"><span id="img2pdfFileCount">0</span> file(s)</div>
-          <button id="img2pdfClearAll" class="hyperos-btn-clear px-3 py-1.5 text-xs hidden"><i class="fas fa-trash-alt mr-1"></i> Clear all</button>
+          <span class="text-sm font-medium text-gray-600"><span id="img2pdfFileCount">0</span> file(s)</span>
+          <button id="img2pdfClearAll" class="hyperos-btn-clear px-3 py-1.5 text-xs hidden"><i class="fas fa-trash-alt mr-1"></i> Clear</button>
         </div>
         <div id="img2pdfPreviewList" class="mt-2 space-y-2 max-h-64 overflow-y-auto"></div>
         <div class="mt-4 flex flex-col sm:flex-row gap-3 items-stretch sm:items-center">
@@ -362,52 +390,72 @@
     </div>
   </main>
 
-  <footer class="w-full bg-white/80 backdrop-blur-sm border-t border-gray-200 py-3 px-4 text-center text-xs md:text-sm text-gray-500 mt-8">
-    <p>© 2025 Media Toolbox · All processing is performed locally in your browser. No data is ever uploaded.</p>
+  <footer class="w-full bg-white/70 backdrop-blur-lg border-t border-gray-200/50 py-3 px-4 text-center text-xs md:text-sm text-gray-500 mt-8">
+    <p>© 2025 Media Toolbox · All processing is local and private.</p>
+    <p class="text-xs mt-1 opacity-75">Created by Grafynx Visual</p>
   </footer>
 
   <script>
-    // ---------- Tab Indicator ----------
-    const tabContainer = document.getElementById('tabContainer');
-    const indicator = document.getElementById('tabIndicator');
-    function updateIndicator(activeBtn) {
-      const containerRect = tabContainer.getBoundingClientRect();
-      const btnRect = activeBtn.getBoundingClientRect();
-      const left = btnRect.left - containerRect.left + tabContainer.scrollLeft;
-      const width = btnRect.width;
-      indicator.style.left = left + 'px';
-      indicator.style.width = width + 'px';
+    // ---------- Theme switching ----------
+    document.querySelectorAll('.theme-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        const theme = btn.dataset.theme;
+        document.body.className = document.body.className.replace(/theme-\w+/g, '');
+        if (theme !== 'default') document.body.classList.add('theme-' + theme);
+        // Hide dropdown after click
+        btn.closest('.group').querySelector('button').click();
+      });
+    });
+
+    // ---------- Tab Switching (no indicator) ----------
+    const sections = {
+      pdf: document.getElementById('pdfSection'),
+      compress: document.getElementById('imageCompressSection'),
+      convert: document.getElementById('imageConvertSection'),
+      merge: document.getElementById('mergeSection'),
+      split: document.getElementById('splitSection'),
+      img2pdf: document.getElementById('img2pdfSection')
+    };
+    const tabs = {
+      pdf: document.getElementById('tabPdf'),
+      compress: document.getElementById('tabImageCompress'),
+      convert: document.getElementById('tabImageConvert'),
+      merge: document.getElementById('tabMerge'),
+      split: document.getElementById('tabSplit'),
+      img2pdf: document.getElementById('tabImg2Pdf')
+    };
+    function setActiveTab(id) {
+      Object.values(sections).forEach(s => s.classList.add('hidden'));
+      sections[id].classList.remove('hidden');
+      Object.values(tabs).forEach(t => t.classList.remove('tab-active'));
+      tabs[id].classList.add('tab-active');
     }
-    function scrollTabIntoView(btn) { btn.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' }); }
+    Object.entries(tabs).forEach(([id, el]) => el.addEventListener('click', () => setActiveTab(id)));
+    setActiveTab('pdf');
+
+    // Utility functions
     function addDropBounce(el) { el.classList.add('drop-zone-bounce'); el.addEventListener('animationend', () => el.classList.remove('drop-zone-bounce'), { once: true }); }
     function celebrate() { confetti({ particleCount: 60, spread: 60, origin: { y: 0.6 }, colors: ['#1677ff','#10b981','#f59e0b','#ef4444'] }); }
     function addBounce(btns) { btns.forEach(b => { b.classList.add('bounce-for-celebration'); setTimeout(() => b.classList.remove('bounce-for-celebration'), 2000); }); }
     const formatBytes = b => { if (b===0) return '0 Bytes'; const k=1024, s=['Bytes','KB','MB','GB']; const i=Math.floor(Math.log(b)/Math.log(k)); return parseFloat((b/Math.pow(k,i)).toFixed(2))+' '+s[i]; };
-
-    // PDF thumbnail generator
-    async function generatePdfThumbnail(file, scale = 0.3) {
+    async function generatePdfThumbnail(file, scale=0.35) {
       const buf = await file.arrayBuffer();
-      const doc = await pdfjsLib.getDocument({ data: buf }).promise;
+      const doc = await pdfjsLib.getDocument({data:buf}).promise;
       const page = await doc.getPage(1);
-      const vp = page.getViewport({ scale });
-      const canvas = document.createElement('canvas');
-      canvas.width = vp.width; canvas.height = vp.height;
-      await page.render({ canvasContext: canvas.getContext('2d'), viewport: vp }).promise;
+      const vp = page.getViewport({scale});
+      const canvas = document.createElement('canvas'); canvas.width=vp.width; canvas.height=vp.height;
+      await page.render({canvasContext:canvas.getContext('2d'), viewport:vp}).promise;
       return canvas.toDataURL();
     }
 
-    // ============================================================
-    // 1) PDF COMPRESSOR (original filename)
-    // ============================================================
+    // ========== BATCH PDF COMPRESSOR (original filename) ==========
     (() => {
       const dropzone = document.getElementById('pdfDropzone'), input = document.getElementById('pdfInput');
       const fileList = document.getElementById('pdfFileList'), settings = document.getElementById('pdfSettings');
       const fileCount = document.getElementById('pdfFileCount'), clearAllBtn = document.getElementById('pdfClearAll');
-      const progressArea = document.getElementById('pdfProgressArea'), progressFill = document.getElementById('pdfProgressFill');
-      const progressPercent = document.getElementById('pdfProgressPercent'), progressLabel = document.getElementById('pdfProgressLabel');
+      const progressArea = document.getElementById('pdfProgressArea'), progressFill = document.getElementById('pdfProgressFill'), progressPercent = document.getElementById('pdfProgressPercent'), progressLabel = document.getElementById('pdfProgressLabel');
       const results = document.getElementById('pdfResults'), compressBtn = document.getElementById('pdfCompressBtn');
-      const compressionSelect = document.getElementById('pdfCompressionSelect'), customQuality = document.getElementById('pdfCustomQuality');
-      const jpegSlider = document.getElementById('pdfJpegQuality'), qualityVal = document.getElementById('pdfQualityValue');
+      const compressionSelect = document.getElementById('pdfCompressionSelect'), customQuality = document.getElementById('pdfCustomQuality'), jpegSlider = document.getElementById('pdfJpegQuality'), qualityVal = document.getElementById('pdfQualityValue');
       let files = [];
       toggleCustom(); compressionSelect.addEventListener('change', toggleCustom);
       jpegSlider.addEventListener('input', () => qualityVal.innerText = Math.round(jpegSlider.value*100)+'%');
@@ -415,19 +463,12 @@
 
       async function renderFileList() {
         fileCount.innerText = files.length;
-        if (files.length === 0) { fileList.innerHTML = ''; settings.classList.add('hidden'); clearAllBtn.classList.add('hidden'); return; }
+        if (files.length===0) { fileList.innerHTML=''; settings.classList.add('hidden'); clearAllBtn.classList.add('hidden'); return; }
         settings.classList.remove('hidden'); clearAllBtn.classList.remove('hidden');
         fileList.innerHTML = '';
-        for (let i = 0; i < files.length; i++) {
-          const f = files[i];
-          const thumbUrl = await generatePdfThumbnail(f, 0.3);
-          fileList.innerHTML += `
-            <div class="preview-item">
-              <img src="${thumbUrl}" alt="thumbnail" />
-              <div class="flex-1 min-w-0"><p class="font-medium text-sm truncate">${f.name}</p><p class="text-xs text-gray-500">${formatBytes(f.size)}</p></div>
-              <button data-index="${i}" class="remove-pdf text-red-500 p-1"><i class="fas fa-trash-alt"></i></button>
-            </div>
-          `;
+        for (let i=0; i<files.length; i++) {
+          const f=files[i]; const thumb = await generatePdfThumbnail(f);
+          fileList.innerHTML += `<div class="preview-item"><img src="${thumb}" alt="thumbnail"/><div class="flex-1 min-w-0"><p class="font-medium text-sm truncate">${f.name}</p><p class="text-xs text-gray-500">${formatBytes(f.size)}</p></div><button data-index="${i}" class="remove-pdf text-red-500 p-1"><i class="fas fa-trash-alt"></i></button></div>`;
         }
         document.querySelectorAll('.remove-pdf').forEach(b => b.addEventListener('click', (e) => {
           const idx = parseInt(b.dataset.index); files.splice(idx,1); renderFileList();
@@ -451,8 +492,8 @@
         const mode = compressionSelect.value;
         compressBtn.disabled = true; compressBtn.innerHTML = '<i class="fas fa-spinner fa-pulse"></i> Compressing...';
         progressArea.classList.remove('hidden'); results.classList.add('hidden'); results.innerHTML = '';
-        let processed = 0;
         pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js';
+        let processed = 0;
         for (const file of files) {
           progressLabel.innerText = `Compressing ${file.name} (${++processed}/${files.length})...`;
           progressPercent.innerText = '0%'; progressFill.style.width = '0%';
@@ -468,22 +509,22 @@
               resultBuffer = await ndoc.save({ useObjectStreams: true });
             } else {
               let quality = mode==='balanced' ? 0.85 : mode==='maximum' ? 0.5 : Math.min(0.9, Math.max(0.3, parseFloat(jpegSlider.value)));
-              const doc = await pdfjsLib.getDocument({ data: buf }).promise;
+              const doc = await pdfjsLib.getDocument({data:buf}).promise;
               const pageCount = doc.numPages;
               const first = await doc.getPage(1);
-              const vp = first.getViewport({ scale:1 });
+              const vp = first.getViewport({scale:1});
               const wmm = vp.width*0.352778, hmm = vp.height*0.352778;
               const { jsPDF } = window.jspdf;
-              let pdf = new jsPDF({ unit:'mm', format:[wmm,hmm], orientation:wmm>hmm?'landscape':'portrait' });
-              let firstPage=true;
+              let pdf = new jsPDF({unit:'mm', format:[wmm,hmm], orientation:wmm>hmm?'landscape':'portrait'});
+              let firstPage = true;
               for (let i=1; i<=pageCount; i++) {
                 progressPercent.innerText = Math.floor((i-1)/pageCount*100)+'%';
                 progressFill.style.width = ((i-1)/pageCount*100)+'%';
                 const page = await doc.getPage(i);
-                const vps = page.getViewport({ scale:2 });
+                const vps = page.getViewport({scale:2});
                 const canvas = document.createElement('canvas'); canvas.width=vps.width; canvas.height=vps.height;
                 const ctx = canvas.getContext('2d');
-                await page.render({ canvasContext:ctx, viewport:vps }).promise;
+                await page.render({canvasContext:ctx, viewport:vps}).promise;
                 const dataUrl = canvas.toDataURL('image/jpeg', quality);
                 if (firstPage) { pdf.addImage(dataUrl,'JPEG',0,0,wmm,hmm,undefined,'FAST'); firstPage=false; }
                 else { pdf.addPage([wmm,hmm]); pdf.addImage(dataUrl,'JPEG',0,0,wmm,hmm,undefined,'FAST'); }
@@ -494,7 +535,7 @@
             const newSize = resultBuffer.byteLength, saved = file.size - newSize, percent = (saved/file.size)*100;
             const blob = new Blob([resultBuffer], {type:'application/pdf'});
             const url = URL.createObjectURL(blob);
-            results.innerHTML += `<div class="result-item"><i class="fas fa-file-pdf text-green-600"></i><div class="flex-1 min-w-0"><p class="font-semibold text-sm">${file.name}</p><p class="text-xs">${formatBytes(file.size)} → ${formatBytes(newSize)} (↓${percent.toFixed(1)}%)</p></div><a href="${url}" download="${file.name}" class="hyperos-btn-success px-3 py-1 text-xs ml-auto"><i class="fas fa-download"></i></a></div>`;
+            results.innerHTML += `<div class="result-item"><i class="fas fa-file-pdf text-green-600"></i><div class="flex-1 min-w-0"><p class="font-semibold text-sm">${file.name}</p><p class="text-xs">${formatBytes(file.size)} → ${formatBytes(newSize)} (↓${percent.toFixed(1)}%)</p></div><a href="${url}" download="${file.name}" class="hyperos-btn-success px-3 py-1.5 text-xs ml-auto"><i class="fas fa-download"></i></a></div>`;
             progressFill.style.width = '100%'; progressPercent.innerText = '100%';
           } catch (err) {
             results.innerHTML += `<div class="result-item bg-red-50"><i class="fas fa-exclamation-circle text-red-500"></i><div class="flex-1"><p class="text-sm font-medium text-red-700">${file.name}</p><p class="text-xs text-red-500">Compression failed: ${err.message}</p></div></div>`;
@@ -507,20 +548,17 @@
       });
     })();
 
-    // ============================================================
-    // 2) IMAGE COMPRESSOR (original name, auto aspect ratio, download right)
-    // ============================================================
+    // ========== IMAGE COMPRESSOR (original filename, auto resize) ==========
     (() => {
       const dropzone = document.getElementById('compDropzone'), input = document.getElementById('compInput');
       const fileList = document.getElementById('compFileList'), settings = document.getElementById('compSettings');
       const fileCount = document.getElementById('compFileCount'), clearAllBtn = document.getElementById('compClearAll');
-      const progressArea = document.getElementById('compProgressArea'), progressFill = document.getElementById('compProgressFill');
-      const progressPercent = document.getElementById('compProgressPercent'), progressLabel = document.getElementById('compProgressLabel');
+      const progressArea = document.getElementById('compProgressArea'), progressFill = document.getElementById('compProgressFill'), progressPercent = document.getElementById('compProgressPercent');
       const results = document.getElementById('compResults'), processBtn = document.getElementById('compProcessBtn');
       const qualitySlider = document.getElementById('compQuality'), qualityVal = document.getElementById('compQualityVal');
       const scaleSelect = document.getElementById('compScale'), applyScaleBtn = document.getElementById('compApplyScale');
-      const widthInp = document.getElementById('compWidth'), heightInp = document.getElementById('compHeight');
-      const clearResize = document.getElementById('compClearResize'), forceCheck = document.getElementById('compForceJpeg');
+      const widthInp = document.getElementById('compWidth'), heightInp = document.getElementById('compHeight'), clearResize = document.getElementById('compClearResize');
+      const forceCheck = document.getElementById('compForceJpeg');
       let files = [], origDimensions = new Map();
 
       qualitySlider.addEventListener('input', () => qualityVal.innerText = Math.round(qualitySlider.value*100)+'%');
@@ -572,54 +610,44 @@
         progressArea.classList.remove('hidden'); results.classList.add('hidden'); results.innerHTML = '';
         let processed = 0;
         for (const file of files) {
-          progressLabel.innerText = `Compressing ${file.name} (${++processed}/${files.length})...`;
           progressPercent.innerText = '0%'; progressFill.style.width = '0%';
           try {
             const img = new Image(); img.src = URL.createObjectURL(file);
             await new Promise((res,rej) => { img.onload=res; img.onerror=rej; });
-            const origW = img.width, origH = img.height;
             let w = tw, h = th;
-            // Auto aspect ratio: if only one dimension given, calculate the other
-            if (w && !h) h = Math.round(origH * (w / origW));
-            else if (!w && h) w = Math.round(origW * (h / origH));
-            else if (!w && !h) { w = origW; h = origH; }
+            if (w && !h) h = Math.round(img.height * (w / img.width));
+            else if (!w && h) w = Math.round(img.width * (h / img.height));
+            else if (!w && !h) { w = img.width; h = img.height; }
             const canvas = document.createElement('canvas'); canvas.width=w; canvas.height=h;
             const ctx = canvas.getContext('2d'); ctx.drawImage(img,0,0,w,h);
             let mime = force ? 'image/jpeg' : file.type;
-            let ext = force ? 'jpg' : file.type.split('/')[1];
-            if (ext==='jpeg') ext='jpg';
             const blob = await new Promise(res => canvas.toBlob(res, mime, quality));
             const newSize = blob.size, saved = file.size - newSize, percent = (saved/file.size)*100;
             const url = URL.createObjectURL(blob);
-            // Download filename: original base name + correct extension
-            const baseName = file.name.replace(/\.[^/.]+$/, '');
-            const downloadName = `${baseName}.${ext}`;
-            results.innerHTML += `<div class="result-item"><img src="${URL.createObjectURL(blob)}" alt="result"/><div class="flex-1 min-w-0"><p class="font-semibold text-sm">${downloadName}</p><p class="text-xs">${formatBytes(file.size)} → ${formatBytes(newSize)} (↓${percent.toFixed(1)}%) · ${w}×${h}</p></div><a href="${url}" download="${downloadName}" class="hyperos-btn-success px-3 py-1 text-xs ml-auto"><i class="fas fa-download"></i></a></div>`;
+            // Download with original file name (unchanged)
+            results.innerHTML += `<div class="result-item"><img src="${URL.createObjectURL(blob)}" alt="result"/><div class="flex-1 min-w-0"><p class="font-semibold text-sm">${file.name}</p><p class="text-xs">${formatBytes(file.size)} → ${formatBytes(newSize)} (↓${percent.toFixed(1)}%) · ${w}×${h}</p></div><a href="${url}" download="${file.name}" class="hyperos-btn-success px-3 py-1.5 text-xs ml-auto"><i class="fas fa-download"></i></a></div>`;
             progressFill.style.width = '100%'; progressPercent.innerText = '100%';
+            processed++;
           } catch (err) {
             results.innerHTML += `<div class="result-item bg-red-50"><i class="fas fa-exclamation-circle text-red-500"></i><div class="flex-1"><p class="text-sm font-medium text-red-700">${file.name}</p><p class="text-xs text-red-500">Compression failed: ${err.message}</p></div></div>`;
           }
         }
         results.classList.remove('hidden'); progressArea.classList.add('hidden');
-        processBtn.disabled = false; processBtn.innerHTML = '<i class="fas fa-fire"></i> Compress All';
+        processBtn.disabled = false; processBtn.innerHTML = '<i class="fas fa-fire"></i> Aggressive Compress';
         if (results.querySelectorAll('.result-item').length) celebrate();
         addBounce(results.querySelectorAll('.hyperos-btn-success'));
       });
     })();
 
-    // ============================================================
-    // 3) IMAGE CONVERTER (original name, auto aspect ratio, download right)
-    // ============================================================
+    // ========== IMAGE CONVERTER (original filename) ==========
     (() => {
       const dropzone = document.getElementById('convDropzone'), input = document.getElementById('convInput');
       const fileList = document.getElementById('convFileList'), settings = document.getElementById('convSettings');
       const fileCount = document.getElementById('convFileCount'), clearAllBtn = document.getElementById('convClearAll');
-      const progressArea = document.getElementById('convProgressArea'), progressFill = document.getElementById('convProgressFill');
-      const progressPercent = document.getElementById('convProgressPercent'), progressLabel = document.getElementById('convProgressLabel');
+      const progressArea = document.getElementById('convProgressArea'), progressFill = document.getElementById('convProgressFill'), progressPercent = document.getElementById('convProgressPercent');
       const results = document.getElementById('convResults'), processBtn = document.getElementById('convProcessBtn');
-      const formatSelect = document.getElementById('convFormat'), qualitySlider = document.getElementById('convQuality');
-      const qualityVal = document.getElementById('convQualityVal'), widthInp = document.getElementById('convWidth'), heightInp = document.getElementById('convHeight');
-      const clearResize = document.getElementById('convClearResize');
+      const formatSelect = document.getElementById('convFormat'), qualitySlider = document.getElementById('convQuality'), qualityVal = document.getElementById('convQualityVal');
+      const widthInp = document.getElementById('convWidth'), heightInp = document.getElementById('convHeight'), clearResize = document.getElementById('convClearResize');
       let files = [], origDimensions = new Map();
 
       qualitySlider.addEventListener('input', () => qualityVal.innerText = Math.round(qualitySlider.value*100)+'%');
@@ -660,32 +688,28 @@
         const quality = parseFloat(qualitySlider.value);
         let tw = widthInp.value && parseInt(widthInp.value)>0 ? parseInt(widthInp.value) : null;
         let th = heightInp.value && parseInt(heightInp.value)>0 ? parseInt(heightInp.value) : null;
-        processBtn.disabled = true; processBtn.innerHTML = '<i class="fas fa-spinner fa-pulse"></i>Converting...';
+        processBtn.disabled = true; processBtn.innerHTML = '<i class="fas fa-spinner fa-pulse"></i> Converting...';
         progressArea.classList.remove('hidden'); results.classList.add('hidden'); results.innerHTML = '';
         let processed = 0;
         for (const file of files) {
-          progressLabel.innerText = `Converting ${file.name} (${++processed}/${files.length})...`;
           progressPercent.innerText = '0%'; progressFill.style.width = '0%';
           try {
             const img = new Image(); img.src = URL.createObjectURL(file);
             await new Promise((res,rej) => { img.onload=res; img.onerror=rej; });
-            const origW = img.width, origH = img.height;
             let w = tw, h = th;
-            if (w && !h) h = Math.round(origH * (w / origW));
-            else if (!w && h) w = Math.round(origW * (h / origH));
-            else if (!w && !h) { w = origW; h = origH; }
+            if (w && !h) h = Math.round(img.height * (w / img.width));
+            else if (!w && h) w = Math.round(img.width * (h / img.height));
+            else if (!w && !h) { w = img.width; h = img.height; }
             const canvas = document.createElement('canvas'); canvas.width=w; canvas.height=h;
             const ctx = canvas.getContext('2d'); ctx.drawImage(img,0,0,w,h);
             let mime = format==='jpeg' ? 'image/jpeg' : format==='png' ? 'image/png' : 'image/webp';
-            let ext = format==='jpeg' ? 'jpg' : format;
             const blob = await new Promise(res => canvas.toBlob(res, mime, quality));
             const newSize = blob.size, saved = file.size - newSize, percent = (saved/file.size)*100;
             const url = URL.createObjectURL(blob);
-            // Download name: original base name + new extension
-            const baseName = file.name.replace(/\.[^/.]+$/, '');
-            const downloadName = `${baseName}.${ext}`;
-            results.innerHTML += `<div class="result-item"><img src="${URL.createObjectURL(blob)}" alt="result"/><div class="flex-1 min-w-0"><p class="font-semibold text-sm">${downloadName}</p><p class="text-xs">${formatBytes(file.size)} → ${formatBytes(newSize)} (${percent>0?'↓':'↑'}${Math.abs(percent).toFixed(1)}%) · ${w}×${h}</p></div><a href="${url}" download="${downloadName}" class="hyperos-btn-success px-3 py-1 text-xs ml-auto"><i class="fas fa-download"></i></a></div>`;
+            // Download with original file name (unchanged)
+            results.innerHTML += `<div class="result-item"><img src="${URL.createObjectURL(blob)}" alt="result"/><div class="flex-1 min-w-0"><p class="font-semibold text-sm">${file.name}</p><p class="text-xs">${formatBytes(file.size)} → ${formatBytes(newSize)} (${percent>0?'↓':'↑'}${Math.abs(percent).toFixed(1)}%) · ${w}×${h}</p></div><a href="${url}" download="${file.name}" class="hyperos-btn-success px-3 py-1.5 text-xs ml-auto"><i class="fas fa-download"></i></a></div>`;
             progressFill.style.width = '100%'; progressPercent.innerText = '100%';
+            processed++;
           } catch (err) {
             results.innerHTML += `<div class="result-item bg-red-50"><i class="fas fa-exclamation-circle text-red-500"></i><div class="flex-1"><p class="text-sm font-medium text-red-700">${file.name}</p><p class="text-xs text-red-500">Conversion failed: ${err.message}</p></div></div>`;
           }
@@ -697,44 +721,43 @@
       });
     })();
 
-    // ========== 4) MERGE PDF (unchanged name: merged.pdf) ==========
+    // ========== MERGE PDF ==========
     (() => {
-      const mergeDrop = document.getElementById('mergeDropzone'), mergeInput = document.getElementById('mergeInput');
+      const drop = document.getElementById('mergeDropzone'), input = document.getElementById('mergeInput');
       const previewList = document.getElementById('mergePreviewList'), mergeBtn = document.getElementById('mergeBtn');
-      const fileCount = document.getElementById('mergeFileCount'), clearAllBtn = document.getElementById('mergeClearAll');
-      let mergeFiles = [];
+      const fileCount = document.getElementById('mergeFileCount'), clearAll = document.getElementById('mergeClearAll');
+      let files = [];
       async function updatePreview() {
-        fileCount.innerText = mergeFiles.length;
-        if (!mergeFiles.length) { previewList.innerHTML='<p class="text-gray-400 text-center text-sm">No files selected</p>'; mergeBtn.disabled=true; clearAllBtn.classList.add('hidden'); return; }
-        clearAllBtn.classList.remove('hidden');
+        fileCount.innerText = files.length;
+        if (!files.length) { previewList.innerHTML='<p class="text-gray-400 text-center text-sm">No files selected</p>'; mergeBtn.disabled=true; clearAll.classList.add('hidden'); return; }
+        clearAll.classList.remove('hidden');
         previewList.innerHTML='';
-        for (let i=0; i<mergeFiles.length; i++) {
-          const f=mergeFiles[i]; const thumb=await generatePdfThumbnail(f, 0.25);
+        for (let i=0; i<files.length; i++) {
+          const f=files[i]; const thumb=await generatePdfThumbnail(f, 0.25);
           previewList.innerHTML+=`<div class="preview-item"><img src="${thumb}" alt="thumbnail"/><div class="flex-1 min-w-0"><p class="font-medium text-sm truncate">${f.name}</p><p class="text-xs text-gray-500">${(f.size/1024).toFixed(1)} KB</p></div><button data-index="${i}" class="remove-merge text-red-500 p-1"><i class="fas fa-trash-alt"></i></button></div>`;
         }
         mergeBtn.disabled=false;
         document.querySelectorAll('.remove-merge').forEach(b => b.addEventListener('click', (e)=>{
-          const idx=parseInt(b.dataset.index); mergeFiles.splice(idx,1); updatePreview();
+          const idx=parseInt(b.dataset.index); files.splice(idx,1); updatePreview();
         }));
       }
-      clearAllBtn.addEventListener('click', () => { mergeFiles = []; updatePreview(); });
-
-      function addFiles(newFiles) {
-        const valid = newFiles.filter(f => { if (f.type!=='application/pdf') return false; if (f.size>250*1024*1024) { alert(`"${f.name}" too large.`); return false; } return true; });
-        if (mergeFiles.length+valid.length>10) { alert('Maximum 10 PDFs.'); return; }
-        mergeFiles.push(...valid); updatePreview(); addDropBounce(mergeDrop);
+      clearAll.addEventListener('click', () => { files=[]; updatePreview(); });
+      function add(fs){
+        const valid = fs.filter(f => { if (f.type!=='application/pdf') return false; if (f.size>250*1024*1024) { alert(`"${f.name}" too large.`); return false; } return true; });
+        if (files.length+valid.length>10) { alert('Maximum 10 PDFs.'); return; }
+        files.push(...valid); updatePreview(); addDropBounce(drop);
       }
-      mergeDrop.addEventListener('click',()=>mergeInput.click());
-      mergeDrop.addEventListener('dragover',e=>{e.preventDefault(); mergeDrop.classList.add('drop-active');});
-      mergeDrop.addEventListener('dragleave',()=>mergeDrop.classList.remove('drop-active'));
-      mergeDrop.addEventListener('drop',e=>{e.preventDefault(); mergeDrop.classList.remove('drop-active'); addFiles([...e.dataTransfer.files]);});
-      mergeInput.addEventListener('change',e=>{if(e.target.files.length){addFiles([...e.target.files]); mergeInput.value='';}});
+      drop.addEventListener('click',()=>input.click());
+      drop.addEventListener('dragover',e=>{e.preventDefault(); drop.classList.add('drop-active');});
+      drop.addEventListener('dragleave',()=>drop.classList.remove('drop-active'));
+      drop.addEventListener('drop',e=>{e.preventDefault(); drop.classList.remove('drop-active'); add([...e.dataTransfer.files]);});
+      input.addEventListener('change',e=>{if(e.target.files.length){add([...e.target.files]); input.value='';}});
       mergeBtn.addEventListener('click',async()=>{
-        if(mergeFiles.length<2){alert('Select at least 2 PDFs'); return;}
+        if(files.length<2){alert('Select at least 2 PDFs'); return;}
         mergeBtn.disabled=true; mergeBtn.innerHTML='<i class="fas fa-spinner fa-pulse"></i> Merging...';
         try{
           const merged=await PDFLib.PDFDocument.create();
-          for(const f of mergeFiles){const bytes=await f.arrayBuffer(); const pdf=await PDFLib.PDFDocument.load(bytes); const pages=await merged.copyPages(pdf,pdf.getPageIndices()); pages.forEach(p=>merged.addPage(p));}
+          for(const f of files){const bytes=await f.arrayBuffer(); const pdf=await PDFLib.PDFDocument.load(bytes); const pages=await merged.copyPages(pdf,pdf.getPageIndices()); pages.forEach(p=>merged.addPage(p));}
           const blob=new Blob([await merged.save()],{type:'application/pdf'});
           const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='merged.pdf'; a.click(); URL.revokeObjectURL(a.href);
           celebrate();
@@ -743,43 +766,42 @@
       });
     })();
 
-    // ========== 5) SPLIT PDF (unchanged) ==========
+    // ========== SPLIT PDF ==========
     (() => {
-      const splitDrop = document.getElementById('splitDropzone'), splitInput = document.getElementById('splitInput');
-      const splitPreview = document.getElementById('splitPreview'), splitFileName = document.getElementById('splitFileName');
-      const splitFileSize = document.getElementById('splitFileSize'), splitPageCount = document.getElementById('splitPageCount');
-      const splitRange = document.getElementById('splitRange'), splitBtn = document.getElementById('splitBtn'), splitResult = document.getElementById('splitResult');
-      const splitCanvas = document.getElementById('splitThumbnail');
-      let pdfBuffer = null, pdfDoc = null;
-      async function loadFile(file) {
+      const drop = document.getElementById('splitDropzone'), input = document.getElementById('splitInput');
+      const preview = document.getElementById('splitPreview'), fname = document.getElementById('splitFileName'), fsize = document.getElementById('splitFileSize'), fpages = document.getElementById('splitPageCount');
+      const range = document.getElementById('splitRange'), splitBtn = document.getElementById('splitBtn'), splitRes = document.getElementById('splitResult');
+      const canvas = document.getElementById('splitThumbnail');
+      let buffer = null, doc = null;
+      async function load(file) {
         if (file.size>250*1024*1024){alert('Max 250 MB'); return;}
-        pdfBuffer=await file.arrayBuffer();
-        pdfDoc=await pdfjsLib.getDocument({data:pdfBuffer}).promise;
-        const pc=pdfDoc.numPages;
-        splitFileName.innerText=file.name; splitFileSize.innerText=(file.size/1024).toFixed(1)+' KB'; splitPageCount.innerText=pc+' page'+(pc!==1?'s':'');
-        const page=await pdfDoc.getPage(1); const vp=page.getViewport({scale:0.25});
-        splitCanvas.width=vp.width; splitCanvas.height=vp.height;
-        await page.render({canvasContext:splitCanvas.getContext('2d'), viewport:vp}).promise;
-        splitPreview.classList.remove('hidden');
-        splitResult.innerHTML='<span class="text-green-600">Ready – '+pc+' pages</span>';
-        addDropBounce(splitDrop);
+        buffer = await file.arrayBuffer();
+        doc = await pdfjsLib.getDocument({data:buffer}).promise;
+        const pc = doc.numPages;
+        fname.innerText = file.name; fsize.innerText = (file.size/1024).toFixed(1)+' KB'; fpages.innerText = pc+' page'+(pc!==1?'s':'');
+        const page = await doc.getPage(1); const vp = page.getViewport({scale:0.3});
+        canvas.width = vp.width; canvas.height = vp.height;
+        await page.render({canvasContext:canvas.getContext('2d'), viewport:vp}).promise;
+        preview.classList.remove('hidden');
+        splitRes.innerHTML = '<span class="text-green-600">Ready – '+pc+' pages</span>';
+        addDropBounce(drop);
       }
-      splitDrop.addEventListener('click',()=>splitInput.click());
-      splitDrop.addEventListener('dragover',e=>{e.preventDefault(); splitDrop.classList.add('drop-active');});
-      splitDrop.addEventListener('dragleave',()=>splitDrop.classList.remove('drop-active'));
-      splitDrop.addEventListener('drop',e=>{e.preventDefault(); splitDrop.classList.remove('drop-active'); const f=e.dataTransfer.files[0]; if(f&&f.type==='application/pdf') loadFile(f); else alert('Drop a PDF');});
-      splitInput.addEventListener('change',e=>{if(e.target.files.length) loadFile(e.target.files[0]);});
+      drop.addEventListener('click',()=>input.click());
+      drop.addEventListener('dragover',e=>{e.preventDefault(); drop.classList.add('drop-active');});
+      drop.addEventListener('dragleave',()=>drop.classList.remove('drop-active'));
+      drop.addEventListener('drop',e=>{e.preventDefault(); drop.classList.remove('drop-active'); const f=e.dataTransfer.files[0]; if(f&&f.type==='application/pdf') load(f); else alert('Drop a PDF');});
+      input.addEventListener('change',e=>{if(e.target.files.length) load(e.target.files[0]);});
       splitBtn.addEventListener('click',async()=>{
-        if(!pdfBuffer){alert('Select a PDF first'); return;}
-        const range=splitRange.value.trim(); if(!range){alert('Enter page range'); return;}
+        if(!buffer){alert('Select a PDF first'); return;}
+        const r = range.value.trim(); if(!r){alert('Enter page range'); return;}
         try{
-          const pdf=await PDFLib.PDFDocument.load(pdfBuffer);
-          const pagesToExtract=parsePageRanges(range, pdf.getPageCount());
-          if(!pagesToExtract.length) throw new Error('No valid pages');
-          const newPdf=await PDFLib.PDFDocument.create(); (await newPdf.copyPages(pdf, pagesToExtract)).forEach(p=>newPdf.addPage(p));
-          const blob=new Blob([await newPdf.save()],{type:'application/pdf'});
-          const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='extracted.pdf'; a.click(); URL.revokeObjectURL(a.href);
-          splitResult.innerHTML+=`<div class="text-green-600 mt-2">✅ Extracted ${pagesToExtract.length} pages</div>`; celebrate();
+          const pdf = await PDFLib.PDFDocument.load(buffer);
+          const pages = parsePageRanges(r, pdf.getPageCount());
+          if(!pages.length) throw new Error('No valid pages');
+          const newPdf = await PDFLib.PDFDocument.create(); (await newPdf.copyPages(pdf, pages)).forEach(p=>newPdf.addPage(p));
+          const blob = new Blob([await newPdf.save()], {type:'application/pdf'});
+          const a = document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='extracted.pdf'; a.click(); URL.revokeObjectURL(a.href);
+          splitRes.innerHTML += `<div class="text-green-600 mt-2">✅ Extracted ${pages.length} pages</div>`; celebrate();
         }catch(e){alert('Split error: '+e.message);}
       });
       function parsePageRanges(str,total){
@@ -796,33 +818,32 @@
       }
     })();
 
-    // ========== 6) IMAGE TO PDF (unchanged name: images.pdf) ==========
+    // ========== IMAGE TO PDF ==========
     (() => {
       const drop=document.getElementById('img2pdfDropzone'), input=document.getElementById('img2pdfInput');
       const previewList=document.getElementById('img2pdfPreviewList'), btn=document.getElementById('img2pdfBtn');
-      const fileCount=document.getElementById('img2pdfFileCount'), clearAllBtn=document.getElementById('img2pdfClearAll');
+      const fileCount=document.getElementById('img2pdfFileCount'), clearAll=document.getElementById('img2pdfClearAll');
       const pageSize=document.getElementById('img2pdfPageSize');
       let images=[];
       function updatePreview(){
-        fileCount.innerText = images.length;
-        if(!images.length){ previewList.innerHTML='<p class="text-gray-400 text-center text-sm">No images selected</p>'; btn.disabled=true; clearAllBtn.classList.add('hidden'); return; }
-        clearAllBtn.classList.remove('hidden');
+        fileCount.innerText=images.length;
+        if(!images.length){ previewList.innerHTML='<p class="text-gray-400 text-center text-sm">No images selected</p>'; btn.disabled=true; clearAll.classList.add('hidden'); return; }
+        clearAll.classList.remove('hidden');
         previewList.innerHTML=images.map((f,i)=>`<div class="preview-item preview-item-image"><img src="${URL.createObjectURL(f)}" alt="${f.name}"/><div class="flex-1 min-w-0"><p class="font-medium text-sm truncate">${f.name}</p><p class="text-xs text-gray-500">${(f.size/1024).toFixed(1)} KB</p></div><button data-index="${i}" class="remove-img text-red-500 p-1"><i class="fas fa-trash-alt"></i></button></div>`).join('');
         btn.disabled=false;
         document.querySelectorAll('.remove-img').forEach(b=>b.addEventListener('click',(e)=>{ const idx=parseInt(b.dataset.index); images.splice(idx,1); updatePreview(); }));
       }
-      clearAllBtn.addEventListener('click', () => { images = []; updatePreview(); });
-
-      function addImages(files){
-        const valid = files.filter(f => { if (!f.type.startsWith('image/')) return false; if (f.size>35*1024*1024){ alert(`"${f.name}" too large.`); return false; } return true; });
+      clearAll.addEventListener('click',()=>{ images=[]; updatePreview(); });
+      function add(fs){
+        const valid = fs.filter(f => { if (!f.type.startsWith('image/')) return false; if (f.size>35*1024*1024){ alert(`"${f.name}" too large.`); return false; } return true; });
         if(images.length+valid.length>10){ alert('Maximum 10 images.'); return; }
         images.push(...valid); updatePreview(); addDropBounce(drop);
       }
       drop.addEventListener('click',()=>input.click());
       drop.addEventListener('dragover',e=>{e.preventDefault(); drop.classList.add('drop-active');});
       drop.addEventListener('dragleave',()=>drop.classList.remove('drop-active'));
-      drop.addEventListener('drop',e=>{e.preventDefault(); drop.classList.remove('drop-active'); addImages([...e.dataTransfer.files]);});
-      input.addEventListener('change',e=>{if(e.target.files.length){addImages([...e.target.files]); input.value='';}});
+      drop.addEventListener('drop',e=>{e.preventDefault(); drop.classList.remove('drop-active'); add([...e.dataTransfer.files]);});
+      input.addEventListener('change',e=>{if(e.target.files.length){add([...e.target.files]); input.value='';}});
       btn.addEventListener('click',async()=>{
         if(!images.length) return;
         btn.disabled=true; btn.innerHTML='<i class="fas fa-spinner fa-pulse"></i> Creating PDF...';
@@ -850,34 +871,6 @@
         finally{btn.disabled=false; btn.innerHTML='<i class="fas fa-file-pdf"></i> Convert to PDF';}
       });
     })();
-
-    // ========== TAB SWITCHING ==========
-    const sections = {
-      pdf: document.getElementById('pdfSection'),
-      compress: document.getElementById('imageCompressSection'),
-      convert: document.getElementById('imageConvertSection'),
-      merge: document.getElementById('mergeSection'),
-      split: document.getElementById('splitSection'),
-      img2pdf: document.getElementById('img2pdfSection')
-    };
-    const tabs = {
-      pdf: document.getElementById('tabPdf'),
-      compress: document.getElementById('tabImageCompress'),
-      convert: document.getElementById('tabImageConvert'),
-      merge: document.getElementById('tabMerge'),
-      split: document.getElementById('tabSplit'),
-      img2pdf: document.getElementById('tabImg2Pdf')
-    };
-    function setActiveTab(id) {
-      Object.values(sections).forEach(s => s.classList.add('hidden'));
-      sections[id].classList.remove('hidden');
-      Object.values(tabs).forEach(t => t.classList.remove('tab-active'));
-      const active = tabs[id]; active.classList.add('tab-active');
-      updateIndicator(active); scrollTabIntoView(active);
-    }
-    Object.entries(tabs).forEach(([id, el]) => el.addEventListener('click', () => setActiveTab(id)));
-    window.addEventListener('load', () => setActiveTab('pdf'));
-    window.addEventListener('resize', () => { const active = document.querySelector('.tab-active'); if (active) updateIndicator(active); });
   </script>
 </body>
 </html>
